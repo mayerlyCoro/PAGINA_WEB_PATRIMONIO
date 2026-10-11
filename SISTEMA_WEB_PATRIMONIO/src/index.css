@@ -1,0 +1,145 @@
+@import "tailwindcss";
+
+@theme {
+  --color-patrimonio-dark: #0b0a08;
+  --color-patrimonio-dark-soft: #151310;
+
+  --color-patrimonio-white: #f5f2ea;
+  --color-patrimonio-gold: #b89a63;
+  --color-patrimonio-beige: #d8c9ad;
+
+  --color-patrimonio-text: #b8b3a9;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background-color: var(--color-patrimonio-dark);
+  color: var(--color-patrimonio-white);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+
+@import "tailwindcss";
+
+@layer utilities {
+  .bg-patrimonio-dark {
+    background-color: #0d0a0a;
+  }
+  .text-patrimonio-orange {
+    color: #e65100;
+  }
+  .bg-patrimonio-orange {
+    background-color: #e65100;
+  }
+  .border-patrimonio-red {
+    border-color: #c62828;
+  }
+}
+
+@keyframes marquee {
+  0% { transform: translateX(0%); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-marquee {
+  display: flex;
+  width: 200%;
+  animation: marquee 25s linear infinite;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+/* src/index.css */
+@layer utilities {
+  .perspective-1000 {
+    perspective: 1000px;
+  }
+  .transform-style-3d {
+    transform-style: preserve-3d;
+  }
+  .backface-hidden {
+    backface-visibility: hidden;
+  }
+  .rotate-y-180 {
+    transform: rotateY(180deg);
+  }
+}
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-60px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-slide-in-left {
+  animation: slideInLeft 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Utilidades para tarjetas Flip 3D */
+@layer utilities {
+  .perspective-1000 {
+    perspective: 1000px;
+  }
+  .transform-style-3d {
+    transform-style: preserve-3d;
+  }
+  .backface-hidden {
+    backface-visibility: hidden;
+  }
+  .rotate-y-180 {
+    transform: rotateY(180deg);
+  }
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-33.333%);
+  }
+}
+
+.animate-marquee {
+  animation: marquee 35s linear infinite;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.3s ease-out forwards;
+}
+
+@keyframes smoothFloat {
+  0% {
+    transform: translateX(-25px);
+  }
+  50% {
+    transform: translateX(25px);
+  }
+  100% {
+    transform: translateX(-25px);
+  }
+}
+
+.animate-smooth-float {
+  animation: smoothFloat 10s ease-in-out infinite;
+}
