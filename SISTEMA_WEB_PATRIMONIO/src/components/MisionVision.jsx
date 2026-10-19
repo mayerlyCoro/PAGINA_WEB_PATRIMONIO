@@ -1,254 +1,383 @@
-import React, { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 const secciones = [
   {
     id: 'mision',
     titulo: 'Misión',
-    resumen: 'Preservar, catalogar y restaurar el patrimonio histórico, arquitectónico y cultural de Potosí.',
+    resumen:
+      'Preservar, catalogar y restaurar el patrimonio histórico, arquitectónico y cultural de Potosí.',
     detalles: [
       'Preservación, catalogación y restauración del patrimonio histórico de la Villa Imperial.',
       'Supervisión y control técnico riguroso de intervenciones urbanas en el Centro Histórico.',
       'Protección activa e inventariado de inmuebles patrimoniales de primer y segundo orden.',
-      'Promoción de la conservación preventiva en coordinación con los propietarios locales.'
-    ]
+      'Promoción de la conservación preventiva en coordinación con los propietarios locales.',
+    ],
   },
   {
     id: 'vision',
     titulo: 'Visión',
-    resumen: 'Consolidar a Potosí como un referente internacional en gestión patrimonial y desarrollo urbano.',
+    resumen:
+      'Consolidar a Potosí como un referente internacional en gestión patrimonial y desarrollo urbano.',
     detalles: [
       'Posicionar a la Villa Imperial como referente mundial en gestión de patrimonio cultural.',
       'Armonizar la conservación colonial con el crecimiento urbano moderno y sostenible.',
       'Fomentar la apropiación social, el orgullo e identidad en la población potosina.',
-      'Impulsar el turismo cultural responsable ligado a la protección del Centro Histórico.'
-    ]
+      'Impulsar el turismo cultural responsable ligado a la protección del Centro Histórico.',
+    ],
   },
   {
     id: 'acciones',
     titulo: 'Acciones',
-    resumen: 'Inspecciones técnicas de campo, catalogación de inmuebles y proyectos de restauración.',
+    resumen:
+      'Inspecciones técnicas de campo, catalogación de inmuebles y proyectos de restauración.',
     detalles: [
       'Ejecución de inspecciones técnicas de campo periódicas en áreas de preservación.',
       'Desarrollo de proyectos integrales de restauración arquitectónica y paisajística.',
       'Campañas continuas de sensibilización y educación patrimonial en unidades educativas.',
-      'Intervención rápida en inmuebles con riesgo de colapso o deterioro estructural.'
-    ]
+      'Intervención rápida en inmuebles con riesgo de colapso o deterioro estructural.',
+    ],
   },
   {
     id: 'politicas',
     titulo: 'Políticas',
-    resumen: 'Cumplimiento de las Leyes Municipales de conservación y transparencia administrativa.',
+    resumen:
+      'Cumplimiento de las Leyes Municipales de conservación y transparencia administrativa.',
     detalles: [
       'Garantizar el cumplimiento estricto de las Leyes Municipales de conservación patrimonial.',
       'Asegurar la máxima transparencia y celeridad en licencias y fichas de catalogación.',
       'Coordinación interinstitucional para frenar intervenciones clandestinas e ilegales.',
-      'Fomento a la participación ciudadana activa en la defensa de nuestro patrimonio.'
-    ]
-  }
+      'Fomento a la participación ciudadana activa en la defensa de nuestro patrimonio.',
+    ],
+  },
 ];
 
-export default function MisionVision() {
-  const [seccionSeleccionada, setSeccionSeleccionada] = useState(null);
-  const [indiceActual, setIndiceActual] = useState(0);
-  const [estaPausado, setEstaPausado] = useState(false);
+// ICONOS
 
-  // Transición automática cada 4 segundos de derecha a izquierda
-  useEffect(() => {
-    if (estaPausado || seccionSeleccionada) return;
-
-    const intervalo = setInterval(() => {
-      setIndiceActual((prev) => (prev + 1) % secciones.length);
-    }, 4000); // Cambia el tiempo aquí si deseas más o menos velocidad
-
-    return () => clearInterval(intervalo);
-  }, [estaPausado, seccionSeleccionada]);
-
-  const siguiente = () => {
-    setIndiceActual((prev) => (prev + 1) % secciones.length);
+function IconoInstitucional({
+  tipo,
+  className = 'h-8 w-8',
+}) {
+  const atributos = {
+    viewBox: '0 0 24 24',
+    fill: 'none',
+    stroke: 'currentColor',
+    strokeWidth: 1.7,
+    strokeLinecap: 'round',
+    strokeLinejoin: 'round',
+    className,
+    'aria-hidden': true,
   };
 
-  const anterior = () => {
-    setIndiceActual((prev) => (prev - 1 + secciones.length) % secciones.length);
-  };
+  if (tipo === 'mision') {
+    return (
+      <svg {...atributos}>
+        <circle cx="12" cy="12" r="9" />
+        <circle cx="12" cy="12" r="5.5" />
+        <circle cx="12" cy="12" r="1.5" />
+        <path d="m12 12 6-6" />
+      </svg>
+    );
+  }
+
+  if (tipo === 'vision') {
+    return (
+      <svg {...atributos}>
+        <path d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6Z" />
+        <circle cx="12" cy="12" r="3" />
+      </svg>
+    );
+  }
+
+  if (tipo === 'acciones') {
+    return (
+      <svg {...atributos}>
+        <path d="m4 12 5 5L20 6" />
+        <path d="M12 2a10 10 0 1 0 10 10" />
+      </svg>
+    );
+  }
 
   return (
-    <div className="w-full bg-zinc-950 text-white relative py-20 pb-32 overflow-hidden font-sans">
-      
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Varela+Round&display=swap');
-        .font-varela {
-          font-family: 'Varela Round', sans-serif;
-        }
-      `}</style>
+    <svg {...atributos}>
+      <path d="M3 9.5 12 4l9 5.5" />
+      <path d="M5 10.5v8M10 10.5v8M14 10.5v8M19 10.5v8" />
+      <path d="M3 20h18M2 22h20" />
+    </svg>
+  );
+}
 
-      {/* FONDO DEGRADADO */}
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-orange-950/30 to-zinc-950 pointer-events-none" />
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-amber-500/10 via-orange-600/5 to-transparent pointer-events-none" />
+// TARJETAS DE MISIÓN Y VISIÓN
 
-      {/* CABECERA */}
-      <div className="relative z-10 max-w-7xl mx-auto px-6 text-center mb-16 font-varela">
-        <span className="text-xs sm:text-sm uppercase tracking-widest text-amber-400 font-bold">
-          Ejes Institucionales
-        </span>
-        <h2 className="text-4xl sm:text-6xl font-extrabold uppercase text-white mt-2 tracking-wide">
-          Nuestra Identidad y Gestión
-        </h2>
-        <div className="w-28 h-1.5 bg-gradient-to-r from-orange-500 via-amber-400 to-yellow-500 mx-auto rounded-full mt-4"></div>
-      </div>
+function TarjetaIdentidad({ seccion, numero }) {
+  const esMision = seccion.id === 'mision';
 
-      {/* CONTENEDOR DEL CARRUSEL (SOLO 4 TARJETAS) */}
-      <div 
-        className="relative z-10 max-w-5xl mx-auto px-6 font-varela"
-        onMouseEnter={() => setEstaPausado(true)}
-        onMouseLeave={() => setEstaPausado(false)}
-      >
-        {/* BOTÓN ANTERIOR */}
-        <button 
-          onClick={anterior}
-          className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full bg-zinc-900/80 border border-amber-500/50 text-amber-400 hover:bg-amber-500 hover:text-white flex items-center justify-center transition-all shadow-lg"
-          title="Anterior"
+  return (
+    <article
+      id={seccion.id}
+      aria-labelledby={`titulo-${seccion.id}`}
+      className="group relative flex h-full scroll-mt-36 flex-col overflow-hidden rounded-[1.75rem] border border-[#e5dac9] bg-white p-6 shadow-[0_14px_48px_rgba(40,30,20,0.06)] transition-shadow duration-300 hover:shadow-[0_18px_52px_rgba(40,30,20,0.12)] sm:p-9 lg:p-10"
+    >
+      <div
+        aria-hidden="true"
+        className={`absolute inset-x-0 top-0 h-1.5 ${
+          esMision ? 'bg-[#c76635]' : 'bg-[#b48a3a]'
+        }`}
+      />
+
+      <div className="flex items-start justify-between gap-4">
+        <div
+          className={`flex h-16 w-16 items-center justify-center rounded-2xl sm:h-[72px] sm:w-[72px] ${
+            esMision
+              ? 'bg-[#fff0e6] text-[#b65227]'
+              : 'bg-[#f8efd8] text-[#926b24]'
+          }`}
         >
-          ❮
-        </button>
-
-        {/* BOTÓN SIGUIENTE */}
-        <button 
-          onClick={siguiente}
-          className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full bg-zinc-900/80 border border-amber-500/50 text-amber-400 hover:bg-amber-500 hover:text-white flex items-center justify-center transition-all shadow-lg"
-          title="Siguiente"
-        >
-          ❯
-        </button>
-
-        {/* MÁSCARA DEL SLIDER */}
-        <div className="overflow-hidden py-6 px-2">
-          <div 
-            className="flex transition-transform duration-1000 ease-in-out gap-6"
-            style={{ transform: `translateX(-${indiceActual * 100}%)` }}
-          >
-            {secciones.map((sec) => (
-              <div
-                key={sec.id}
-                className="w-full flex-shrink-0 flex justify-center"
-              >
-                <div
-                  onClick={() => setSeccionSeleccionada(sec)}
-                  className="w-full max-w-md h-72 sm:h-80 bg-zinc-900/90 border-2 border-amber-500/40 hover:border-amber-400 rounded-3xl p-8 cursor-pointer transition-all duration-300 hover:scale-105 shadow-[0_10px_35px_rgba(0,0,0,0.6)] hover:shadow-[0_15px_40px_rgba(245,158,11,0.25)] flex flex-col justify-between text-center items-center group"
-                >
-                  <div className="flex-1 flex items-center justify-center w-full">
-                    <h3 className="text-3xl sm:text-5xl font-extrabold uppercase text-white group-hover:text-amber-400 transition-colors tracking-wide text-center">
-                      {sec.titulo}
-                    </h3>
-                  </div>
-
-                  <div className="w-full pt-4 border-t border-zinc-800/80 flex items-center justify-between text-sm sm:text-base font-bold text-amber-400 group-hover:text-amber-300">
-                    <span>Ver sección completa</span>
-                    <svg className="w-6 h-6 transform group-hover:translate-x-2 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                    </svg>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
+          <IconoInstitucional
+            tipo={seccion.id}
+            className="h-9 w-9"
+          />
         </div>
 
-        {/* INDICADORES DE PUNTOS */}
-        <div className="flex justify-center gap-3 mt-6">
-          {secciones.map((_, idx) => (
-            <button
-              key={idx}
-              onClick={() => setIndiceActual(idx)}
-              className={`h-3 rounded-full transition-all duration-500 ${
-                indiceActual === idx 
-                  ? 'w-10 bg-amber-400' 
-                  : 'w-3 bg-zinc-700 hover:bg-zinc-500'
-              }`}
+        <span className="text-base font-bold tracking-[0.2em] text-stone-400">
+          {numero} / 02
+        </span>
+      </div>
+
+      <h3
+        id={`titulo-${seccion.id}`}
+        className="mt-7 text-3xl font-extrabold uppercase tracking-tight text-[#242d2b] sm:text-4xl lg:text-[2.65rem]"
+      >
+        {seccion.titulo}
+      </h3>
+
+      <div
+        aria-hidden="true"
+        className={`mt-4 h-1.5 w-20 rounded-full ${
+          esMision ? 'bg-[#c76635]' : 'bg-[#b48a3a]'
+        }`}
+      />
+
+      <p className="mt-7 text-xl font-medium leading-relaxed text-[#444843] sm:text-[1.35rem] lg:text-2xl">
+        {seccion.resumen}
+      </p>
+
+      <div className="mt-9 border-t border-[#ece6dc] pt-7">
+        <p className="mb-6 text-sm font-extrabold uppercase tracking-[0.18em] text-[#986d37] sm:text-base">
+          Aspectos principales
+        </p>
+
+        <ul className="space-y-5">
+          {seccion.detalles.map((detalle) => (
+            <li
+              key={detalle}
+              className="flex items-start gap-4 text-lg leading-[1.8] text-[#525550] sm:text-xl"
+            >
+              <span
+                aria-hidden="true"
+                className="mt-[0.7rem] h-2.5 w-2.5 shrink-0 rounded-full bg-[#c47b39]"
+              />
+
+              <span>{detalle}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </article>
+  );
+}
+
+// TARJETAS DE ACCIONES Y POLÍTICAS
+
+function TarjetaGestion({ seccion }) {
+  const [abierto, setAbierto] = useState(false);
+
+  return (
+    <article
+      id={seccion.id}
+      aria-labelledby={`titulo-${seccion.id}`}
+      className="scroll-mt-36 rounded-[1.5rem] border border-amber-100/30 bg-[#451820]/45 p-6 text-white shadow-lg transition-colors duration-300 hover:bg-[#451820]/60 sm:p-8 lg:p-9"
+    >
+      <div className="flex items-start gap-5">
+        <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-amber-400/15 text-amber-300 sm:h-16 sm:w-16">
+          <IconoInstitucional
+            tipo={seccion.id}
+            className="h-8 w-8"
+          />
+        </div>
+
+        <div className="min-w-0">
+          <h4
+            id={`titulo-${seccion.id}`}
+            className="text-2xl font-extrabold uppercase tracking-wide sm:text-3xl lg:text-4xl"
+          >
+            {seccion.titulo}
+          </h4>
+
+          <p className="mt-4 text-lg leading-[1.8] text-stone-100 sm:text-xl">
+            {seccion.resumen}
+          </p>
+        </div>
+      </div>
+
+      <button
+        type="button"
+        onClick={() => setAbierto((valor) => !valor)}
+        aria-expanded={abierto}
+        aria-controls={`detalle-${seccion.id}`}
+        className="mt-8 inline-flex min-h-12 items-center gap-3 rounded-lg border border-amber-400/60 px-5 py-3 text-base font-bold text-amber-300 transition-colors hover:bg-amber-400/15 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-amber-300"
+      >
+        {abierto ? 'Ocultar detalles' : 'Ver detalles'}
+
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          aria-hidden="true"
+          className={`h-5 w-5 transition-transform ${
+            abierto ? 'rotate-180' : ''
+          }`}
+        >
+          <path d="m6 9 6 6 6-6" />
+        </svg>
+      </button>
+
+      <div
+        id={`detalle-${seccion.id}`}
+        hidden={!abierto}
+        className="mt-7 border-t border-white/20 pt-7"
+      >
+        <ul className="space-y-5">
+          {seccion.detalles.map((detalle) => (
+            <li
+              key={detalle}
+              className="flex items-start gap-4 text-lg leading-[1.8] text-stone-100 sm:text-xl"
+            >
+              <span
+                aria-hidden="true"
+                className="mt-[0.8rem] h-2 w-2 shrink-0 rounded-full bg-amber-300"
+              />
+
+              <span>{detalle}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </article>
+  );
+}
+
+// COMPONENTE PRINCIPAL
+
+export default function MisionVision() {
+  const identidad = secciones.slice(0, 2);
+  const gestion = secciones.slice(2);
+
+  return (
+    <section
+      id="institucion"
+      aria-labelledby="titulo-identidad"
+      className="relative isolate w-full scroll-mt-28 overflow-hidden bg-[#f7f3ec] font-sans text-[#242d2b] md:scroll-mt-36 xl:scroll-mt-44"
+    >
+      {/* DETALLE SUPERIOR */}
+
+      <div
+        aria-hidden="true"
+        className="h-1.5 w-full bg-gradient-to-r from-[#8b3b24] via-[#df8c37] to-[#d5b15c]"
+      />
+
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[42rem] bg-[radial-gradient(ellipse_at_top_right,rgba(223,165,87,0.11),transparent_65%)]"
+      />
+
+      {/* MISIÓN Y VISIÓN */}
+
+      <div className="mx-auto max-w-7xl px-5 pb-20 pt-16 sm:px-8 sm:pt-20 lg:px-12 lg:pb-24 lg:pt-24">
+        <header className="max-w-5xl">
+          <p className="inline-flex items-center gap-3 text-sm font-extrabold uppercase tracking-[0.19em] text-[#a65b2a] sm:text-base">
+            <span
+              aria-hidden="true"
+              className="h-3 w-3 rounded-full bg-[#c86b35]"
+            />
+
+            Dirección de Patrimonio Histórico
+          </p>
+
+          <h2
+            id="titulo-identidad"
+            className="mt-5 break-words text-4xl font-black uppercase leading-[1.08] tracking-tight sm:text-5xl lg:text-6xl"
+          >
+            Nuestra identidad{' '}
+            <span className="text-[#b75b2d]">
+              institucional
+            </span>
+          </h2>
+
+          <div
+            aria-hidden="true"
+            className="mt-7 h-1.5 w-28 rounded-full bg-gradient-to-r from-[#c45c30] to-[#d6ad58]"
+          />
+
+          <p className="mt-8 max-w-4xl text-lg leading-[1.8] text-[#5f625c] sm:text-xl lg:text-2xl">
+            Conoce los propósitos y las líneas de trabajo relacionadas
+            con la preservación del patrimonio histórico,
+            arquitectónico y cultural de Potosí.
+          </p>
+        </header>
+
+        <div className="mt-12 grid items-stretch gap-7 lg:grid-cols-2 lg:gap-9">
+          {identidad.map((seccion, indice) => (
+            <TarjetaIdentidad
+              key={seccion.id}
+              seccion={seccion}
+              numero={String(indice + 1).padStart(2, '0')}
             />
           ))}
         </div>
       </div>
 
-      {/* MODAL CON DETALLES Y LOGO */}
-      {seccionSeleccionada && (
-        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4 sm:p-8 overflow-y-auto font-varela">
-          
-          <div className="bg-white text-zinc-900 max-w-6xl w-full rounded-3xl p-8 sm:p-12 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.7)] border border-amber-200/60 relative overflow-hidden my-auto space-y-10">
-            
-            <div className="absolute top-0 left-0 right-0 h-3 bg-gradient-to-r from-orange-500 via-amber-400 to-yellow-500"></div>
+      {/* EJES DE GESTIÓN */}
 
-            <div className="flex justify-between items-center border-b border-zinc-100 pb-6">
-              <div className="text-left">
-                <span className="text-xs sm:text-sm font-bold uppercase tracking-widest text-amber-600 block mb-1">
-                  Dirección de Patrimonio Histórico
-                </span>
-                <h1 className="text-4xl sm:text-6xl font-extrabold uppercase tracking-wide text-zinc-900">
-                  {seccionSeleccionada.titulo}
-                </h1>
-              </div>
+      <div className="relative bg-gradient-to-br from-[#761b29] via-[#ac3328] to-[#b45d13] text-white">
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(255,196,79,0.24),transparent_60%)]"
+        />
 
-              <div className="flex items-center gap-4 sm:gap-6">
-                <img 
-                  src="/images/images.png" 
-                  alt="Logo Patrimonio" 
-                  className="h-14 sm:h-20 w-auto object-contain drop-shadow-sm"
-                />
-                <button
-                  onClick={() => setSeccionSeleccionada(null)}
-                  className="w-12 h-12 rounded-2xl bg-zinc-100 hover:bg-orange-500 hover:text-white text-zinc-600 font-bold flex items-center justify-center text-2xl transition-all shadow-sm"
-                  title="Cerrar"
-                >
-                  ✕
-                </button>
-              </div>
-            </div>
+        <div
+          aria-hidden="true"
+          className="absolute inset-x-0 top-0 h-px bg-[#f8c65b]/70"
+        />
 
-            <div className="p-8 bg-gradient-to-r from-amber-500/10 via-orange-500/5 to-transparent border-l-8 border-orange-500 rounded-r-2xl shadow-sm text-center sm:text-left">
-              <p className="text-xl sm:text-3xl font-extrabold text-zinc-800 italic leading-relaxed">
-                "{seccionSeleccionada.resumen}"
-              </p>
-            </div>
+        <div className="relative mx-auto max-w-7xl px-5 py-16 sm:px-8 sm:py-20 lg:px-12 lg:py-24">
+          <div className="max-w-4xl">
+            <p className="text-sm font-extrabold uppercase tracking-[0.2em] text-amber-300 sm:text-base">
+              Ejes institucionales
+            </p>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {seccionSeleccionada.detalles.map((item, idx) => (
-                <div 
-                  key={idx} 
-                  className="p-6 bg-gradient-to-br from-zinc-50 to-orange-50/30 border-l-4 border-amber-500 rounded-2xl flex items-start gap-5 shadow-sm hover:shadow-md transition-all duration-200"
-                >
-                  <span className="w-9 h-9 rounded-full bg-gradient-to-r from-orange-500 to-amber-500 text-white font-extrabold text-sm flex items-center justify-center flex-shrink-0 shadow-sm mt-0.5">
-                    {idx + 1}
-                  </span>
-                  <p className="text-zinc-800 text-base sm:text-xl font-bold leading-relaxed">
-                    {item}
-                  </p>
-                </div>
-              ))}
-            </div>
+            <h3 className="mt-5 text-4xl font-extrabold uppercase tracking-tight sm:text-5xl lg:text-6xl">
+              Nuestros ejes de gestión
+            </h3>
 
-            <div className="pt-8 border-t border-zinc-100 flex flex-col sm:flex-row items-center justify-between gap-6">
-              <div className="flex items-center gap-5">
-                <img 
-                  src="/images/escudo.png" 
-                  alt="Escudo de Potosí" 
-                  className="h-20 w-auto object-contain drop-shadow-sm" 
-                />
-                <div className="text-sm sm:text-base font-extrabold text-zinc-700 uppercase tracking-wide leading-tight">
-                  Gobierno Autónomo<br />Municipal de Potosí
-                </div>
-              </div>
+            <p className="mt-6 text-lg leading-[1.8] text-stone-100 sm:text-xl lg:text-2xl">
+              Consulta las acciones y políticas que forman parte
+              del trabajo de conservación y protección patrimonial.
+            </p>
+          </div>
 
-              <button
-                onClick={() => setSeccionSeleccionada(null)}
-                className="w-full sm:w-auto px-10 py-4 rounded-2xl bg-gradient-to-r from-orange-500 via-amber-500 to-yellow-500 hover:from-orange-600 hover:to-amber-600 text-white font-extrabold text-sm sm:text-base uppercase tracking-widest transition-all transform hover:scale-105 shadow-md hover:shadow-orange-500/20"
-              >
-                Cerrar vista
-              </button>
-            </div>
-
+          <div className="mt-12 grid items-start gap-7 lg:grid-cols-2 lg:gap-9">
+            {gestion.map((seccion) => (
+              <TarjetaGestion
+                key={seccion.id}
+                seccion={seccion}
+              />
+            ))}
           </div>
         </div>
-      )}
-
-    </div>
+      </div>
+    </section>
   );
 }

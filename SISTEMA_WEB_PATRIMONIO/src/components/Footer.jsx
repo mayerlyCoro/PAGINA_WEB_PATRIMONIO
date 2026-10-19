@@ -1,152 +1,515 @@
 import React from 'react';
 
+// ============================================================
+// ICONOS DE CONTACTO
+// ============================================================
+
+function IconoUbicacion() {
+  return (
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className="h-6 w-6 shrink-0"
+    >
+      <path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z" />
+      <circle cx="12" cy="10" r="2.5" />
+    </svg>
+  );
+}
+
+function IconoTelefono() {
+  return (
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className="h-6 w-6 shrink-0"
+    >
+      <path d="M7 3H4a1 1 0 0 0-1 1 17 17 0 0 0 17 17 1 1 0 0 0 1-1v-3l-5-2-2 3a14 14 0 0 1-5-5l3-2-2-5Z" />
+    </svg>
+  );
+}
+
+function IconoCorreo() {
+  return (
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className="h-6 w-6 shrink-0"
+    >
+      <rect x="3" y="5" width="18" height="14" rx="2" />
+      <path d="m4 7 8 6 8-6" />
+    </svg>
+  );
+}
+
+
+// ============================================================
+// ICONOS DE REDES SOCIALES
+// ============================================================
+
+function IconoFacebook() {
+  return (
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      className="h-7 w-7"
+    >
+      <path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073c0 6.02 4.388 11.02 10.125 11.927v-8.438H7.078v-3.489h3.047V9.412c0-3.027 1.792-4.7 4.533-4.7 1.312 0 2.686.236 2.686.236v2.97H15.83c-1.491 0-1.956.93-1.956 1.884v2.271h3.328l-.532 3.489h-2.796V24C19.612 23.093 24 18.093 24 12.073Z" />
+    </svg>
+  );
+}
+
+function IconoInstagram() {
+  return (
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className="h-7 w-7"
+    >
+      <rect x="3" y="3" width="18" height="18" rx="5" />
+      <circle cx="12" cy="12" r="4" />
+      <circle
+        cx="17.5"
+        cy="6.5"
+        r="0.8"
+        fill="currentColor"
+        stroke="none"
+      />
+    </svg>
+  );
+}
+
+function IconoYouTube() {
+  return (
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      className="h-7 w-7"
+    >
+      <path d="M23.5 6.2a3 3 0 0 0-2.12-2.13C19.5 3.56 12 3.56 12 3.56s-7.5 0-9.38.51A3 3 0 0 0 .5 6.2C0 8.08 0 12 0 12s0 3.92.5 5.8a3 3 0 0 0 2.12 2.13c1.88.51 9.38.51 9.38.51s7.5 0 9.38-.51a3 3 0 0 0 2.12-2.13C24 15.92 24 12 24 12s0-3.92-.5-5.8ZM9.55 15.57V8.43L15.82 12l-6.27 3.57Z" />
+    </svg>
+  );
+}
+
+
+// ============================================================
+// TÍTULOS DE COLUMNA
+// ============================================================
+
+function TituloColumna({ children }) {
+  return (
+    <div className="mb-7">
+      <h3 className="text-lg font-black uppercase tracking-[0.12em] text-[#20332e] sm:text-xl lg:text-2xl">
+        {children}
+      </h3>
+
+      <div
+        aria-hidden="true"
+        className="mt-3 h-1 w-16 rounded-full bg-gradient-to-r from-[#d85b24] to-[#ff9800]"
+      />
+    </div>
+  );
+}
+
+
+// ============================================================
+// BOTÓN DE RED SOCIAL
+// ============================================================
+
+function BotonSocial({ href, nombre, children }) {
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label={nombre}
+      title={nombre}
+      className="flex h-14 w-14 items-center justify-center rounded-xl border border-[#e4ddd2] bg-white text-[#263b34] shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-[#e66b28] hover:bg-[#fff4e9] hover:text-[#b84a1c] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-orange-600 sm:h-16 sm:w-16"
+    >
+      {children}
+    </a>
+  );
+}
+
+
+// ============================================================
+// FOOTER PRINCIPAL
+// ============================================================
+
 export default function Footer() {
   return (
-    <footer className="relative w-full bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 text-zinc-950 font-sans overflow-hidden border-t-8 border-amber-300">
-      
-      {/* CAPA CON PATRÓN SUTIL DE FONDO Y LUZ */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-yellow-300/30 via-transparent to-black/20 pointer-events-none" />
+    <footer className="relative w-full overflow-hidden border-t-4 border-[#ed762b] bg-white font-sans text-[#30352f]">
 
-      {/* AUMENTADO EL PADDING VERTICAL (py-16 sm:py-20) Y EL ANCHO MÁXIMO (max-w-7xl) */}
-      <div className="relative z-10 max-w-7xl mx-auto px-6 sm:px-10 py-16 sm:py-20">
-        
-        {/* SECCIÓN PRINCIPAL EN GRID */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-12 pb-12 border-b-2 border-black/20">
-          
-          {/* COLUMNA 1: LOGOS E IDENTIDAD */}
-          <div className="space-y-6 md:col-span-1">
-            <div className="flex items-center gap-5 bg-black/10 p-4 rounded-2xl backdrop-blur-sm border border-black/15">
-              <img 
-                src="/images/images.png" 
-                alt="Logo Patrimonio Histórico" 
-                className="h-20 w-auto object-contain drop-shadow-lg"
+      {/* ==================================================
+          DETALLE DECORATIVO SUPERIOR
+      ================================================== */}
+
+      <div
+        aria-hidden="true"
+        className="h-1 w-full bg-gradient-to-r from-[#b93c20] via-[#f27a20] to-[#f5bd42]"
+      />
+
+
+      {/* ==================================================
+          CONTENIDO PRINCIPAL
+      ================================================== */}
+
+      <div className="relative mx-auto w-full max-w-[1900px] px-5 py-12 sm:px-8 sm:py-14 lg:px-12 lg:py-16 2xl:px-16">
+
+        <div className="grid grid-cols-1 gap-12 border-b border-[#e8dfd4] pb-12 sm:gap-14 md:grid-cols-12 md:gap-7 lg:gap-10 xl:gap-14">
+
+
+          {/* ==================================================
+              COLUMNA 1: IDENTIDAD INSTITUCIONAL
+          ================================================== */}
+
+          <div className="min-w-0 md:col-span-4">
+
+            {/* LOGOTIPOS SIN TARJETAS NI FONDOS AÑADIDOS */}
+
+            <div className="flex flex-wrap items-center justify-start gap-x-5 gap-y-5 xl:gap-x-6">
+
+              {/* PATRIMONIO HISTÓRICO */}
+
+              <img
+                src="/images/images.png"
+                alt="Logotipo de la Dirección de Patrimonio Histórico"
+                className="h-20 w-auto max-w-[90px] object-contain sm:h-24 sm:max-w-[100px] lg:h-28 lg:max-w-[115px] xl:h-32 xl:max-w-[125px]"
               />
-              <img 
-                src="/images/escudo.png" 
-                alt="Escudo de Potosí" 
-                className="h-20 w-auto object-contain drop-shadow-lg"
+
+
+              {/* ESCUDO MUNICIPAL Y DENOMINACIÓN OFICIAL */}
+
+              <div className="flex items-center gap-2">
+
+                <img
+                  src="/images/escudo.png"
+                  alt="Escudo del Gobierno Autónomo Municipal de Potosí"
+                  className="h-20 w-auto max-w-[75px] shrink-0 object-contain sm:h-24 sm:max-w-[85px] lg:h-28 lg:max-w-[100px] xl:h-32 xl:max-w-[110px]"
+                />
+
+                <div className="leading-tight">
+
+                  <p className="whitespace-nowrap text-[8px] font-bold uppercase tracking-[0.01em] text-[#245b61] sm:text-[9px] lg:text-[10px] xl:text-[11px]">
+                    Gobierno Autónomo
+                  </p>
+
+                  <p className="whitespace-nowrap text-[8px] font-bold uppercase tracking-[0.01em] text-[#245b61] sm:text-[9px] lg:text-[10px] xl:text-[11px]">
+                    Municipal de
+                  </p>
+
+                  <p className="mt-1 whitespace-nowrap text-lg font-black leading-none tracking-tight text-[#ef4045] sm:text-xl lg:text-2xl xl:text-3xl">
+                    POTOSÍ
+                  </p>
+
+                </div>
+
+              </div>
+
+
+              {/* LOGOTIPO POTOSI.PNG */}
+
+              <img
+                src="/images/potosi.png"
+                alt="Logotipo del Gobierno Autónomo Municipal de Potosí, Sigamos Construyendo Juntos"
+                className="h-20 w-auto max-w-[145px] object-contain sm:h-24 sm:max-w-[165px] lg:h-28 lg:max-w-[185px] xl:h-32 xl:max-w-[205px]"
               />
+
             </div>
-            <p className="text-base sm:text-lg font-bold leading-relaxed text-zinc-900">
-              Preservando la historia, la arquitectura y el legado cultural de la Villa Imperial de Potosí para el mundo.
-            </p>
+
+
+            {/* DESCRIPCIÓN INSTITUCIONAL */}
+
+            <div className="mt-8 max-w-xl">
+
+              <p className="text-xl font-black uppercase leading-snug text-[#20332e] sm:text-2xl">
+                Dirección de Patrimonio Histórico
+              </p>
+
+              <p className="mt-2 text-lg font-bold text-[#70685e] sm:text-xl">
+                Potosí, Bolivia
+              </p>
+
+              <div
+                aria-hidden="true"
+                className="my-5 h-1.5 w-20 rounded-full bg-gradient-to-r from-[#d85b24] to-[#f5b83b]"
+              />
+
+              <p className="max-w-lg text-base leading-7 text-[#53564f] sm:text-lg sm:leading-8">
+                Preservando la historia, la arquitectura y el legado
+                cultural de la Villa Imperial de Potosí.
+              </p>
+
+              <div className="mt-6 inline-flex items-center gap-3">
+
+                <span
+                  aria-hidden="true"
+                  className="h-1.5 w-9 rounded-full bg-[#e8752a]"
+                />
+
+                <span className="text-xs font-black uppercase tracking-[0.15em] text-[#485249] sm:text-sm">
+                  Villa Imperial de Potosí
+                </span>
+
+              </div>
+
+            </div>
+
           </div>
 
-          {/* COLUMNA 2: NAVEGACIÓN RÁPIDA */}
-          <div className="space-y-4">
-            <h3 className="text-xl sm:text-2xl font-black uppercase tracking-wider text-black border-b-4 border-black/20 pb-2 inline-block">
+
+          {/* ==================================================
+              COLUMNA 2: NAVEGACIÓN
+          ================================================== */}
+
+          <div className="min-w-0 md:col-span-2">
+
+            <TituloColumna>
               Navegación
-            </h3>
-            <ul className="space-y-3 text-base sm:text-lg font-extrabold">
-              <li>
-                <a href="#inicio" className="hover:text-white transition-colors duration-200 block py-1">
-                  › Inicio
-                </a>
-              </li>
-              <li>
-                <a href="#patrimonio" className="hover:text-white transition-colors duration-200 block py-1">
-                  › Patrimonio
-                </a>
-              </li>
-              <li>
-                <a href="#normativas" className="hover:text-white transition-colors duration-200 block py-1">
-                  › Normativas y Leyes
-                </a>
-              </li>
-              <li>
-                <a href="#proyectos" className="hover:text-white transition-colors duration-200 block py-1">
-                  › Proyectos y Gestión
-                </a>
-              </li>
-            </ul>
+            </TituloColumna>
+
+            <nav aria-label="Enlaces del pie de página">
+
+              <ul className="space-y-5 text-base font-semibold sm:text-lg">
+
+                <li>
+                  <a
+                    href="/#inicio"
+                    className="inline-flex items-center gap-3 transition-colors hover:text-[#c94e1b] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-orange-600"
+                  >
+                    <span className="text-xl font-black text-[#e8752a]">
+                      ›
+                    </span>
+                    Inicio
+                  </a>
+                </li>
+
+                <li>
+                  <a
+                    href="/#patrimonio"
+                    className="inline-flex items-center gap-3 transition-colors hover:text-[#c94e1b] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-orange-600"
+                  >
+                    <span className="text-xl font-black text-[#e8752a]">
+                      ›
+                    </span>
+                    Patrimonio
+                  </a>
+                </li>
+
+                <li>
+                  <a
+                    href="/#normativas"
+                    className="inline-flex items-center gap-3 transition-colors hover:text-[#c94e1b] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-orange-600"
+                  >
+                    <span className="text-xl font-black text-[#e8752a]">
+                      ›
+                    </span>
+                    Normativas y leyes
+                  </a>
+                </li>
+
+                <li>
+                  <a
+                    href="/#tramites"
+                    className="inline-flex items-center gap-3 transition-colors hover:text-[#c94e1b] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-orange-600"
+                  >
+                    <span className="text-xl font-black text-[#e8752a]">
+                      ›
+                    </span>
+                    Trámites
+                  </a>
+                </li>
+
+                <li>
+                  <a
+                    href="/informacion"
+                    className="inline-flex items-center gap-3 transition-colors hover:text-[#c94e1b] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-orange-600"
+                  >
+                    <span className="text-xl font-black text-[#e8752a]">
+                      ›
+                    </span>
+                    Información
+                  </a>
+                </li>
+
+              </ul>
+
+            </nav>
+
           </div>
 
-          {/* COLUMNA 3: INFORMACIÓN DE CONTACTO */}
-          <div className="space-y-4">
-            <h3 className="text-xl sm:text-2xl font-black uppercase tracking-wider text-black border-b-4 border-black/20 pb-2 inline-block">
+
+          {/* ==================================================
+              COLUMNA 3: CONTACTO
+          ================================================== */}
+
+          <div className="min-w-0 md:col-span-3">
+
+            <TituloColumna>
               Contacto
-            </h3>
-            <ul className="space-y-3 text-base sm:text-lg font-bold text-zinc-900">
-              <li className="flex items-start gap-3">
-                <span className="text-xl">📍</span>
-                <span>Centro Histórico, Calle Quijarro N° 123, Potosí, Bolivia</span>
+            </TituloColumna>
+
+            <ul className="space-y-6 text-base leading-7 text-[#53564f] sm:text-lg sm:leading-8">
+
+              <li className="flex items-start gap-4">
+
+                <span className="mt-1 text-[#d96526]">
+                  <IconoUbicacion />
+                </span>
+
+                <span>
+                  Centro Histórico, calle Quijarro N.º 123,
+                  Potosí, Bolivia
+                </span>
+
               </li>
-              <li className="flex items-center gap-3">
-                <span className="text-xl">📞</span>
-                <span>+591 (2) 62-2XXXX</span>
+
+              <li className="flex items-start gap-4">
+
+                <span className="mt-1 text-[#d96526]">
+                  <IconoTelefono />
+                </span>
+
+                <span>
+                  +591 (2) 62-2XXXX
+                </span>
+
               </li>
-              <li className="flex items-center gap-3">
-                <span className="text-xl">✉️</span>
-                <span>patrimonio@potosi.gob.bo</span>
+
+              <li className="flex items-start gap-4">
+
+                <span className="mt-1 text-[#d96526]">
+                  <IconoCorreo />
+                </span>
+
+                <span className="break-all">
+                  patrimonio@potosi.gob.bo
+                </span>
+
               </li>
+
             </ul>
+
           </div>
 
-          {/* COLUMNA 4: REDES SOCIALES */}
-          <div className="space-y-5">
-            <h3 className="text-xl sm:text-2xl font-black uppercase tracking-wider text-black border-b-4 border-black/20 pb-2 inline-block">
+
+          {/* ==================================================
+              COLUMNA 4: REDES SOCIALES
+          ================================================== */}
+
+          <div className="min-w-0 md:col-span-3">
+
+            <TituloColumna>
               Síguenos
-            </h3>
-            <p className="text-sm sm:text-base font-bold text-zinc-900 leading-snug">
-              Mantente al tanto de las actividades de restauración y avisos sobre conservación patrimonial.
+            </TituloColumna>
+
+            <p className="max-w-md text-base leading-7 text-[#53564f] sm:text-lg sm:leading-8">
+              Mantente al tanto de las actividades de restauración
+              y de las iniciativas de conservación patrimonial.
             </p>
 
-            {/* BOTONES DE REDES SOCIALES MÁS GRANDES */}
-            <div className="flex gap-4 pt-2">
-              {/* Facebook */}
-              <a 
-                href="https://facebook.com" 
-                target="_blank" 
-                rel="noreferrer"
-                className="w-14 h-14 rounded-2xl bg-black text-amber-400 hover:bg-white hover:text-orange-600 flex items-center justify-center transition-all duration-300 transform hover:scale-110 shadow-xl"
-                title="Facebook"
-              >
-                <svg className="w-8 h-8 fill-current" viewBox="0 0 24 24">
-                  <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
-                </svg>
-              </a>
 
-              {/* Instagram */}
-              <a 
-                href="https://instagram.com" 
-                target="_blank" 
-                rel="noreferrer"
-                className="w-14 h-14 rounded-2xl bg-black text-amber-400 hover:bg-white hover:text-orange-600 flex items-center justify-center transition-all duration-300 transform hover:scale-110 shadow-xl"
-                title="Instagram"
-              >
-                <svg className="w-8 h-8 fill-current" viewBox="0 0 24 24">
-                  <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
-                </svg>
-              </a>
+            {/* BOTONES DE REDES SOCIALES */}
 
-              {/* YouTube */}
-              <a 
-                href="https://youtube.com" 
-                target="_blank" 
-                rel="noreferrer"
-                className="w-14 h-14 rounded-2xl bg-black text-amber-400 hover:bg-white hover:text-orange-600 flex items-center justify-center transition-all duration-300 transform hover:scale-110 shadow-xl"
-                title="YouTube"
+            <div className="mt-7 flex flex-wrap gap-3">
+
+              <BotonSocial
+                href="https://facebook.com"
+                nombre="Facebook"
               >
-                <svg className="w-8 h-8 fill-current" viewBox="0 0 24 24">
-                  <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
-                </svg>
-              </a>
+                <IconoFacebook />
+              </BotonSocial>
+
+              <BotonSocial
+                href="https://instagram.com"
+                nombre="Instagram"
+              >
+                <IconoInstagram />
+              </BotonSocial>
+
+              <BotonSocial
+                href="https://youtube.com"
+                nombre="YouTube"
+              >
+                <IconoYouTube />
+              </BotonSocial>
+
             </div>
+
+
+            {/* IDENTIDAD COMPLEMENTARIA */}
+
+            <div className="mt-8 border-l-[3px] border-[#ed762b] pl-4">
+
+              <p className="text-sm font-black uppercase tracking-[0.14em] text-[#20332e] sm:text-base">
+                Patrimonio Histórico
+              </p>
+
+              <p className="mt-2 text-base leading-7 text-[#70685e]">
+                Historia, arquitectura y cultura de Potosí.
+              </p>
+
+            </div>
+
           </div>
 
-        </div>
-
-        {/* PIE DE PÁGINA INFERIOR */}
-        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between text-sm sm:text-base font-black text-zinc-950 gap-4">
-          <p className="text-center sm:text-left">
-            © {new Date().getFullYear()} Dirección de Patrimonio Histórico — Gobierno Autónomo Municipal de Potosí.
-          </p>
-          <p className="uppercase tracking-widest text-xs sm:text-sm bg-black/15 px-4 py-2 rounded-xl border border-black/10">
-            Villa Imperial de Potosí - Bolivia
-          </p>
         </div>
 
       </div>
+
+
+      {/* ==================================================
+          FRANJA INFERIOR NARANJA
+      ================================================== */}
+
+      <div className="border-t border-[#dd6825] bg-gradient-to-r from-[#f28a27] via-[#ff9b34] to-[#f28a27]">
+
+        <div className="mx-auto flex w-full max-w-[1900px] flex-col items-start justify-between gap-5 px-5 py-6 sm:px-8 md:flex-row md:items-center lg:px-12 2xl:px-16">
+
+          <p className="text-sm font-semibold leading-7 text-[#39230d] sm:text-base">
+            © {new Date().getFullYear()} Dirección de Patrimonio Histórico.
+            Gobierno Autónomo Municipal de Potosí.
+          </p>
+
+          <div className="inline-flex items-center gap-3 rounded-full border border-[#8c481c]/35 bg-white/30 px-5 py-3">
+
+            <span
+              aria-hidden="true"
+              className="h-2.5 w-2.5 rounded-full bg-[#a94c16]"
+            />
+
+            <p className="text-xs font-black uppercase tracking-[0.12em] text-[#39230d] sm:text-sm">
+              Villa Imperial de Potosí · Bolivia
+            </p>
+
+          </div>
+
+        </div>
+
+      </div>
+
     </footer>
   );
 }

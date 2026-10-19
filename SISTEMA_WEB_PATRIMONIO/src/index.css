@@ -143,3 +143,66 @@ html {
 .animate-smooth-float {
   animation: smoothFloat 10s ease-in-out infinite;
 }
+
+/* =========================================
+   CONTROL GENERAL DEL DESPLAZAMIENTO
+========================================= */
+
+/* Evita los efectos visuales de rebote
+   al llegar a los límites de la página */
+
+html {
+  overscroll-behavior: none;
+  overflow-x: clip;
+}
+
+/* Evita el desplazamiento horizontal
+   innecesario */
+
+body {
+  overscroll-behavior: none;
+  overflow-x: clip;
+}
+
+@keyframes giroEscudo {
+  0% {
+    transform: rotateY(0deg);
+  }
+
+  50% {
+    transform: rotateY(180deg);
+  }
+
+  100% {
+    transform: rotateY(360deg);
+  }
+}
+
+
+/* Giro de los logotipos del Navbar */
+@keyframes giroEscudo {
+  0%, 80% {
+    transform: rotateY(0deg);
+  }
+
+  88% {
+    transform: rotateY(360deg);
+  }
+
+  100% {
+    transform: rotateY(360deg);
+  }
+}
+
+.logo-giro {
+  display: block;
+  transform-style: preserve-3d;
+  animation: giroEscudo 5s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .logo-giro {
+    animation: none;
+  }
+}
+

@@ -1,143 +1,318 @@
-import React, { useState, useEffect } from 'react';
+
+import { useEffect, useRef, useState } from 'react';
+import { Link } from 'react-router-dom';
+
+const patrimonioSubsections = [
+  { name: 'Turismo', href: '#turismo' },
+  { name: 'Cultura', href: '#cultura' },
+  { name: 'Arquitectura', href: '#arquitectura' },
+  { name: 'Arqueología', href: '#arqueologia' },
+];
+
+const normativasSubsections = [
+  {
+    name: 'Ley Municipal 055',
+    href: '#normativa-055',
+    desc: 'Reglamento de Áreas Históricas',
+  },
+  {
+    name: 'Ley Municipal 122',
+    href: '#normativa-122',
+    desc: 'Conservación Patrimonial',
+  },
+];
+
+// ============================================================
+// ICONO DE FLECHA
+// ============================================================
+
+function Flecha({ abierta = false }) {
+  return (
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={`h-4 w-4 shrink-0 transition-transform ${
+        abierta ? 'rotate-180' : ''
+      }`}
+    >
+      <path d="m6 9 6 6 6-6" />
+    </svg>
+  );
+}
+
+// ============================================================
+// NAVBAR PRINCIPAL
+// ============================================================
 
 export default function Navbar() {
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [dropdownNormativa, setDropdownNormativa] = useState(false);
+  const headerRef = useRef(null);
+
   const [isScrolled, setIsScrolled] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [openDropdown, setOpenDropdown] = useState(null);
+  const [mobileExpanded, setMobileExpanded] = useState(null);
+
+  // DETECTAR SI ESTAMOS EN INICIO
+
+  const [isHome, setIsHome] = useState(
+    window.location.hash === '' ||
+      window.location.hash === '#inicio'
+  );
+
+  // DETECTAR DESPLAZAMIENTO
 
   useEffect(() => {
-    const handleScroll = () => {
+    const updateScroll = () => {
       setIsScrolled(window.scrollY > 120);
     };
 
-    handleScroll();
-    window.addEventListener('scroll', handleScroll);
+    updateScroll();
+
+    window.addEventListener('scroll', updateScroll, {
+      passive: true,
+    });
 
     return () => {
-      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('scroll', updateScroll);
     };
   }, []);
 
-  const handleGoToSection = (e, href) => {
+  // DETECTAR CAMBIOS DE HASH Y NAVEGACIÓN DEL NAVEGADOR
+
+  useEffect(() => {
+    const updateHome = () => {
+      setIsHome(
+        window.location.hash === '' ||
+          window.location.hash === '#inicio'
+      );
+    };
+
+    window.addEventListener('hashchange', updateHome);
+    window.addEventListener('popstate', updateHome);
+
+    return () => {
+      window.removeEventListener('hashchange', updateHome);
+      window.removeEventListener('popstate', updateHome);
+    };
+  }, []);
+
+  // CERRAR MENÚS CON ESCAPE O AL HACER CLIC FUERA
+
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.key === 'Escape') {
+        setMenuOpen(false);
+        setOpenDropdown(null);
+        setMobileExpanded(null);
+      }
+    };
+
+    const handleOutsideClick = (event) => {
+      if (!headerRef.current?.contains(event.target)) {
+        setMenuOpen(false);
+        setOpenDropdown(null);
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    document.addEventListener('pointerdown', handleOutsideClick);
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+      document.removeEventListener(
+        'pointerdown',
+        handleOutsideClick
+      );
+    };
+  }, []);
+
+  // CERRAR TODOS LOS MENÚS
+
+  const closeMenus = () => {
     setMenuOpen(false);
-    setDropdownOpen(false);
-    setDropdownNormativa(false);
-
-    const element = document.getElementById(href.replace('#', ''));
-
-    if (element) {
-      e.preventDefault();
-      window.history.pushState(null, '', href);
-
-      element.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start',
-      });
-    }
+    setOpenDropdown(null);
+    setMobileExpanded(null);
   };
 
-  const patrimonioSubsections = [
-    { name: 'Turismo', href: '#turismo' },
-    { name: 'Cultura', href: '#cultura' },
-    { name: 'Arquitectura', href: '#arquitectura' },
-    { name: 'Arqueología', href: '#arqueologia' },
-  ];
+  // NAVEGACIÓN ENTRE SECCIONES DE LA PÁGINA PRINCIPAL
 
-  const normativasSubsections = [
-    {
-      name: 'Ley Municipal 055',
-      href: '#normativa-055',
-      desc: 'Reglamento de Áreas Históricas',
-    },
-    {
-      name: 'Ley Municipal 122',
-      href: '#normativa-122',
-      desc: 'Conservación Patrimonial',
-    },
-  ];
+  const handleNavigate = (event, href) => {
+    closeMenus();
 
-  const linkClass = `text-lg xl:text-xl font-extrabold uppercase tracking-widest transition-colors py-2 border-b-2 border-transparent whitespace-nowrap ${
+    const target = document.getElementById(href.slice(1));
+
+    if (!target) {
+      event.preventDefault();
+      return;
+    }
+
+    event.preventDefault();
+
+    if (window.location.hash !== href) {
+      window.history.pushState(null, '', href);
+    }
+
+    // ACTUALIZAR ESTADO DE INICIO
+
+    setIsHome(href === '#inicio');
+
+    const headerHeight =
+      headerRef.current?.offsetHeight ?? 100;
+
+    const top =
+      window.scrollY +
+      target.getBoundingClientRect().top -
+      headerHeight -
+      12;
+
+    const reduceMotion = window.matchMedia(
+      '(prefers-reduced-motion: reduce)'
+    ).matches;
+
+    window.scrollTo({
+      top: Math.max(0, top),
+      behavior: reduceMotion ? 'auto' : 'smooth',
+    });
+  };
+
+  // ==========================================================
+  // ESTILOS ORIGINALES DE LOS ENLACES
+  // ==========================================================
+
+  const linkClass = `inline-flex items-center gap-1 whitespace-nowrap border-b-2 border-transparent py-2 text-sm 2xl:text-base font-extrabold uppercase tracking-[0.06em] transition-colors focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-amber-400 ${
     isScrolled
-      ? 'text-zinc-900 hover:text-amber-600 hover:border-amber-600'
-      : 'text-white hover:text-amber-300 hover:border-amber-300'
+      ? 'text-zinc-900 hover:border-amber-600 hover:text-amber-700'
+      : 'text-white hover:border-amber-400 hover:text-amber-300'
+  }`;
+
+  const mobileLinkClass = `block w-full rounded-lg px-3 py-3 text-left text-base font-bold uppercase tracking-wide transition-colors focus-visible:outline-2 focus-visible:outline-amber-400 ${
+    isScrolled
+      ? 'text-zinc-900 hover:bg-amber-100'
+      : 'text-white hover:bg-white/10'
   }`;
 
   return (
     <header
-      className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 border-b ${
+      ref={headerRef}
+      className={`fixed inset-x-0 top-0 z-50 border-b transition-colors duration-300 ${
         isScrolled
-          ? 'bg-white/[0.38] backdrop-blur-xl border-amber-500/40 shadow-[0_10px_30px_rgba(0,0,0,0.25)]'
-          : 'bg-zinc-950/35 backdrop-blur-md border-amber-500/30'
+          ? 'border-amber-500/40 bg-stone-50/95 shadow-lg backdrop-blur-xl'
+          : 'border-amber-500/30 bg-zinc-950/30 backdrop-blur-md'
       }`}
     >
-      <div className="h-1.5 w-full bg-gradient-to-r from-red-700 via-orange-500 to-amber-500" />
+      {/* FRANJA SUPERIOR */}
 
-      <nav className="w-full max-w-7xl mx-auto px-4 sm:px-6 h-20 md:h-42 flex items-center justify-between relative">
-        {/* Logo de Patrimonio Histórico */}
+      <div className="h-1 w-full bg-gradient-to-r from-red-700 via-orange-500 to-amber-500" />
+
+      {/* NAVEGACIÓN PRINCIPAL */}
+
+      <nav
+        aria-label="Navegación principal"
+        className="mx-auto flex h-24 w-full max-w-[1900px] items-center justify-between gap-1 px-2 sm:h-28 sm:gap-2 sm:px-4 md:h-32 md:px-6 xl:h-36 xl:gap-3 xl:px-8 2xl:px-10"
+      >
+        {/* LOGOTIPO DE PATRIMONIO HISTÓRICO */}
+
         <a
           href="#inicio"
-          onClick={(e) => handleGoToSection(e, '#inicio')}
-          className="flex items-center -ml-65 gap-3 md:gap-4 group z-30"
+          onClick={(event) =>
+            handleNavigate(event, '#inicio')
+          }
+          aria-label="Ir al inicio"
+          className="flex shrink-0 items-center focus-visible:rounded focus-visible:outline-2 focus-visible:outline-amber-400"
         >
           <img
             src="/images/images.png"
-            alt="Logo Dirección de Patrimonio Histórico"
-            className="h-10 sm:h-16 md:h-43 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
+            alt="Dirección de Patrimonio Histórico"
+            className="h-16 w-auto max-w-[70px] object-contain sm:h-20 sm:max-w-24 md:h-24 md:max-w-28 xl:h-28 xl:max-w-32 2xl:h-32 2xl:max-w-36"
           />
         </a>
 
-        {/* Menú de escritorio */}
-        <div className="hidden lg:flex items-center gap-5 xl:gap-7 my-auto -ml-12 xl:-ml-20">
-          {/* Inicio sin desplegable */}
+        {/* MENÚ DE ESCRITORIO */}
+
+        <div className="hidden min-w-0 flex-1 items-center justify-center gap-2 2xl:flex 2xl:gap-4">
+
+          {/* INICIO */}
+
           <a
             href="#inicio"
-            onClick={(e) => handleGoToSection(e, '#inicio')}
+            onClick={(event) =>
+              handleNavigate(event, '#inicio')
+            }
             className={linkClass}
           >
             Inicio
           </a>
 
-          {/* Patrimonio */}
+          {/* PATRIMONIO */}
+
           <div
             className="relative flex items-center"
-            onMouseEnter={() => setDropdownOpen(true)}
-            onMouseLeave={() => setDropdownOpen(false)}
+            onMouseEnter={() =>
+              setOpenDropdown('patrimonio')
+            }
+            onMouseLeave={() =>
+              setOpenDropdown(null)
+            }
+            onBlur={(event) => {
+              if (
+                !event.currentTarget.contains(
+                  event.relatedTarget
+                )
+              ) {
+                setOpenDropdown(null);
+              }
+            }}
           >
             <button
               type="button"
-              onClick={() => {
-                setDropdownOpen(!dropdownOpen);
-                setDropdownNormativa(false);
-              }}
-              aria-expanded={dropdownOpen}
+              aria-expanded={
+                openDropdown === 'patrimonio'
+              }
               aria-controls="submenu-patrimonio"
+              onClick={() =>
+                setOpenDropdown(
+                  openDropdown === 'patrimonio'
+                    ? null
+                    : 'patrimonio'
+                )
+              }
               className={linkClass}
             >
               Patrimonio
+
+              <Flecha
+                abierta={
+                  openDropdown === 'patrimonio'
+                }
+              />
             </button>
 
-            {dropdownOpen && (
+            {openDropdown === 'patrimonio' && (
               <div
                 id="submenu-patrimonio"
-                className="absolute top-full left-0 w-64 pt-3 z-50 animate-fadeIn"
+                className="absolute left-0 top-full z-50 w-64 pt-3"
               >
-                <div className="bg-[#faf7f2] text-zinc-900 rounded-xl shadow-xl border border-stone-200 overflow-hidden">
-                  <div className="px-5 py-3 border-b border-stone-200">
-                    <span className="text-xs font-semibold uppercase tracking-widest text-stone-500">
-                      Áreas de Patrimonio
-                    </span>
-                  </div>
+                <div className="overflow-hidden rounded-xl border border-stone-200 bg-[#faf7f2] text-zinc-900 shadow-xl">
+                  <p className="border-b border-stone-200 px-5 py-3 text-xs font-bold uppercase tracking-wider text-stone-500">
+                    Áreas de Patrimonio
+                  </p>
 
                   <div className="p-2">
-                    {patrimonioSubsections.map((sub) => (
+                    {patrimonioSubsections.map((item) => (
                       <a
-                        key={sub.name}
-                        href={sub.href}
-                        onClick={(e) => handleGoToSection(e, sub.href)}
-                        className="block px-4 py-3 rounded-lg text-lg font-semibold text-zinc-800 transition-colors hover:bg-orange-100 hover:text-orange-800 focus-visible:outline-2 focus-visible:outline-orange-600"
+                        key={item.href}
+                        href={item.href}
+                        onClick={(event) =>
+                          handleNavigate(event, item.href)
+                        }
+                        className="block rounded-lg px-4 py-3 font-semibold text-zinc-800 hover:bg-orange-100 hover:text-orange-800 focus-visible:outline-2 focus-visible:outline-orange-600"
                       >
-                        {sub.name}
+                        {item.name}
                       </a>
                     ))}
                   </div>
@@ -146,59 +321,92 @@ export default function Navbar() {
             )}
           </div>
 
-          {/* Normativa */}
+          {/* NORMATIVA */}
+
           <div
-            className="relative flex items-center"
-            onMouseEnter={() => setDropdownNormativa(true)}
-            onMouseLeave={() => setDropdownNormativa(false)}
+            className="relative flex items-center gap-1"
+            onMouseEnter={() =>
+              setOpenDropdown('normativa')
+            }
+            onMouseLeave={() =>
+              setOpenDropdown(null)
+            }
+            onBlur={(event) => {
+              if (
+                !event.currentTarget.contains(
+                  event.relatedTarget
+                )
+              ) {
+                setOpenDropdown(null);
+              }
+            }}
           >
             <a
               href="#normativas"
-              onClick={(e) => handleGoToSection(e, '#normativas')}
-              onFocus={() => setDropdownNormativa(true)}
-              onKeyDown={(e) => {
-                if (e.key === 'Escape') {
-                  setDropdownNormativa(false);
-                }
-
-                if (e.key === 'ArrowDown') {
-                  e.preventDefault();
-                  setDropdownNormativa(true);
-                }
-              }}
-              aria-expanded={dropdownNormativa}
-              aria-controls="submenu-normativa"
+              onClick={(event) =>
+                handleNavigate(event, '#normativas')
+              }
+              onFocus={() =>
+                setOpenDropdown('normativa')
+              }
               className={linkClass}
             >
               Normativa
             </a>
 
-            {dropdownNormativa && (
+            <button
+              type="button"
+              aria-label="Mostrar leyes municipales"
+              aria-expanded={
+                openDropdown === 'normativa'
+              }
+              aria-controls="submenu-normativa"
+              onClick={() =>
+                setOpenDropdown(
+                  openDropdown === 'normativa'
+                    ? null
+                    : 'normativa'
+                )
+              }
+              className={`rounded p-1 focus-visible:outline-2 focus-visible:outline-amber-400 ${
+                isScrolled
+                  ? 'text-zinc-900'
+                  : 'text-white'
+              }`}
+            >
+              <Flecha
+                abierta={
+                  openDropdown === 'normativa'
+                }
+              />
+            </button>
+
+            {openDropdown === 'normativa' && (
               <div
                 id="submenu-normativa"
-                className="absolute top-full left-0 w-80 pt-3 z-50 animate-fadeIn"
+                className="absolute left-0 top-full z-50 w-80 pt-3"
               >
-                <div className="bg-[#faf7f2] text-zinc-900 rounded-xl shadow-xl border border-stone-200 overflow-hidden">
-                  <div className="px-5 py-3 border-b border-stone-200">
-                    <span className="text-xs font-semibold uppercase tracking-widest text-stone-500">
-                      Leyes Municipales
-                    </span>
-                  </div>
+                <div className="overflow-hidden rounded-xl border border-stone-200 bg-[#faf7f2] text-zinc-900 shadow-xl">
+                  <p className="border-b border-stone-200 px-5 py-3 text-xs font-bold uppercase tracking-wider text-stone-500">
+                    Leyes municipales
+                  </p>
 
                   <div className="p-2">
-                    {normativasSubsections.map((norma) => (
+                    {normativasSubsections.map((item) => (
                       <a
-                        key={norma.name}
-                        href={norma.href}
-                        onClick={(e) => handleGoToSection(e, norma.href)}
-                        className="block px-4 py-3 rounded-lg transition-colors hover:bg-orange-100 focus-visible:outline-2 focus-visible:outline-orange-600 group"
+                        key={item.href}
+                        href={item.href}
+                        onClick={(event) =>
+                          handleNavigate(event, item.href)
+                        }
+                        className="group block rounded-lg px-4 py-3 hover:bg-orange-100 focus-visible:outline-2 focus-visible:outline-orange-600"
                       >
-                        <span className="block text-lg font-semibold text-zinc-800 group-hover:text-orange-800">
-                          {norma.name}
+                        <span className="block font-semibold text-zinc-800 group-hover:text-orange-800">
+                          {item.name}
                         </span>
 
-                        <span className="block mt-1 text-sm leading-relaxed text-stone-600">
-                          {norma.desc}
+                        <span className="mt-1 block text-sm text-stone-600">
+                          {item.desc}
                         </span>
                       </a>
                     ))}
@@ -208,174 +416,297 @@ export default function Navbar() {
             )}
           </div>
 
-          {/* Trámites */}
+          {/* TRÁMITES */}
+
           <a
             href="#tramites"
-            onClick={(e) => handleGoToSection(e, '#tramites')}
+            onClick={(event) =>
+              handleNavigate(event, '#tramites')
+            }
             className={linkClass}
           >
             Trámites
           </a>
 
-          {/* Planes y Programas */}
+          {/* PLANES Y PROGRAMAS */}
+
           <a
             href="#planes"
-            onClick={(e) => handleGoToSection(e, '#planes')}
+            onClick={(event) =>
+              handleNavigate(event, '#planes')
+            }
             className={linkClass}
           >
             Planes y Programas
           </a>
 
-          {/* Información */}
-          <a
-            href="#historia"
-            onClick={(e) => handleGoToSection(e, '#historia')}
-            className={`text-lg xl:text-xl font-extrabold uppercase tracking-widest px-5 py-2.5 rounded-full border transition-all shadow-md whitespace-nowrap ${
+          {/* INFORMACIÓN */}
+
+          <Link
+            to="/informacion"
+            onClick={closeMenus}
+            className={`whitespace-nowrap rounded-full border px-3 py-2 text-sm font-extrabold uppercase tracking-[0.05em] transition-colors focus-visible:outline-2 focus-visible:outline-amber-400 2xl:px-4 2xl:text-base ${
               isScrolled
-                ? 'text-amber-950 bg-amber-500/30 hover:bg-amber-500/40 border-amber-600/60'
-                : 'text-amber-300 hover:text-white bg-amber-500/20 hover:bg-amber-500/30 border-amber-400/40'
+                ? 'border-amber-600/60 bg-amber-100 text-amber-950 hover:bg-amber-200'
+                : 'border-amber-400/50 bg-amber-500/20 text-amber-300 hover:bg-amber-500/30'
             }`}
           >
             Información
-          </a>
+          </Link>
+
         </div>
 
-        {/* Botón móvil y escudo a la derecha */}
-        <div className="flex items-center gap-3 sm:gap-4 shrink-0 ml-4">
+        {/* LOGOTIPOS MUNICIPALES */}
+
+        <div className="flex shrink-0 items-center gap-2 sm:gap-3 2xl:gap-4">
+
+          {/* LOGOTIPO DE POTOSÍ */}
+
+          <img
+            src="/images/potosi.png"
+            alt="Logotipo de Potosí con el lema Sigamos Construyendo Juntos"
+            className={`h-12 w-auto max-w-[72px] shrink-0 object-contain sm:h-16 sm:max-w-24 md:h-20 md:max-w-28 xl:h-24 xl:max-w-36 2xl:h-28 2xl:max-w-40 ${
+              isHome ? 'logo-giro' : ''
+            }`}
+          />
+
+          {/* LÍNEA SEPARADORA */}
+
+          <div
+            aria-hidden="true"
+            className={`h-10 w-px shrink-0 sm:h-14 md:h-16 xl:h-20 2xl:h-24 ${
+              isScrolled
+                ? 'bg-stone-400'
+                : 'bg-white/60'
+            }`}
+          />
+
+          {/* ESCUDO MUNICIPAL */}
+
+          <img
+            src="/images/escudo.png"
+            alt="Escudo del Gobierno Autónomo Municipal de Potosí"
+            className={`h-12 w-auto shrink-0 object-contain sm:h-16 md:h-20 xl:h-24 2xl:h-28 ${
+              isHome ? 'logo-giro' : ''
+            }`}
+          />
+
+          {/* BOTÓN PARA MÓVILES Y TABLETAS */}
+
           <button
             type="button"
-            onClick={() => setMenuOpen(!menuOpen)}
-            className={`lg:hidden p-2 z-30 ${
-              isScrolled ? 'text-zinc-900' : 'text-white'
-            }`}
-            aria-label={menuOpen ? 'Cerrar menú' : 'Abrir menú'}
+            aria-label={
+              menuOpen
+                ? 'Cerrar menú'
+                : 'Abrir menú'
+            }
             aria-expanded={menuOpen}
             aria-controls="menu-movil"
+            onClick={() => {
+              setMenuOpen(!menuOpen);
+              setMobileExpanded(null);
+              setOpenDropdown(null);
+            }}
+            className={`rounded-lg p-2 focus-visible:outline-2 focus-visible:outline-amber-400 2xl:hidden ${
+              isScrolled
+                ? 'text-zinc-900'
+                : 'text-white'
+            }`}
           >
             <svg
-              className="w-8 h-8"
+              aria-hidden="true"
+              className="h-7 w-7"
+              viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
-              viewBox="0 0 24 24"
-              aria-hidden="true"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
             >
               {menuOpen ? (
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M6 18L18 6M6 6l12 12"
-                />
+                <path d="M6 6 18 18M18 6 6 18" />
               ) : (
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M4 6h16M4 12h16M4 18h16"
-                />
+                <path d="M4 6h16M4 12h16M4 18h16" />
               )}
             </svg>
           </button>
 
-          <img
-            src="/images/escudo.png"
-            alt="Escudo de Potosí"
-            className="h-12 sm:h-16 md:h-24 w-auto object-contain"
-          />
         </div>
       </nav>
 
-      {/* Menú móvil */}
+      {/* MENÚ MÓVIL */}
+
       {menuOpen && (
         <div
           id="menu-movil"
-          className={`lg:hidden border-b-2 border-amber-500/50 px-6 py-6 flex flex-col gap-4 max-h-[85vh] overflow-y-auto ${
+          className={`max-h-[calc(100dvh-6rem)] overflow-y-auto border-t border-amber-500/30 px-4 py-4 shadow-xl sm:max-h-[calc(100dvh-7rem)] md:max-h-[calc(100dvh-8rem)] xl:max-h-[calc(100dvh-9rem)] 2xl:hidden ${
             isScrolled
-              ? 'bg-white/90 text-zinc-900'
+              ? 'bg-stone-50 text-zinc-900'
               : 'bg-zinc-950 text-white'
           }`}
         >
-          <a
-            href="#inicio"
-            onClick={(e) => handleGoToSection(e, '#inicio')}
-            className="text-xl font-bold uppercase tracking-wider"
-          >
-            Inicio
-          </a>
+          <div className="mx-auto flex max-w-2xl flex-col gap-1">
 
-          <div className="rounded-xl bg-[#faf7f2] text-zinc-900 border border-stone-200 overflow-hidden">
-            <div className="px-5 py-3 border-b border-stone-200">
-              <span className="text-xs font-semibold uppercase tracking-widest text-stone-500">
-                Patrimonio
-              </span>
-            </div>
+            {/* INICIO */}
 
-            <div className="p-2">
-              {patrimonioSubsections.map((sub) => (
-                <a
-                  key={sub.name}
-                  href={sub.href}
-                  onClick={(e) => handleGoToSection(e, sub.href)}
-                  className="block px-4 py-3 rounded-lg text-lg font-semibold transition-colors hover:bg-orange-100 hover:text-orange-800"
-                >
-                  {sub.name}
-                </a>
-              ))}
-            </div>
-          </div>
-
-          <div className="rounded-xl bg-[#faf7f2] text-zinc-900 border border-stone-200 overflow-hidden">
             <a
-              href="#normativas"
-              onClick={(e) => handleGoToSection(e, '#normativas')}
-              className="block px-5 py-3 border-b border-stone-200 text-xs font-semibold uppercase tracking-widest text-stone-500"
+              href="#inicio"
+              onClick={(event) =>
+                handleNavigate(event, '#inicio')
+              }
+              className={mobileLinkClass}
             >
-              Normativa
+              Inicio
             </a>
 
-            <div className="p-2">
-              {normativasSubsections.map((norma) => (
-                <a
-                  key={norma.name}
-                  href={norma.href}
-                  onClick={(e) => handleGoToSection(e, norma.href)}
-                  className="block px-4 py-3 rounded-lg transition-colors hover:bg-orange-100 group"
-                >
-                  <span className="block text-lg font-semibold group-hover:text-orange-800">
-                    {norma.name}
-                  </span>
+            {/* PATRIMONIO */}
 
-                  <span className="block mt-1 text-sm leading-relaxed text-stone-600">
-                    {norma.desc}
-                  </span>
-                </a>
-              ))}
+            <button
+              type="button"
+              aria-expanded={
+                mobileExpanded === 'patrimonio'
+              }
+              aria-controls="patrimonio-movil"
+              onClick={() =>
+                setMobileExpanded(
+                  mobileExpanded === 'patrimonio'
+                    ? null
+                    : 'patrimonio'
+                )
+              }
+              className={`${mobileLinkClass} flex items-center justify-between`}
+            >
+              Patrimonio
+
+              <Flecha
+                abierta={
+                  mobileExpanded === 'patrimonio'
+                }
+              />
+            </button>
+
+            {mobileExpanded === 'patrimonio' && (
+              <div
+                id="patrimonio-movil"
+                className="ml-3 rounded-lg bg-[#faf7f2] p-2 text-zinc-900"
+              >
+                {patrimonioSubsections.map((item) => (
+                  <a
+                    key={item.href}
+                    href={item.href}
+                    onClick={(event) =>
+                      handleNavigate(event, item.href)
+                    }
+                    className="block rounded-lg px-4 py-3 font-semibold hover:bg-orange-100 focus-visible:outline-2 focus-visible:outline-orange-600"
+                  >
+                    {item.name}
+                  </a>
+                ))}
+              </div>
+            )}
+
+            {/* NORMATIVA */}
+
+            <div className="flex items-center justify-between gap-2">
+              <a
+                href="#normativas"
+                onClick={(event) =>
+                  handleNavigate(event, '#normativas')
+                }
+                className={`${mobileLinkClass} flex-1`}
+              >
+                Normativa
+              </a>
+
+              <button
+                type="button"
+                aria-label="Mostrar leyes municipales"
+                aria-expanded={
+                  mobileExpanded === 'normativa'
+                }
+                aria-controls="normativa-movil"
+                onClick={() =>
+                  setMobileExpanded(
+                    mobileExpanded === 'normativa'
+                      ? null
+                      : 'normativa'
+                  )
+                }
+                className={`rounded-lg p-3 focus-visible:outline-2 focus-visible:outline-amber-400 ${
+                  isScrolled
+                    ? 'text-zinc-900'
+                    : 'text-white'
+                }`}
+              >
+                <Flecha
+                  abierta={
+                    mobileExpanded === 'normativa'
+                  }
+                />
+              </button>
             </div>
+
+            {mobileExpanded === 'normativa' && (
+              <div
+                id="normativa-movil"
+                className="ml-3 rounded-lg bg-[#faf7f2] p-2 text-zinc-900"
+              >
+                {normativasSubsections.map((item) => (
+                  <a
+                    key={item.href}
+                    href={item.href}
+                    onClick={(event) =>
+                      handleNavigate(event, item.href)
+                    }
+                    className="block rounded-lg px-4 py-3 hover:bg-orange-100 focus-visible:outline-2 focus-visible:outline-orange-600"
+                  >
+                    <span className="block font-semibold">
+                      {item.name}
+                    </span>
+
+                    <span className="block text-sm text-stone-600">
+                      {item.desc}
+                    </span>
+                  </a>
+                ))}
+              </div>
+            )}
+
+            {/* TRÁMITES */}
+
+            <a
+              href="#tramites"
+              onClick={(event) =>
+                handleNavigate(event, '#tramites')
+              }
+              className={mobileLinkClass}
+            >
+              Trámites
+            </a>
+
+            {/* PLANES Y PROGRAMAS */}
+
+            <a
+              href="#planes"
+              onClick={(event) =>
+                handleNavigate(event, '#planes')
+              }
+              className={mobileLinkClass}
+            >
+              Planes y Programas
+            </a>
+
+            {/* INFORMACIÓN MÓVIL */}
+
+            <Link
+              to="/informacion"
+              onClick={closeMenus}
+              className={`${mobileLinkClass} text-amber-500`}
+            >
+              Información
+            </Link>
+
           </div>
-
-          <a
-            href="#tramites"
-            onClick={(e) => handleGoToSection(e, '#tramites')}
-            className="text-xl font-bold uppercase tracking-wider"
-          >
-            Trámites
-          </a>
-
-          <a
-            href="#planes"
-            onClick={(e) => handleGoToSection(e, '#planes')}
-            className="text-xl font-bold uppercase tracking-wider"
-          >
-            Planes y Programas
-          </a>
-
-          <a
-            href="#historia"
-            onClick={(e) => handleGoToSection(e, '#historia')}
-            className="text-xl font-bold uppercase tracking-wider text-amber-600"
-          >
-            Información
-          </a>
         </div>
       )}
     </header>
