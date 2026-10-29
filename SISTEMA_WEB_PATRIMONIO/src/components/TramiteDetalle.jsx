@@ -1,889 +1,786 @@
-import { Link, useParams } from 'react-router-dom';
 
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
+import React from "react";
 
-import { tramites } from '../data/tramites';
+import {
+  Link,
+  useParams,
+} from "react-router-dom";
 
-// ======================================================
-// ICONO DE FLECHA
-// ======================================================
+import {
+  motion,
+  useReducedMotion,
+} from "motion/react";
 
-function IconoFlecha({ direccion = 'izquierda' }) {
+import { tramites } from "../data/tramites";
+
+// ============================================================
+// IMÁGENES PARA LAS PORTADAS DE LOS NUEVE TRÁMITES
+// ============================================================
+
+// Las imágenes deben estar dentro de public/images.
+
+const imagenesTramites = [
+  "/images/Gonzalo Viera Azpiroz - Potosí.jpeg",
+  "/images/Potosí.jpeg",
+  "/images/descarga.jpeg",
+
+  "/images/Potosí.jpeg",
+  "/images/descarga.jpeg",
+  "/images/Gonzalo Viera Azpiroz - Potosí.jpeg",
+
+  "/images/descarga.jpeg",
+  "/images/Gonzalo Viera Azpiroz - Potosí.jpeg",
+  "/images/Potosí.jpeg",
+];
+
+// ============================================================
+// ICONO DE REQUISITOS
+// ============================================================
+
+function IconoRequisitos() {
   return (
     <svg
-      aria-hidden="true"
+      width="28"
+      height="28"
       viewBox="0 0 24 24"
-      width="20"
-      height="20"
       fill="none"
       stroke="currentColor"
-      strokeWidth="2"
+      strokeWidth="1.8"
       strokeLinecap="round"
       strokeLinejoin="round"
-      style={{
-        transform:
-          direccion === 'derecha' ? 'rotate(180deg)' : 'none',
-      }}
+      aria-hidden="true"
     >
-      <path d="M19 12H5" />
-      <path d="m12 19-7-7 7-7" />
+      <rect x="5" y="4" width="14" height="17" rx="2" />
+
+      <path d="M9 4V2h6v2" />
+
+      <path d="m8 11 2 2 5-5" />
+
+      <path d="M8 17h8" />
     </svg>
   );
 }
 
-// ======================================================
-// BOTÓN PARA VOLVER A TRÁMITES
-// ======================================================
+// ============================================================
+// BOTÓN VOLVER A TRÁMITES
+// ============================================================
 
-function BotonVolver({ outlined = false }) {
+function BotonVolver({ oscuro = false }) {
   return (
-    <Button
-      component={Link}
+    <Link
       to="/#tramites"
-      startIcon={<IconoFlecha />}
-      variant={outlined ? 'outlined' : 'text'}
-      sx={{
-        minHeight: 46,
-        px: 2,
-        borderRadius: '10px',
-        color: '#a94c16',
-        borderColor: '#b96836',
-        fontSize: '1rem',
-        fontWeight: 800,
-        textTransform: 'none',
-
-        '&:hover': {
-          bgcolor: '#f8eadf',
-          borderColor: '#8d351d',
-        },
-      }}
+      className={`
+        inline-flex
+        min-h-11
+        items-center
+        justify-center
+        gap-3
+        rounded-lg
+        px-4
+        py-2.5
+        text-sm
+        font-extrabold
+        uppercase
+        tracking-wide
+        transition-all
+        duration-300
+        ${
+          oscuro
+            ? "text-amber-300 hover:bg-white/10 hover:text-white"
+            : "text-orange-700 hover:bg-orange-50"
+        }
+      `}
     >
-      Volver a trámites
-    </Button>
+      <span aria-hidden="true" className="text-xl">
+        ←
+      </span>
+
+      VOLVER A TRÁMITES
+    </Link>
   );
 }
 
-// ======================================================
-// CABECERA INSTITUCIONAL
-// ======================================================
-
-function CabeceraInstitucional() {
-  return (
-    <Box
-      component="header"
-      sx={{
-        bgcolor: '#ffffff',
-        borderBottom: '1px solid #e5ddd1',
-        boxShadow: '0 3px 15px rgba(40, 30, 20, 0.05)',
-
-        px: {
-          xs: 2,
-          sm: 3,
-          md: 4,
-          lg: 5,
-        },
-
-        py: {
-          xs: 1.5,
-          sm: 2,
-          md: 2.5,
-        },
-      }}
-    >
-      <Box
-        sx={{
-          width: '100%',
-          maxWidth: 1500,
-          mx: 'auto',
-
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-
-          gap: {
-            xs: 1.5,
-            sm: 2.5,
-            lg: 4,
-          },
-        }}
-      >
-        {/* LOGOTIPO DE PATRIMONIO HISTÓRICO */}
-
-        <Box
-          component={Link}
-          to="/#inicio"
-          aria-label="Volver al inicio de Patrimonio Histórico de Potosí"
-          sx={{
-            display: 'flex',
-            alignItems: 'center',
-
-            gap: {
-              xs: 1,
-              sm: 2,
-            },
-
-            minWidth: 0,
-            flexShrink: 0,
-            color: '#263b39',
-            textDecoration: 'none',
-          }}
-        >
-          <Box
-            component="img"
-            src="/images/images.png"
-            alt="Logotipo de la Dirección de Patrimonio Histórico"
-            sx={{
-              height: {
-                xs: 60,
-                sm: 74,
-                md: 86,
-                lg: 96,
-              },
-
-              width: 'auto',
-
-              maxWidth: {
-                xs: 58,
-                sm: 72,
-                md: 82,
-                lg: 92,
-              },
-
-              objectFit: 'contain',
-              flexShrink: 0,
-            }}
-          />
-
-          <Box>
-            <Typography
-              sx={{
-                fontSize: {
-                  xs: '0.86rem',
-                  sm: '1.1rem',
-                  md: '1.25rem',
-                  lg: '1.35rem',
-                },
-
-                fontWeight: 900,
-                lineHeight: 1.35,
-                color: '#263b39',
-              }}
-            >
-              Patrimonio Histórico
-            </Typography>
-
-            <Typography
-              sx={{
-                mt: 0.3,
-
-                fontSize: {
-                  xs: '0.82rem',
-                  sm: '1rem',
-                  md: '1.1rem',
-                },
-
-                fontWeight: 600,
-                color: '#716b63',
-              }}
-            >
-              Potosí
-            </Typography>
-          </Box>
-        </Box>
-
-        {/* IDENTIDAD DEL GOBIERNO MUNICIPAL */}
-
-        <Box
-          sx={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'flex-end',
-
-            gap: {
-              xs: 1,
-              sm: 1.5,
-              md: 2.5,
-              lg: 3,
-            },
-
-            flexShrink: 0,
-          }}
-        >
-          {/* ESCUDO MUNICIPAL */}
-
-          <Box
-            component="img"
-            src="/images/escudo.png"
-            alt="Escudo del Gobierno Autónomo Municipal de Potosí"
-            sx={{
-              height: {
-                xs: 54,
-                sm: 68,
-                md: 82,
-                lg: 92,
-              },
-
-              width: 'auto',
-
-              maxWidth: {
-                xs: 46,
-                sm: 58,
-                md: 68,
-                lg: 78,
-              },
-
-              objectFit: 'contain',
-              flexShrink: 0,
-            }}
-          />
-
-          {/* DENOMINACIÓN MUNICIPAL */}
-
-          <Box
-            aria-label="Gobierno Autónomo Municipal de Potosí"
-            sx={{
-              display: {
-                xs: 'none',
-                sm: 'block',
-              },
-
-              flexShrink: 0,
-              lineHeight: 1,
-            }}
-          >
-            <Typography
-              sx={{
-                fontSize: {
-                  sm: '0.67rem',
-                  md: '0.82rem',
-                  lg: '0.95rem',
-                },
-
-                fontWeight: 700,
-                textTransform: 'uppercase',
-                whiteSpace: 'nowrap',
-                color: '#245b61',
-                lineHeight: 1.5,
-              }}
-            >
-              GOBIERNO AUTÓNOMO
-            </Typography>
-
-            <Typography
-              sx={{
-                fontSize: {
-                  sm: '0.67rem',
-                  md: '0.82rem',
-                  lg: '0.95rem',
-                },
-
-                fontWeight: 700,
-                textTransform: 'uppercase',
-                whiteSpace: 'nowrap',
-                color: '#245b61',
-                lineHeight: 1.5,
-              }}
-            >
-              MUNICIPAL DE
-            </Typography>
-
-            <Typography
-              sx={{
-                mt: 0.2,
-
-                fontSize: {
-                  sm: '1.5rem',
-                  md: '1.9rem',
-                  lg: '2.25rem',
-                },
-
-                fontWeight: 950,
-                letterSpacing: '-0.055em',
-                lineHeight: 1,
-                whiteSpace: 'nowrap',
-                color: '#ef4045',
-              }}
-            >
-              POTOSÍ
-            </Typography>
-          </Box>
-
-          {/* LOGOTIPO POTOSI.PNG */}
-
-          <Box
-            component="img"
-            src="/images/potosi.png"
-            alt="Logotipo del Gobierno Autónomo Municipal de Potosí, Sigamos Construyendo Juntos"
-            sx={{
-              height: {
-                xs: 54,
-                sm: 68,
-                md: 82,
-                lg: 92,
-              },
-
-              width: {
-                xs: 94,
-                sm: 120,
-                md: 145,
-                lg: 165,
-              },
-
-              objectFit: 'contain',
-              objectPosition: 'center',
-              flexShrink: 0,
-            }}
-          />
-        </Box>
-      </Box>
-    </Box>
-  );
-}
-
-// ======================================================
-// AVISO SIMPLE DE INFORMACIÓN PENDIENTE
-// ======================================================
-
-function AvisoPendiente() {
-  return (
-    <Box
-      role="note"
-      sx={{
-        display: 'flex',
-        alignItems: 'center',
-        gap: 1.5,
-
-        px: {
-          xs: 2,
-          sm: 2.5,
-        },
-
-        py: {
-          xs: 1.8,
-          sm: 2,
-        },
-
-        mb: 4,
-
-        bgcolor: '#fff5e5',
-        border: '1px solid #ecd4a5',
-        borderLeft: '5px solid #ba741e',
-        borderRadius: '12px',
-      }}
-    >
-      <Box
-        aria-hidden="true"
-        sx={{
-          flexShrink: 0,
-          width: 9,
-          height: 9,
-          borderRadius: '50%',
-          bgcolor: '#ba741e',
-        }}
-      />
-
-      <Typography
-        sx={{
-          fontSize: {
-            xs: '1rem',
-            sm: '1.1rem',
-          },
-
-          fontWeight: 800,
-          color: '#794414',
-          lineHeight: 1.6,
-        }}
-      >
-        Información pendiente (faltan fotografías)
-      </Typography>
-    </Box>
-  );
-}
-
-// ======================================================
-// LISTA DE REQUISITOS CON VIÑETAS NARANJAS
-// ======================================================
+// ============================================================
+// LISTA DE REQUISITOS
+// ============================================================
 
 function ListaRequisitos({ items }) {
-  if (!items?.length) {
+  if (!Array.isArray(items) || items.length === 0) {
     return null;
   }
 
   return (
-    <Box
-      component="ul"
-      sx={{
-        m: 0,
-
-        pl: {
-          xs: 2.7,
-          sm: 3.2,
-        },
-
-        listStyleType: 'disc',
-
-        '& li': {
-          pl: {
-            xs: 0.7,
-            sm: 1,
-          },
-
-          mb: {
-            xs: 2,
-            sm: 2.5,
-          },
-
-          fontSize: {
-            xs: '1rem',
-            sm: '1.1rem',
-            md: '1.17rem',
-          },
-
-          lineHeight: {
-            xs: 1.8,
-            sm: 1.9,
-          },
-
-          color: '#45443f',
-          overflowWrap: 'anywhere',
-        },
-
-        '& li::marker': {
-          color: '#c56832',
-          fontSize: '1.1em',
-        },
-
-        '& li:last-child': {
-          mb: 0,
-        },
-      }}
-    >
+    <ul className="space-y-4">
       {items.map((item, index) => (
-        <Box
-          component="li"
-          key={`${index}-${item}`}
+        <li
+          key={index}
+          className="
+            flex
+            items-start
+            gap-4
+            text-sm
+            leading-relaxed
+            text-stone-700
+            sm:text-base
+          "
         >
-          {item}
-        </Box>
+          {/* ICONO DE VERIFICACIÓN */}
+
+          <span
+            aria-hidden="true"
+            className="
+              mt-[5px]
+              flex
+              h-5
+              w-5
+              shrink-0
+              items-center
+              justify-center
+              rounded-full
+              bg-orange-100
+              text-orange-700
+            "
+          >
+            <svg
+              width="12"
+              height="12"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="3"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="m5 12 4 4L19 6" />
+            </svg>
+          </span>
+
+          <span className="whitespace-pre-line">
+            {item}
+          </span>
+        </li>
       ))}
-    </Box>
+    </ul>
   );
 }
 
-// ======================================================
-// TARJETA DE CADA APARTADO
-// ======================================================
+// ============================================================
+// TARJETAS DE REQUISITOS
+// ============================================================
 
 function BloqueRequisitos({ bloque, index }) {
+  const reducirMovimiento = useReducedMotion();
+
   return (
-    <Box
-      component="section"
-      aria-labelledby={`titulo-bloque-${index}`}
-      sx={{
-        position: 'relative',
-        bgcolor: '#ffffff',
-
-        border: '1px solid #e8dfd3',
-
-        borderRadius: {
-          xs: '14px',
-          sm: '18px',
-        },
-
-        overflow: 'hidden',
-
-        boxShadow:
-          '0 5px 22px rgba(44, 35, 25, 0.045)',
-
-        mb: 3,
+    <motion.article
+      initial={
+        reducirMovimiento
+          ? false
+          : { opacity: 0, y: 30 }
+      }
+      whileInView={{
+        opacity: 1,
+        y: 0,
       }}
+      viewport={{
+        once: true,
+        amount: 0.1,
+      }}
+      transition={{
+        duration: reducirMovimiento ? 0 : 0.6,
+        delay: reducirMovimiento ? 0 : index * 0.08,
+      }}
+      className="
+        group
+        overflow-hidden
+        rounded-2xl
+        border
+        border-[#E5DBD0]
+        bg-white
+        shadow-[0_6px_24px_rgba(40,30,20,0.05)]
+        transition-all
+        duration-300
+        hover:border-orange-300
+        hover:shadow-[0_12px_30px_rgba(150,65,20,0.10)]
+      "
     >
-      {/* DETALLE SUPERIOR */}
+      {/* FRANJA SUPERIOR */}
 
-      <Box
-        aria-hidden="true"
-        sx={{
-          height: 4,
-          width: '100%',
-
-          background:
-            'linear-gradient(90deg, #a94427 0%, #d98236 55%, #d6ac58 100%)',
-        }}
+      <div
+        className="
+          h-[3px]
+          w-full
+          bg-gradient-to-r
+          from-red-600
+          via-orange-500
+          to-amber-400
+        "
       />
 
-      <Box
-        sx={{
-          p: {
-            xs: 2.5,
-            sm: 3.5,
-            md: 4.5,
-          },
-        }}
-      >
-        <Typography
-          id={`titulo-bloque-${index}`}
-          component="h2"
-          sx={{
-            mb: 3,
+      <div className="p-6 sm:p-8 lg:p-10">
 
-            fontSize: {
-              xs: '1.3rem',
-              sm: '1.55rem',
-              md: '1.8rem',
-            },
+        {/* ENCABEZADO */}
 
-            fontWeight: 900,
-            lineHeight: 1.35,
-            color: '#293330',
-            overflowWrap: 'anywhere',
-          }}
-        >
-          {bloque.titulo}
-        </Typography>
+        <div className="mb-6 flex items-start gap-4">
+          <div
+            className="
+              flex
+              h-14
+              w-14
+              shrink-0
+              items-center
+              justify-center
+              rounded-xl
+              bg-orange-50
+              text-orange-700
+            "
+          >
+            <IconoRequisitos />
+          </div>
+
+          <div>
+            <p
+              className="
+                mb-2
+                text-xs
+                font-extrabold
+                uppercase
+                tracking-[0.15em]
+                text-orange-700
+              "
+            >
+              APARTADO {String(index + 1).padStart(2, "0")}
+            </p>
+
+            <h2
+              className="
+                text-xl
+                font-extrabold
+                leading-snug
+                text-[#24352F]
+                sm:text-2xl
+              "
+            >
+              {bloque.titulo}
+            </h2>
+          </div>
+        </div>
 
         {/* INTRODUCCIÓN */}
 
         {bloque.introduccion && (
-          <Typography
-            sx={{
-              mb: 3,
-
-              fontSize: {
-                xs: '1rem',
-                sm: '1.1rem',
-                md: '1.17rem',
-              },
-
-              lineHeight: 1.9,
-              color: '#5b5952',
-              whiteSpace: 'pre-line',
-            }}
+          <p
+            className="
+              mb-5
+              whitespace-pre-line
+              text-sm
+              leading-relaxed
+              text-stone-600
+              sm:text-base
+            "
           >
             {bloque.introduccion}
-          </Typography>
+          </p>
         )}
 
-        {/* TEXTO INFORMATIVO */}
+        {/* TEXTO COMPLEMENTARIO */}
 
         {bloque.texto && (
-          <Typography
-            sx={{
-              fontSize: {
-                xs: '1rem',
-                sm: '1.1rem',
-                md: '1.17rem',
-              },
-
-              lineHeight: 1.9,
-              color: '#45443f',
-              whiteSpace: 'pre-line',
-            }}
+          <p
+            className="
+              mb-5
+              whitespace-pre-line
+              text-sm
+              leading-relaxed
+              text-stone-700
+              sm:text-base
+            "
           >
             {bloque.texto}
-          </Typography>
+          </p>
         )}
 
-        {/* REQUISITOS CON VIÑETAS */}
+        {/* LISTA DE REQUISITOS */}
 
-        {bloque.items && (
-          <ListaRequisitos items={bloque.items} />
-        )}
-      </Box>
-    </Box>
+        {Array.isArray(bloque.items) &&
+          bloque.items.length > 0 && (
+            <ListaRequisitos items={bloque.items} />
+          )}
+      </div>
+    </motion.article>
   );
 }
 
-// ======================================================
-// COMPONENTE PRINCIPAL DE DETALLE DEL TRÁMITE
-// ======================================================
+// ============================================================
+// COMPONENTE PRINCIPAL
+// ============================================================
 
 export default function TramiteDetalle() {
   const { tramiteId } = useParams();
 
-  const tramite = tramites.find(
+  const reducirMovimiento = useReducedMotion();
+
+  // ==========================================================
+  // BUSCAR TRÁMITE Y SU POSICIÓN ORIGINAL
+  // ==========================================================
+
+  const indiceTramite = tramites.findIndex(
     (item) => item.id === tramiteId
   );
 
+  const tramite =
+    indiceTramite !== -1
+      ? tramites[indiceTramite]
+      : null;
+
+  // ==========================================================
+  // SELECCIONAR IMAGEN PARA CADA TRÁMITE
+  // ==========================================================
+
+  const imagenFondo =
+    indiceTramite >= 0
+      ? imagenesTramites[
+          indiceTramite % imagenesTramites.length
+        ]
+      : "/images/Potosí.jpeg";
+
+  // ==========================================================
   // TRÁMITE NO ENCONTRADO
+  // ==========================================================
 
   if (!tramite) {
     return (
-      <Box
-        sx={{
-          minHeight: '100vh',
-          bgcolor: '#f7f3ec',
-        }}
+      <main
+        className="
+          flex
+          min-h-screen
+          flex-col
+          items-center
+          justify-center
+          bg-[#F7F4EF]
+          px-6
+          pt-32
+          text-center
+        "
       >
-        <CabeceraInstitucional />
+        <h1 className="mb-4 text-3xl font-extrabold text-[#24352F]">
+          Trámite no encontrado
+        </h1>
 
-        <Box
-          component="main"
-          sx={{
-            maxWidth: 1100,
-            mx: 'auto',
-            px: 3,
-            py: 8,
-          }}
-        >
-          <Typography
-            component="h1"
-            sx={{
-              fontSize: {
-                xs: '2rem',
-                sm: '2.6rem',
-              },
+        <p className="mb-7 text-stone-600">
+          No se encontró la información solicitada.
+        </p>
 
-              fontWeight: 900,
-              color: '#293330',
-            }}
-          >
-            Trámite no encontrado
-          </Typography>
-
-          <Typography
-            sx={{
-              mt: 2,
-              fontSize: '1.1rem',
-              color: '#615c55',
-            }}
-          >
-            No se encontró la información solicitada.
-          </Typography>
-
-          <Box sx={{ mt: 4 }}>
-            <BotonVolver outlined />
-          </Box>
-        </Box>
-      </Box>
+        <BotonVolver />
+      </main>
     );
   }
 
-  // PÁGINA DE DETALLE
+  // ==========================================================
+  // PÁGINA INDIVIDUAL DEL TRÁMITE
+  // ==========================================================
 
   return (
-    <Box
-      sx={{
-        minHeight: '100vh',
-        bgcolor: '#f7f4ee',
-        color: '#272522',
-      }}
+    <main
+      className="
+        min-h-screen
+        bg-[#F7F4EF]
+        text-[#24352F]
+      "
     >
-      {/* CABECERA INSTITUCIONAL */}
+      {/* ======================================================
+          1. PORTADA CON IMAGEN PERSONALIZADA
+          ====================================================== */}
 
-      <CabeceraInstitucional />
-
-      {/* CONTENIDO PRINCIPAL */}
-
-      <Box
-        component="main"
-        sx={{
-          width: '100%',
-          maxWidth: 1240,
-          mx: 'auto',
-
-          px: {
-            xs: 2,
-            sm: 4,
-            lg: 5,
-          },
-
-          py: {
-            xs: 3,
-            sm: 5,
-            md: 6,
-          },
-        }}
+      <section
+        className="
+          relative
+          flex
+          min-h-[55svh]
+          items-center
+          overflow-hidden
+          bg-[#102C27]
+          px-6
+          pb-20
+          pt-40
+          text-white
+          sm:px-12
+          lg:px-24
+        "
       >
-        {/* VOLVER A TRÁMITES */}
+        {/* ==================================================
+            FOTOGRAFÍA CON ZOOM CINEMATOGRÁFICO
+            ================================================== */}
 
-        <Box sx={{ mb: 4 }}>
-          <BotonVolver />
-        </Box>
-
-        {/* ENCABEZADO DEL TRÁMITE */}
-
-        <Box
-          component="header"
-          sx={{
-            mb: {
-              xs: 4,
-              md: 5,
+        <motion.img
+          key={imagenFondo}
+          src={imagenFondo}
+          alt=""
+          aria-hidden="true"
+          className="
+            absolute
+            inset-0
+            h-full
+            w-full
+            object-cover
+            object-center
+          "
+          initial={
+            reducirMovimiento
+              ? false
+              : { scale: 1.03, opacity: 0 }
+          }
+          animate={
+            reducirMovimiento
+              ? { scale: 1, opacity: 1 }
+              : {
+                  scale: [1.03, 1.13, 1.03],
+                  opacity: 1,
+                }
+          }
+          transition={{
+            scale: {
+              duration: 20,
+              ease: "easeInOut",
+              repeat: Infinity,
             },
-
-            maxWidth: 1150,
+            opacity: {
+              duration: 0.8,
+            },
           }}
+        />
+
+        {/* ==================================================
+            FILTRO OSCURO PARA RESALTAR LOS TEXTOS
+            ================================================== */}
+
+        <div
+          className="
+            pointer-events-none
+            absolute
+            inset-0
+            bg-gradient-to-r
+            from-[#071D18]/90
+            via-[#11362D]/65
+            to-black/30
+          "
+        />
+
+        {/* SOMBRA INFERIOR */}
+
+        <div
+          className="
+            pointer-events-none
+            absolute
+            inset-x-0
+            bottom-0
+            h-32
+            bg-gradient-to-t
+            from-black/50
+            to-transparent
+          "
+        />
+
+        {/* ==================================================
+            CONTENIDO DE LA PORTADA
+            ================================================== */}
+
+        <motion.div
+          key={tramite.id}
+          initial={
+            reducirMovimiento
+              ? false
+              : {
+                  opacity: 0,
+                  y: 35,
+                }
+          }
+          animate={{
+            opacity: 1,
+            y: 0,
+          }}
+          transition={{
+            duration: reducirMovimiento ? 0 : 0.8,
+          }}
+          className="
+            relative
+            z-10
+            mx-auto
+            w-full
+            max-w-[1250px]
+          "
         >
-          <Box
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: 1.2,
-              mb: 2.5,
-            }}
+          {/* VOLVER A TRÁMITES */}
+
+          <div className="mb-8">
+            <BotonVolver oscuro />
+          </div>
+
+          {/* CATEGORÍA */}
+
+          <p
+            className="
+              mb-5
+              text-xs
+              font-extrabold
+              uppercase
+              tracking-[0.22em]
+              text-amber-300
+              sm:text-sm
+            "
           >
-            <Box
-              aria-hidden="true"
-              sx={{
-                width: 10,
-                height: 10,
-                borderRadius: '50%',
-                bgcolor: '#c56832',
-              }}
-            />
+            {tramite.categoria || "TRÁMITE PATRIMONIAL"}
+          </p>
 
-            <Typography
-              sx={{
-                color: '#a94c16',
-                textTransform: 'uppercase',
+          {/* TÍTULO DEL TRÁMITE */}
 
-                letterSpacing: {
-                  xs: '0.12em',
-                  sm: '0.18em',
-                },
-
-                fontSize: {
-                  xs: '0.8rem',
-                  sm: '0.95rem',
-                },
-
-                fontWeight: 900,
-              }}
-            >
-              Trámites y requisitos
-            </Typography>
-          </Box>
-
-          <Typography
-            component="h1"
-            sx={{
-              fontSize: {
-                xs: '2rem',
-                sm: '2.7rem',
-                md: '3.2rem',
-                lg: '3.6rem',
-              },
-
-              fontWeight: 900,
-              lineHeight: 1.15,
-              letterSpacing: '-0.035em',
-              color: '#252d2a',
-              overflowWrap: 'anywhere',
-              mb: 2.5,
-            }}
+          <h1
+            className="
+              max-w-5xl
+              font-['Bebas_Neue']
+              text-[clamp(3.3rem,6.5vw,7rem)]
+              uppercase
+              leading-[0.98]
+              tracking-wide
+              text-white
+              drop-shadow-[0_5px_15px_rgba(0,0,0,0.8)]
+            "
           >
             {tramite.titulo}
-          </Typography>
+          </h1>
 
-          <Typography
-            sx={{
-              maxWidth: 1050,
+          {/* LÍNEA DECORATIVA */}
 
-              fontSize: {
-                xs: '1.05rem',
-                sm: '1.2rem',
-                md: '1.3rem',
-              },
+          <div
+            className="
+              my-7
+              h-[3px]
+              w-24
+              bg-gradient-to-r
+              from-orange-500
+              to-amber-400
+            "
+          />
 
-              lineHeight: 1.85,
-              color: '#5c5a54',
-            }}
+          {/* DESCRIPCIÓN */}
+
+          <p
+            className="
+              max-w-3xl
+              text-base
+              font-medium
+              leading-relaxed
+              text-white/95
+              sm:text-lg
+              drop-shadow-[0_3px_7px_rgba(0,0,0,0.7)]
+            "
           >
             {tramite.descripcion}
-          </Typography>
-        </Box>
+          </p>
+        </motion.div>
+      </section>
 
-        {/* AVISO BREVE SOLO EN LOS TRÁMITES QUE LO REQUIEREN */}
+      {/* ======================================================
+          2. REQUISITOS DEL TRÁMITE
+          ====================================================== */}
 
-        {tramite.pendiente && <AvisoPendiente />}
+      <section
+        className="
+          mx-auto
+          max-w-[1150px]
+          px-5
+          py-16
+          sm:px-8
+        "
+      >
+        {/* ENCABEZADO */}
 
-        {/* BLOQUES DE REQUISITOS */}
-
-        <Box>
-          {tramite.bloques?.map((bloque, index) => (
-            <BloqueRequisitos
-              key={`${index}-${bloque.titulo}`}
-              bloque={bloque}
-              index={index}
-            />
-          ))}
-        </Box>
-
-        {/* BOTÓN FINAL */}
-
-        <Box
-          sx={{
-            mt: 5,
-            pt: 4,
-
-            borderTop: '1px solid #e3d9cc',
-
-            display: 'flex',
-            flexWrap: 'wrap',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            gap: 3,
+        <motion.div
+          initial={
+            reducirMovimiento
+              ? false
+              : {
+                  opacity: 0,
+                  y: 25,
+                }
+          }
+          whileInView={{
+            opacity: 1,
+            y: 0,
           }}
+          viewport={{
+            once: true,
+          }}
+          transition={{
+            duration: reducirMovimiento ? 0 : 0.6,
+          }}
+          className="mb-10"
         >
-          <Box>
-            <Typography
-              sx={{
-                fontSize: {
-                  xs: '1.1rem',
-                  sm: '1.25rem',
-                },
+          <p
+            className="
+              mb-3
+              text-xs
+              font-extrabold
+              uppercase
+              tracking-[0.2em]
+              text-orange-700
+            "
+          >
+            INFORMACIÓN DEL PROCEDIMIENTO
+          </p>
 
-                fontWeight: 900,
-                color: '#293330',
-              }}
+          <h2
+            className="
+              font-['Bebas_Neue']
+              text-[clamp(2.6rem,5vw,4.5rem)]
+              uppercase
+              leading-none
+              text-[#24352F]
+            "
+          >
+            REQUISITOS DEL TRÁMITE
+          </h2>
+
+          <div
+            className="
+              mt-5
+              h-[2px]
+              w-20
+              bg-gradient-to-r
+              from-orange-600
+              to-amber-400
+            "
+          />
+        </motion.div>
+
+        {/* AVISO DE INFORMACIÓN PENDIENTE */}
+
+        {tramite.pendiente && (
+          <div
+            role="note"
+            className="
+              mb-8
+              rounded-xl
+              border
+              border-amber-200
+              bg-amber-50
+              px-5
+              py-4
+              text-sm
+              font-semibold
+              text-amber-900
+            "
+          >
+            Información complementaria pendiente.
+          </div>
+        )}
+
+        {/* ==================================================
+            REQUISITOS ORIGINALES
+            ================================================== */}
+
+        <div className="grid gap-6">
+          {Array.isArray(tramite.bloques) &&
+          tramite.bloques.length > 0 ? (
+            tramite.bloques.map((bloque, index) => (
+              <BloqueRequisitos
+                key={`${index}-${bloque.titulo}`}
+                bloque={bloque}
+                index={index}
+              />
+            ))
+          ) : (
+            <div
+              className="
+                rounded-xl
+                border
+                border-stone-200
+                bg-white
+                p-7
+                text-stone-600
+              "
+            >
+              Los requisitos detallados de este trámite
+              todavía no están registrados.
+            </div>
+          )}
+        </div>
+
+        {/* ==================================================
+            3. REGRESAR A TODOS LOS TRÁMITES
+            ================================================== */}
+
+        <div
+          className="
+            mt-12
+            flex
+            flex-col
+            items-center
+            justify-between
+            gap-6
+            border-t
+            border-[#E5DBD0]
+            pt-8
+            sm:flex-row
+          "
+        >
+          <div>
+            <h3
+              className="
+                mb-2
+                text-lg
+                font-extrabold
+                text-[#24352F]
+              "
             >
               ¿Necesitas consultar otro trámite?
-            </Typography>
+            </h3>
 
-            <Typography
-              sx={{
-                mt: 0.7,
-                fontSize: '1rem',
-                lineHeight: 1.7,
-                color: '#69645c',
-              }}
+            <p
+              className="
+                text-sm
+                leading-relaxed
+                text-stone-600
+              "
             >
-              Regresa al listado para consultar los demás
-              procedimientos y sus requisitos.
-            </Typography>
-          </Box>
+              Explora los demás procedimientos y
+              requisitos patrimoniales.
+            </p>
+          </div>
 
-          <Button
-            component={Link}
+          <Link
             to="/#tramites"
-            variant="contained"
-            endIcon={
-              <IconoFlecha direccion="derecha" />
-            }
-            sx={{
-              minHeight: 52,
-              px: 3,
-              borderRadius: '10px',
-              bgcolor: '#a94c16',
-              color: '#ffffff',
-              fontSize: '1rem',
-              fontWeight: 800,
-              textTransform: 'none',
-              boxShadow: 'none',
-
-              '&:hover': {
-                bgcolor: '#87390f',
-
-                boxShadow:
-                  '0 5px 15px rgba(80, 34, 12, 0.15)',
-              },
-            }}
+            className="
+              inline-flex
+              min-h-12
+              items-center
+              justify-center
+              gap-3
+              rounded-xl
+              bg-gradient-to-r
+              from-orange-600
+              to-amber-500
+              px-7
+              py-3
+              text-sm
+              font-extrabold
+              uppercase
+              text-white
+              shadow-md
+              transition-all
+              duration-300
+              hover:-translate-y-0.5
+              hover:shadow-lg
+            "
           >
-            Ver todos los trámites
-          </Button>
-        </Box>
-      </Box>
-    </Box>
+            VER TODOS LOS TRÁMITES
+
+            <span aria-hidden="true" className="text-xl">
+              →
+            </span>
+          </Link>
+        </div>
+      </section>
+    </main>
   );
 }

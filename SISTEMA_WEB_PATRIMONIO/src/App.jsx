@@ -1,145 +1,176 @@
-import { useEffect } from 'react';
+
+import { useEffect } from "react";
 
 import {
   BrowserRouter,
   Routes,
   Route,
   Link,
+  Outlet,
   useLocation,
-} from 'react-router-dom';
+} from "react-router-dom";
 
 import {
   ThemeProvider,
   createTheme,
-} from '@mui/material/styles';
+} from "@mui/material/styles";
 
+// ============================================================
 // COMPONENTES PRINCIPALES
-
-import Navbar from './components/Navbar';
-
-import Hero from './components/Hero';
-
-import PanelInstitucional from './components/PanelInstitucional';
-
-import Normativas from './components/Normativas';
-
-import Tramites from './components/Tramites';
-
-import TramiteDetalle from './components/TramiteDetalle';
-
-import Footer from './components/Footer';
-
-import Informacion from './components/Informacion';
-
-
-// ============================================================
-// CONTROL DE VISIBILIDAD DEL PROTOTIPO DE PATRIMONIO
 // ============================================================
 
-// false: mantiene oculta la propuesta anterior.
-// true: vuelve a mostrarla si decides recuperarla.
+import Navbar from "./components/Navbar";
+import Hero from "./components/Hero";
+import Patrimonio from "./components/Patrimonio";
+import PanelInstitucional from "./components/PanelInstitucional";
 
-const MOSTRAR_PATRIMONIO = true;
+import Normativas from "./components/Normativas";
+import NormativaDetalle from "./components/NormativaDetalle";
 
+import Tramites from "./components/Tramites";
+import TramiteDetalle from "./components/TramiteDetalle";
+
+import PlanesProgramas from "./components/PlanesProgramas";
+import PlanDetalle from "./components/PlanDetalle";
+
+import SloganPatrimonio from "./components/SloganPatrimonio";
+import Informacion from "./components/Informacion";
+import Footer from "./components/Footer";
 
 // ============================================================
-// TEMA DE MATERIAL UI
+// TEMA
 // ============================================================
 
 const theme = createTheme({
   palette: {
-    mode: 'light',
-
+    mode: "light",
     primary: {
-      main: '#a94c16',
+      main: "#a94c16",
     },
   },
 
   typography: {
-    fontFamily: 'Arial, Helvetica, sans-serif',
-
+    fontFamily: "Arial, Helvetica, sans-serif",
     button: {
       fontWeight: 700,
     },
   },
 });
 
-
 // ============================================================
-// CONTROL DEL DESPLAZAMIENTO
+// CONTROL DE DESPLAZAMIENTO
 // ============================================================
 
 function ControlDesplazamiento() {
-  const { pathname, hash, key } = useLocation();
+  const { pathname, search, hash, key } = useLocation();
 
   useEffect(() => {
-    const frame = window.requestAnimationFrame(() => {
-      const elemento = hash
-        ? document.getElementById(hash.slice(1))
-        : null;
+    let timeout;
 
-      if (elemento) {
-        elemento.scrollIntoView({
-          block: 'start',
-        });
-      } else {
+    const frame = window.requestAnimationFrame(() => {
+      if (!hash) {
         window.scrollTo({
           top: 0,
           left: 0,
-          behavior: 'instant',
+          behavior: "instant",
         });
+
+        return;
       }
+
+      const desplazar = () => {
+        const id = decodeURIComponent(hash.slice(1));
+        const elemento = document.getElementById(id);
+
+        if (!elemento) return;
+
+        const reducirMovimiento = window.matchMedia(
+          "(prefers-reduced-motion: reduce)"
+        ).matches;
+
+        elemento.scrollIntoView({
+          block: "start",
+          behavior: reducirMovimiento
+            ? "instant"
+            : "smooth",
+        });
+      };
+
+      desplazar();
+      timeout = window.setTimeout(desplazar, 150);
     });
 
     return () => {
       window.cancelAnimationFrame(frame);
+      window.clearTimeout(timeout);
     };
-  }, [pathname, hash, key]);
+  }, [pathname, search, hash, key]);
 
   return null;
 }
 
-
 // ============================================================
-// PÁGINA PRINCIPAL
+// LAYOUT PRINCIPAL
 // ============================================================
 
-function PaginaPrincipal() {
+function LayoutPrincipal() {
+  const { pathname, search } = useLocation();
+
+  // Comprobar si estamos en Memorial Potosí.
+
+  const esMemorial = pathname === "/informacion";
+
+  // Identificar si estamos dentro de una galería válida.
+
+  const parametros = new URLSearchParams(search);
+  const galeria = parametros.get("galeria");
+
+  const galeriasValidas = [
+    "antano",
+    "prahp",
+    "balcones",
+  ];
+
+  const esGaleriaPantallaCompleta =
+    esMemorial && galeriasValidas.includes(galeria);
+
+  // ==========================================================
+  // GALERÍAS A PANTALLA COMPLETA
+  // ==========================================================
+
+  if (esGaleriaPantallaCompleta) {
+    return (
+      <div className="min-h-[100svh] bg-black">
+        {/* SIN NAVBAR */}
+        {/* SIN PANEL INSTITUCIONAL */}
+        {/* SIN FOOTER */}
+
+        <Outlet />
+      </div>
+    );
+  }
+
+  // ==========================================================
+  // TODAS LAS DEMÁS PÁGINAS
+  // ==========================================================
+
   return (
-    <div className="min-h-screen bg-zinc-950 font-sans text-white antialiased selection:bg-amber-500 selection:text-black">
+    <div className="min-h-screen bg-zinc-950 font-sans antialiased">
 
-      {/* NAVBAR PRINCIPAL */}
+      {/* NAVBAR */}
 
       <Navbar />
 
+      {/* PANEL INSTITUCIONAL:
+          SE OCULTA EN LA PORTADA DE MEMORIAL */}
 
-      {/* PANEL LATERAL INSTITUCIONAL */}
-
-      <PanelInstitucional />
-
+      {!esMemorial && <PanelInstitucional />}
 
       {/* CONTENIDO PRINCIPAL */}
 
-      <main>
+      <Outlet />
 
-        <Hero />
-
-
-        {/* PROTOTIPO DE PATRIMONIO, OCULTO POR AHORA */}
-
-        {MOSTRAR_PATRIMONIO && (
-          <div>
-            {/* La propuesta se conserva en Patrimonio.jsx. */}
-          </div>
-        )}
-
-
-        <Normativas />
-
-        <Tramites />
-
-      </main>
-
+      {/* FOOTER */}
 
       <Footer />
 
@@ -147,6 +178,43 @@ function PaginaPrincipal() {
   );
 }
 
+// ============================================================
+// PÁGINA PRINCIPAL
+// ============================================================
+
+function PaginaPrincipal() {
+  return (
+    <main className="min-h-screen bg-zinc-950 text-white">
+
+      {/* 1. HERO */}
+
+      <Hero />
+
+      {/* 2. PATRIMONIO */}
+
+      <Patrimonio />
+
+      {/* 3. NORMATIVAS */}
+
+      <Normativas />
+
+      {/* 4. TRÁMITES */}
+
+      <Tramites />
+
+      {/* 5. PLANES Y PROGRAMAS */}
+
+      <div id="planes" className="scroll-mt-20">
+        <PlanesProgramas />
+      </div>
+
+      {/* 6. ESLOGAN PATRIMONIAL */}
+
+      <SloganPatrimonio />
+
+    </main>
+  );
+}
 
 // ============================================================
 // PÁGINA NO ENCONTRADA
@@ -154,73 +222,87 @@ function PaginaPrincipal() {
 
 function PaginaNoEncontrada() {
   return (
-    <main className="min-h-screen bg-stone-100 p-10 text-zinc-900">
+    <main className="flex min-h-screen flex-col items-center justify-center bg-[#F7F4EF] px-6 py-32 text-center text-zinc-900">
 
-      <h1 className="mb-6 text-3xl font-bold">
+      <h1 className="mb-5 text-3xl font-extrabold">
         Página no encontrada
       </h1>
 
+      <p className="mb-7 text-stone-600">
+        La sección solicitada no está disponible.
+      </p>
+
       <Link
         to="/"
-        className="text-orange-800 underline"
+        className="rounded-xl bg-orange-700 px-6 py-3 font-bold text-white transition hover:bg-orange-600"
       >
-        Volver al inicio
+        VOLVER AL INICIO
       </Link>
 
     </main>
   );
 }
 
-
 // ============================================================
-// APLICACIÓN PRINCIPAL
+// APP PRINCIPAL
 // ============================================================
 
 export default function App() {
   return (
     <ThemeProvider theme={theme}>
-
       <BrowserRouter>
 
         <ControlDesplazamiento />
 
         <Routes>
+          <Route element={<LayoutPrincipal />}>
 
-          {/* PÁGINA PRINCIPAL */}
+            {/* INICIO */}
 
-          <Route
-            path="/"
-            element={<PaginaPrincipal />}
-          />
+            <Route
+              path="/"
+              element={<PaginaPrincipal />}
+            />
 
+            {/* NORMATIVAS */}
 
-          {/* NUEVA PÁGINA DE INFORMACIÓN */}
+            <Route
+              path="/normativas/:normativaId"
+              element={<NormativaDetalle />}
+            />
 
-          <Route
-            path="/informacion"
-            element={<Informacion />}
-          />
+            {/* TRÁMITES */}
 
+            <Route
+              path="/tramites/:tramiteId"
+              element={<TramiteDetalle />}
+            />
 
-          {/* DETALLE DE TRÁMITES */}
+            {/* PLANES */}
 
-          <Route
-            path="/tramites/:tramiteId"
-            element={<TramiteDetalle />}
-          />
+            <Route
+              path="/planes/:planId"
+              element={<PlanDetalle />}
+            />
 
+            {/* MEMORIAL POTOSÍ Y GALERÍAS */}
 
-          {/* RUTAS DESCONOCIDAS */}
+            <Route
+              path="/informacion"
+              element={<Informacion />}
+            />
 
-          <Route
-            path="*"
-            element={<PaginaNoEncontrada />}
-          />
+            {/* NO ENCONTRADA */}
 
+            <Route
+              path="*"
+              element={<PaginaNoEncontrada />}
+            />
+
+          </Route>
         </Routes>
 
       </BrowserRouter>
-
     </ThemeProvider>
   );
 }

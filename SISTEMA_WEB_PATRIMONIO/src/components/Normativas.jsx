@@ -1,111 +1,110 @@
-import React from 'react';
 
-const normativasData = [
+import React from "react";
+import { Link } from "react-router-dom";
+import { motion, useReducedMotion } from "motion/react";
+
+export const normativasData = [
   {
-    id: 'normativa-055',
-    etiqueta: 'LEY MUNICIPAL N° 055',
-    titulo:
-      'REGLAMENTO GENERAL DE ÁREAS HISTÓRICAS Y CONSERVACIÓN PATRIMONIAL',
+    id: "normativa-055",
+    etiqueta: "LEY MUNICIPAL N.º 055",
+    titulo: "LEY DE PRESERVACIÓN DE LAS ÁREAS HISTÓRICAS DE POTOSÍ",
     descripcion:
-      'Establece las directrices marco y normativas técnicas de regulación urbana para las intervenciones en edificaciones del Centro Histórico de Potosí, protegiendo su valor patrimonial y tipología arquitectónica.',
-    puntos: [
-      'Regulación de fachadas y elementos arquitectónicos coloniales.',
-      'Procedimientos de autorización e inspección técnica de obras.',
-      'Límites de preservación estricta y zonas de amortiguamiento.',
-    ],
-    pdfUrl: '/pdf/normativa-055.pdf',
-    bgImage: '/images/normativa-055-bg.jpeg',
-    posicionCard: 'justify-start',
+      "Protección y preservación de las áreas históricas de la Villa Imperial de Potosí.",
+    imagen: "/images/normativa-055-bg.jpg",
+    pdf: "/pdf/normativa-055.pdf",
   },
   {
-    id: 'normativa-122',
-    etiqueta: 'LEY MUNICIPAL N° 122',
-    titulo: 'NORMATIVA DE PROTECCIÓN Y SALVAGUARDIA DEL PATRIMONIO',
+    id: "normativa-122",
+    etiqueta: "LEY MUNICIPAL N.º 122",
+    titulo:
+      "LEY MUNICIPAL DE PROCEDIMIENTOS ADMINISTRATIVOS EN EL ÁREA DE PATRIMONIO HISTÓRICO",
     descripcion:
-      'Regula las acciones de preservación, restauración y conservación de los monumentos históricos y espacios públicos de la ciudad.',
-    puntos: [
-      'Criterios técnicos para la restauración de inmuebles históricos.',
-      'Sanciones e infracciones por modificaciones no autorizadas.',
-      'Incentivos para la conservación de edificaciones patrimoniales.',
-    ],
-    pdfUrl: '/pdf/normativa-122.pdf',
-    bgImage: '/images/normativa-122-bg.jpeg',
-    posicionCard: 'justify-end',
+      "Procedimientos administrativos relacionados con la gestión del patrimonio histórico de Potosí.",
+    imagen: "/images/normativa-122-bg.jpeg",
+    pdf: "/pdf/normativa-122.pdf",
   },
 ];
 
 export default function Normativas() {
+  const reducirMovimiento = useReducedMotion();
+
   return (
-    <div
+    <section
       id="normativas"
-      className="w-full font-sans text-white bg-zinc-950 scroll-mt-24 md:scroll-mt-44"
+      className="scroll-mt-20 bg-[#F6F2EB] px-5 py-20 text-[#24352F] sm:px-8"
     >
-      {normativasData.map((item) => (
-        <section
-          key={item.id}
-          id={item.id}
-          aria-labelledby={`${item.id}-titulo`}
-          className={`relative w-full min-h-screen py-16 px-6 md:px-35 bg-cover bg-center bg-no-repeat flex items-center ${item.posicionCard} border-b border-amber-500/30 scroll-mt-24 md:scroll-mt-44`}
-          style={{
-            backgroundImage: `url(${item.bgImage})`,
-          }}
-        >
-          {/* Capa sobre la fotografía */}
-          <div className="absolute inset-0 bg-gradient-to-r from-zinc-950/70 via-zinc-950/30 to-transparent pointer-events-none" />
+      <div className="mx-auto max-w-[1250px]">
 
-          {/* Tarjeta de normativa */}
-          <div className="relative z-10 max-w-2xl w-full bg-zinc-900/85 border-2 border-amber-500/60 rounded-2xl p-6 sm:p-8 shadow-2xl backdrop-blur-sm">
-            <div className="inline-block bg-gradient-to-r from-orange-500 to-amber-500 text-black font-extrabold text-xs sm:text-sm uppercase tracking-wider px-4 py-1.5 rounded-full mb-4 shadow-md">
-              {item.etiqueta}
-            </div>
+        {/* ENCABEZADO */}
 
-            <h2
-              id={`${item.id}-titulo`}
-              className="text-2xl sm:text-4xl font-extrabold text-amber-400 tracking-wide uppercase leading-tight mb-4"
+        <div className="mb-12 text-center">
+          <p className="mb-4 text-xs font-extrabold uppercase tracking-[0.25em] text-[#B94A14]">
+            DOCUMENTACIÓN MUNICIPAL
+          </p>
+
+          <h2 className="font-['Bebas_Neue'] text-[clamp(3rem,6vw,5.5rem)] uppercase leading-none">
+            NORMATIVAS PATRIMONIALES
+          </h2>
+
+          <div className="mx-auto mt-6 h-[2px] w-20 bg-gradient-to-r from-orange-600 to-amber-400" />
+        </div>
+
+        {/* TARJETAS */}
+
+        <div className="grid grid-cols-1 gap-7 md:grid-cols-2">
+          {normativasData.map((item, index) => (
+            <motion.article
+              key={item.id}
+              id={item.id}
+              initial={
+                reducirMovimiento
+                  ? false
+                  : { opacity: 0, y: 35 }
+              }
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.15 }}
+              transition={{
+                duration: 0.65,
+                delay: index * 0.12,
+              }}
+              className="group flex h-full flex-col overflow-hidden rounded-2xl border border-[#DDD4C8] bg-white shadow-lg transition-all duration-300 hover:-translate-y-1 hover:border-orange-400 hover:shadow-xl"
             >
-              {item.titulo}
-            </h2>
+              <div className="relative h-56 overflow-hidden">
+                <img
+                  src={item.imagen}
+                  alt={`Imagen representativa de ${item.etiqueta}`}
+                  className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
+                  loading="lazy"
+                />
 
-            <p className="text-base sm:text-xl text-zinc-100 leading-relaxed font-medium mb-6">
-              {item.descripcion}
-            </p>
+                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
 
-            <div className="space-y-3 mb-8 border-t border-zinc-700/80 pt-5">
-              {item.puntos.map((punto) => (
-                <p
-                  key={punto}
-                  className="text-sm sm:text-lg text-zinc-200 font-semibold leading-snug"
-                >
-                  {punto}
+                <span className="absolute bottom-5 left-5 rounded-full bg-black/75 px-4 py-2 text-xs font-extrabold uppercase text-amber-300">
+                  {item.etiqueta}
+                </span>
+              </div>
+
+              <div className="flex flex-1 flex-col p-6 sm:p-8">
+                <h3 className="mb-4 text-xl font-extrabold leading-tight sm:text-2xl">
+                  {item.titulo}
+                </h3>
+
+                <p className="mb-7 flex-1 text-sm leading-relaxed text-stone-600 sm:text-base">
+                  {item.descripcion}
                 </p>
-              ))}
-            </div>
 
-            <div className="flex flex-col sm:flex-row gap-4 pt-2">
-              {/* Descargar el PDF */}
-              <a
-                href={item.pdfUrl}
-                download={`${item.id}.pdf`}
-                aria-label={`Descargar ${item.etiqueta} en PDF`}
-                className="inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-orange-600 via-orange-500 to-amber-500 hover:from-orange-700 hover:to-amber-600 text-white font-extrabold text-sm sm:text-base uppercase tracking-wide rounded-xl transition-all transform hover:scale-105 shadow-lg"
-              >
-                Descargar ley (PDF)
-              </a>
-
-              {/* Abrir el mismo PDF en una nueva pestaña */}
-              <a
-                href={item.pdfUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={`Ver ${item.etiqueta} en una nueva pestaña`}
-                className="inline-flex items-center justify-center px-6 py-3 bg-zinc-900/90 hover:bg-zinc-800 border border-amber-500/50 text-amber-300 font-bold text-sm sm:text-base uppercase tracking-wide rounded-xl transition-all hover:scale-105 shadow-md"
-              >
-                Ver en línea
-              </a>
-            </div>
-          </div>
-        </section>
-      ))}
-    </div>
+                <Link
+                  to={`/normativas/${item.id}`}
+                  className="inline-flex min-h-12 items-center justify-center gap-3 rounded-xl bg-gradient-to-r from-orange-600 to-amber-500 px-6 py-3 text-sm font-extrabold uppercase tracking-wide text-white transition-all duration-300 hover:from-orange-700 hover:to-amber-600"
+                >
+                  CONSULTAR NORMATIVA
+                  <span aria-hidden="true">→</span>
+                </Link>
+              </div>
+            </motion.article>
+          ))}
+        </div>
+      </div>
+    </section>
   );
 }

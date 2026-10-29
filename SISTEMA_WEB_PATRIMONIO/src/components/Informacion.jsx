@@ -1,60 +1,246 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
+
+import React, { useEffect, useState } from "react";
+
+import {
+  Link,
+  useSearchParams,
+} from "react-router-dom";
+
+import {
+  AnimatePresence,
+  motion,
+  useReducedMotion,
+} from "motion/react";
 
 // ============================================================
-// IMÁGENES DEL CARRUSEL
+// CONFIGURACIÓN DEL ZOOM CINEMATOGRÁFICO
 // ============================================================
 
-const diapositivas = [
-  {
-    id: 1,
-    categoria: 'PATRIMONIO HISTÓRICO',
-    titulo: 'La historia de Potosí',
-    descripcion:
-      'Un recorrido visual por la Villa Imperial y su paisaje histórico, donde la arquitectura y el desarrollo urbano forman parte de la memoria de la ciudad.',
-    imagen: '/images/1.jpeg',
-    alt: 'Vista panorámica de la ciudad histórica de Potosí',
-  },
+// 1.035 equivale a un acercamiento del 3.5 %.
+// Es suficientemente suave para las fotografías antiguas.
+
+const ZOOM_MINIMO = 0.965;
+const ZOOM_MAXIMO = 1.035;
+const DURACION_ZOOM = 18;
+
+// ============================================================
+// COLECCIONES DE MEMORIAL POTOSÍ
+// ============================================================
+
+const colecciones = [
+  // ==========================================================
+  // 1. POTOSÍ DE ANTAÑO — 18 FOTOGRAFÍAS
+  // ==========================================================
 
   {
-    id: 2,
-    categoria: 'ARQUITECTURA',
-    titulo: 'Arquitectura patrimonial',
+    id: "antano",
+    nombre: "POTOSÍ DE ANTAÑO",
+    subtitulo: "MEMORIA HISTÓRICA",
     descripcion:
-      'Descubre la arquitectura histórica de Potosí mediante fotografías de edificios, fachadas y elementos del patrimonio construido.',
-    imagen: '/images/normativa-122-bg.jpeg',
-    alt: 'Edificio de arquitectura histórica de Potosí',
+      "Un recorrido fotográfico por la historia de la Villa Imperial.",
+
+    portada: "/images/4_c.jpg",
+
+    fotografias: [
+      {
+        src: "/images/1_c.jpg",
+        titulo: "CERRO RICO DE POTOSÍ",
+        descripcion:
+          "Antigua vista de las laderas del Cerro Rico, donde se observan caminos e instalaciones vinculadas a la actividad minera.",
+      },
+      {
+        src: "/images/2_c.jpg",
+        titulo: "IGLESIA DE SAN BERNARDO",
+        descripcion:
+          "Imagen histórica de la Iglesia de San Bernardo, templo asociado a la historia religiosa y colonial de la Villa Imperial.",
+      },
+      {
+        src: "/images/3_c.jpg",
+        titulo: "PLAZA 10 DE NOVIEMBRE",
+        descripcion:
+          "Vista de la antigua Plaza de Armas de Potosí, con su quiosco central y las edificaciones de su entorno.",
+      },
+      {
+        src: "/images/4_c.jpg",
+        titulo: "POTOSÍ HACIA 1895",
+        descripcion:
+          "Vista panorámica de la ciudad con el Cerro Rico al fondo y la antigua Casa de Moneda en primer plano.",
+      },
+      {
+        src: "/images/5_c.jpg",
+        titulo: "ANTIGUA CALLE LANZA",
+        descripcion:
+          "Fotografía de la antigua calle del Duende, hoy calle Lanza, a principios del siglo XX.",
+      },
+      {
+        src: "/images/6_c.jpg",
+        titulo: "ARQUERÍA DEL ANTIGUO CABILDO",
+        descripcion:
+          "Imagen de los corredores con arcos del antiguo Cabildo de Potosí, aproximadamente en la década de 1940.",
+      },
+      {
+        src: "/images/7_c.jpg",
+        titulo: "CASA NACIONAL DE MONEDA",
+        descripcion:
+          "Vista histórica de la fachada de la Casa Nacional de Moneda, una de las construcciones emblemáticas de Potosí.",
+      },
+      {
+        src: "/images/8_c.jpg",
+        titulo: "ANTIGUO PUEBLO MINERO DE PORCO",
+        descripcion:
+          "Postal histórica de Porco, aproximadamente de 1907, con su plaza, viviendas tradicionales y torre de iglesia.",
+      },
+      {
+        src: "/images/9_c.jpg",
+        titulo: "ANTIGUO MERCADO LA RECOBA",
+        descripcion:
+          "Fotografía del antiguo mercado La Recoba, espacio comercial que formó parte de la vida cotidiana de Potosí.",
+      },
+      {
+        src: "/images/10_c.jpg",
+        titulo: "CERRO CHICO DE POTOSÍ",
+        descripcion:
+          "Vista histórica del Cerro Chico, con llamas en primer plano y la capilla del Sagrado Corazón de Jesús en su cima, aproximadamente en 1940.",
+      },
+      {
+        src: "/images/11_c.jpg",
+        titulo: "CATEDRAL DE POTOSÍ",
+        descripcion:
+          "Antigua fotografía de la Catedral de Potosí, ubicada frente a la Plaza 10 de Noviembre, aproximadamente entre 1920 y 1930.",
+      },
+      {
+        src: "/images/12_c.png",
+        titulo: "ANTIGUO CABILDO DE POTOSÍ",
+        descripcion:
+          "Vista de la Plaza 10 de Noviembre y las edificaciones del antiguo Cabildo, centro de la vida política y administrativa de la Villa Imperial.",
+      },
+      {
+        src: "/images/13_c.jpg",
+        titulo: "ANTIGUA CALLE SUCRE",
+        descripcion:
+          "Fotografía de la histórica calle Sucre, que durante el siglo XX se transformó en uno de los principales espacios de encuentro social de Potosí.",
+      },
+      {
+        src: "/images/14_c.png",
+        titulo: "PLAZA 6 DE AGOSTO",
+        descripcion:
+          "Vista de la Plaza 6 de Agosto en 1928, con su antiguo obelisco, arquerías de piedra y las torres de la Catedral de Potosí.",
+      },
+      {
+        src: "/images/15_c.jpg",
+        titulo: "ARCO DE COBIJA",
+        descripcion:
+          "Imagen histórica del Arco de Cobija, construido en el siglo XVIII como una de las entradas de la Villa Imperial, con el Cerro Rico al fondo.",
+      },
+      {
+        src: "/images/16_c.jpg",
+        titulo: "CELEBRACIÓN RELIGIOSA EN POTOSÍ",
+        descripcion:
+          "Fotografía de una celebración religiosa realizada en Potosí alrededor de 1910, con una multitud reunida junto a las antiguas arquerías de la plaza.",
+      },
+      {
+        src: "/images/17_c.jpg",
+        titulo: "TORRE DE LA COMPAÑÍA DE JESÚS",
+        descripcion:
+          "Vista histórica de la monumental torre de la Iglesia de la Compañía de Jesús, destacada por su arquitectura barroca y sus elaborados detalles en piedra.",
+      },
+      {
+        src: "/images/18_c.jpg",
+        titulo: "IGLESIA DE SAN JUAN DE DIOS",
+        descripcion:
+          "Antigua imagen de la Iglesia de San Juan de Dios, vinculada a la historia de la atención hospitalaria y religiosa de la Villa Imperial.",
+      },
+    ],
   },
 
+  // ==========================================================
+  // 2. PRAHP — FOTOGRAFÍAS PROVISIONALES
+  // ==========================================================
+
   {
-    id: 3,
-    categoria: 'ESPACIOS HISTÓRICOS',
-    titulo: 'Calles y fachadas',
+    id: "prahp",
+    nombre: "PRAHP",
+    subtitulo: "REHABILITACIÓN PATRIMONIAL",
     descripcion:
-      'Una mirada a las calles y los espacios urbanos que forman parte del entorno histórico de Potosí.',
-    imagen: '/images/normativa-055-bg.jpeg',
-    alt: 'Calle y fachada del entorno histórico de Potosí',
+      "Un espacio para conocer el valor de la conservación patrimonial.",
+
+    portada: "/images/potosi_patrimonio.jpeg",
+
+    fotografias: [
+      {
+        src: "/images/potosi_patrimonio.jpeg",
+        titulo: "CONSERVAR NUESTRA HISTORIA",
+        descripcion:
+          "La conservación protege los valores de nuestros espacios históricos.",
+      },
+      {
+        src: "/images/1.jpeg",
+        titulo: "PATRIMONIO ARQUITECTÓNICO",
+        descripcion:
+          "El legado arquitectónico de la Villa Imperial.",
+      },
+      {
+        src: "/images/Gonzalo Viera Azpiroz - Potosí.jpeg",
+        titulo: "NUESTRO LEGADO",
+        descripcion:
+          "Conocer nuestro patrimonio permite valorar su importancia.",
+      },
+    ],
+  },
+
+  // ==========================================================
+  // 3. BALCONES COLONIALES — FOTOGRAFÍAS PROVISIONALES
+  // ==========================================================
+
+  {
+    id: "balcones",
+    nombre: "BALCONES COLONIALES",
+    subtitulo: "ARQUITECTURA HISTÓRICA",
+    descripcion:
+      "Un recorrido por los detalles arquitectónicos de Potosí.",
+
+    portada: "/images/Potosí.jpeg",
+
+    fotografias: [
+      {
+        src: "/images/Potosí.jpeg",
+        titulo: "ARQUITECTURA COLONIAL",
+        descripcion:
+          "Fachadas y elementos históricos de nuestra ciudad.",
+      },
+      {
+        src: "/images/Calle_de_Potosí.jpg",
+        titulo: "CALLES CON HISTORIA",
+        descripcion:
+          "La arquitectura forma parte de la memoria urbana.",
+      },
+      {
+        src: "/images/descarga.jpeg",
+        titulo: "DETALLES PATRIMONIALES",
+        descripcion:
+          "Los elementos arquitectónicos reflejan nuestro legado.",
+      },
+    ],
   },
 ];
-
 
 // ============================================================
 // ICONO DE FLECHA
 // ============================================================
 
-function IconoFlecha({ direccion = 'derecha' }) {
+function Flecha({ izquierda = false }) {
   return (
     <svg
-      aria-hidden="true"
+      width="24"
+      height="24"
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
-      strokeWidth="1.8"
+      strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
-      className={`h-6 w-6 ${
-        direccion === 'izquierda' ? 'rotate-180' : ''
-      }`}
+      aria-hidden="true"
+      className={izquierda ? "rotate-180" : ""}
     >
       <path d="M5 12h14" />
       <path d="m12 5 7 7-7 7" />
@@ -62,363 +248,733 @@ function IconoFlecha({ direccion = 'derecha' }) {
   );
 }
 
-
 // ============================================================
-// ICONO PARA VOLVER AL INICIO
+// PORTADA PRINCIPAL — MEMORIAL POTOSÍ
 // ============================================================
 
-function IconoInicio() {
+function PortadaMemorial() {
+  const reducirMovimiento = useReducedMotion();
+
   return (
-    <svg
-      aria-hidden="true"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.8"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className="h-6 w-6"
+    <section
+      className="
+        relative isolate flex
+        min-h-[100svh] w-full
+        flex-col justify-center
+        overflow-hidden bg-[#10241F]
+        px-5 pb-20 pt-44
+        text-white
+        sm:px-10 lg:px-20
+      "
     >
-      <path d="m3 10 9-7 9 7" />
-      <path d="M5 9v12h14V9" />
-      <path d="M9 21v-7h6v7" />
-    </svg>
+      {/* ======================================================
+          FOTOGRAFÍA DE FONDO CON ZOOM
+          ====================================================== */}
+
+      <motion.img
+        src="/images/Gonzalo Viera Azpiroz - Potosí.jpeg"
+        alt=""
+        aria-hidden="true"
+        className="
+          absolute inset-0 -z-20
+          h-full w-full object-cover
+        "
+        initial={false}
+        animate={
+          reducirMovimiento
+            ? { scale: 1 }
+            : { scale: [1, 1.08, 1] }
+        }
+        transition={{
+          duration: 24,
+          repeat: Infinity,
+          ease: "easeInOut",
+        }}
+      />
+
+      {/* CAPAS OSCURAS */}
+
+      <div
+        className="
+          pointer-events-none absolute
+          inset-0 -z-10
+          bg-gradient-to-r
+          from-black/85
+          via-black/55
+          to-black/25
+        "
+      />
+
+      <div
+        className="
+          pointer-events-none absolute
+          inset-0 -z-10
+          bg-gradient-to-t
+          from-black/90
+          via-transparent
+          to-black/30
+        "
+      />
+
+      {/* CONTENIDO */}
+
+      <div className="mx-auto w-full max-w-[1500px]">
+        <motion.div
+          initial={
+            reducirMovimiento
+              ? false
+              : { opacity: 0, y: 35 }
+          }
+          animate={{
+            opacity: 1,
+            y: 0,
+          }}
+          transition={{
+            duration: reducirMovimiento ? 0 : 0.8,
+          }}
+        >
+          <p
+            className="
+              mb-4 text-xs font-extrabold
+              uppercase tracking-[0.23em]
+              text-amber-300 sm:text-sm
+            "
+          >
+            DIRECCIÓN DE PATRIMONIO HISTÓRICO
+          </p>
+
+          <h1
+            className="
+              font-['Bebas_Neue']
+              text-[clamp(4rem,9vw,9rem)]
+              uppercase leading-[0.9]
+              tracking-wide
+            "
+          >
+            MEMORIAL
+
+            <span className="block text-amber-300">
+              POTOSÍ
+            </span>
+          </h1>
+
+          <div
+            className="
+              my-7 h-[3px] w-24
+              bg-gradient-to-r
+              from-orange-500 to-amber-400
+            "
+          />
+
+          <p
+            className="
+              max-w-2xl text-base
+              leading-relaxed
+              text-white/90
+              sm:text-lg
+            "
+          >
+            Memorias de la Villa Imperial.
+            Descubre nuestra historia,
+            la rehabilitación del patrimonio
+            y la riqueza arquitectónica de Potosí.
+          </p>
+        </motion.div>
+
+        {/* ====================================================
+            LAS TRES CATEGORÍAS
+            ==================================================== */}
+
+        <div
+          className="
+            mt-12 grid grid-cols-1
+            gap-5 md:grid-cols-3
+            lg:mt-16
+          "
+        >
+          {colecciones.map((coleccion, index) => (
+            <motion.div
+              key={coleccion.id}
+              initial={
+                reducirMovimiento
+                  ? false
+                  : { opacity: 0, y: 35 }
+              }
+              animate={{
+                opacity: 1,
+                y: 0,
+              }}
+              transition={{
+                duration: reducirMovimiento ? 0 : 0.6,
+                delay: reducirMovimiento ? 0 : index * 0.12,
+              }}
+            >
+              <Link
+                to={`/informacion?galeria=${coleccion.id}`}
+                className="
+                  group relative flex
+                  min-h-[240px]
+                  overflow-hidden rounded-2xl
+                  border border-white/30
+                  bg-black/60 shadow-2xl
+                  transition-all duration-300
+                  hover:-translate-y-2
+                  hover:border-amber-400
+                "
+              >
+                {/* FOTOGRAFÍA */}
+
+                <img
+                  src={coleccion.portada}
+                  alt=""
+                  loading="lazy"
+                  className="
+                    absolute inset-0
+                    h-full w-full object-cover
+                    transition-transform duration-700
+                    group-hover:scale-110
+                  "
+                />
+
+                {/* OSCURECIMIENTO */}
+
+                <div
+                  className="
+                    absolute inset-0
+                    bg-gradient-to-t
+                    from-black/95
+                    via-black/40
+                    to-black/10
+                  "
+                />
+
+                {/* INFORMACIÓN */}
+
+                <div
+                  className="
+                    relative z-10 flex
+                    w-full flex-col
+                    justify-end p-6
+                  "
+                >
+                  <p
+                    className="
+                      mb-3 text-xs
+                      font-bold uppercase
+                      tracking-widest
+                      text-amber-300
+                    "
+                  >
+                    {coleccion.subtitulo}
+                  </p>
+
+                  <h2
+                    className="
+                      font-['Bebas_Neue']
+                      text-[clamp(2rem,3vw,3.2rem)]
+                      uppercase leading-none
+                    "
+                  >
+                    {coleccion.nombre}
+                  </h2>
+
+                  <span
+                    className="
+                      mt-5 inline-flex
+                      items-center gap-2
+                      text-xs font-extrabold
+                      uppercase tracking-wide
+                    "
+                  >
+                    EXPLORAR GALERÍA
+
+                    <Flecha />
+                  </span>
+                </div>
+              </Link>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
   );
 }
 
-
 // ============================================================
-// CARRUSEL DE DOS TARJETAS
-// UNA PRINCIPAL Y UNA VISTA PREVIA A LA DERECHA
+// VISOR FOTOGRÁFICO A PANTALLA COMPLETA
 // ============================================================
 
-function CarruselExpansible() {
-  const [activo, setActivo] = useState(0);
+function GaleriaPantallaCompleta({ coleccion }) {
+  const reducirMovimiento = useReducedMotion();
 
-  // FOTOGRAFÍA ANTERIOR
+  const [indice, setIndice] = useState(0);
+  const [mostrarTexto, setMostrarTexto] = useState(true);
 
-  const anterior = () => {
-    setActivo((actual) =>
-      actual === 0
-        ? diapositivas.length - 1
-        : actual - 1
-    );
-  };
+  const fotografias = coleccion.fotografias;
+  const foto = fotografias[indice];
 
-  // FOTOGRAFÍA SIGUIENTE
+  // ==========================================================
+  // NAVEGACIÓN ENTRE FOTOGRAFÍAS
+  // ==========================================================
 
   const siguiente = () => {
-    setActivo((actual) =>
-      actual === diapositivas.length - 1
-        ? 0
-        : actual + 1
+    setIndice((actual) =>
+      (actual + 1) % fotografias.length
     );
   };
 
-  // SOLO MOSTRAMOS DOS TARJETAS:
-  // 1. LA TARJETA PRINCIPAL.
-  // 2. LA SIGUIENTE TARJETA A SU DERECHA.
+  const anterior = () => {
+    setIndice((actual) =>
+      (actual - 1 + fotografias.length) %
+      fotografias.length
+    );
+  };
 
-  const tarjetasVisibles = [
-    activo,
-    (activo + 1) % diapositivas.length,
-  ];
+  // ==========================================================
+  // NAVEGACIÓN CON FLECHAS DEL TECLADO
+  // ==========================================================
+
+  useEffect(() => {
+    const controlarTeclas = (event) => {
+      const elemento = event.target;
+
+      if (
+        elemento instanceof HTMLElement &&
+        (
+          elemento.isContentEditable ||
+          ["INPUT", "TEXTAREA", "SELECT"].includes(
+            elemento.tagName
+          )
+        )
+      ) {
+        return;
+      }
+
+      if (event.key === "ArrowRight") {
+        event.preventDefault();
+
+        setIndice((actual) =>
+          (actual + 1) % fotografias.length
+        );
+      }
+
+      if (event.key === "ArrowLeft") {
+        event.preventDefault();
+
+        setIndice((actual) =>
+          (actual - 1 + fotografias.length) %
+          fotografias.length
+        );
+      }
+    };
+
+    window.addEventListener(
+      "keydown",
+      controlarTeclas
+    );
+
+    return () => {
+      window.removeEventListener(
+        "keydown",
+        controlarTeclas
+      );
+    };
+  }, [fotografias.length]);
+
+  // ==========================================================
+  // IMPEDIR SCROLL MIENTRAS ESTÁ ABIERTA LA GALERÍA
+  // ==========================================================
+
+  useEffect(() => {
+    const overflowAnterior =
+      document.body.style.overflow;
+
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow =
+        overflowAnterior;
+    };
+  }, []);
+
+  // ==========================================================
+  // VISOR
+  // ==========================================================
 
   return (
     <main
-      className="fixed inset-0 z-[100] h-dvh w-screen overflow-hidden bg-[#111714] text-white"
-      aria-label="Galería fotográfica del patrimonio de Potosí"
+      aria-label={`Galería ${coleccion.nombre}`}
+      className="
+        fixed inset-0 z-[100]
+        h-[100dvh] w-screen
+        overflow-hidden bg-[#090909]
+        text-white
+      "
     >
+      {/* ======================================================
+          FONDO DESENFOCADO DE LA MISMA FOTOGRAFÍA
+          ====================================================== */}
 
-      {/* ==================================================
-          FONDO A PANTALLA COMPLETA
-      ================================================== */}
+      <div className="absolute inset-0 overflow-hidden">
+        <AnimatePresence mode="sync">
+          <motion.img
+            key={`fondo-${coleccion.id}-${indice}`}
+            src={foto.src}
+            alt=""
+            aria-hidden="true"
+            className="
+              absolute inset-0
+              h-full w-full
+              scale-110
+              object-cover
+              blur-3xl
+            "
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 0.5 }}
+            exit={{ opacity: 0 }}
+            transition={{
+              duration: reducirMovimiento ? 0 : 0.65,
+            }}
+          />
+        </AnimatePresence>
 
-      {diapositivas.map((item, indice) => (
-        <img
-          key={item.id}
-          src={item.imagen}
-          alt=""
-          aria-hidden="true"
-          className={`pointer-events-none absolute inset-0 h-full w-full object-cover transition-opacity duration-700 ${
-            activo === indice
-              ? 'opacity-100'
-              : 'opacity-0'
-          }`}
-        />
-      ))}
+        <div className="absolute inset-0 bg-black/50" />
+      </div>
 
-      {/* OSCURECIMIENTO GENERAL */}
+      {/* ======================================================
+          FOTOGRAFÍA PRINCIPAL CON ZOOM CINEMATOGRÁFICO
+          ====================================================== */}
 
       <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 bg-black/40"
-      />
+        className="
+          absolute inset-0 z-[1]
+          flex items-center
+          justify-center
+          overflow-hidden
+          px-3 py-16
+          sm:px-16 sm:py-8
+          lg:px-24
+        "
+      >
+        <AnimatePresence mode="sync">
+          <motion.img
+            key={`${coleccion.id}-${indice}`}
+            src={foto.src}
+            alt={foto.titulo}
+            draggable={false}
+            className="
+              absolute
+              max-h-[calc(100dvh-100px)]
+              max-w-[calc(100vw-24px)]
+              object-contain
+              select-none
+              drop-shadow-[0_12px_35px_rgba(0,0,0,0.6)]
+              sm:max-h-[calc(100dvh-60px)]
+              sm:max-w-[calc(100vw-130px)]
+              lg:max-w-[calc(100vw-190px)]
+            "
+            initial={
+              reducirMovimiento
+                ? false
+                : {
+                    opacity: 0,
+                    scale: ZOOM_MINIMO,
+                  }
+            }
+            animate={{
+              opacity: 1,
 
-      {/* DEGRADADO LATERAL */}
+              // ZOOM LENTO, CONTINUO Y REVERSIBLE
+
+              scale: reducirMovimiento
+                ? 1
+                : [
+                    ZOOM_MINIMO,
+                    ZOOM_MAXIMO,
+                    ZOOM_MINIMO,
+                  ],
+            }}
+            exit={{
+              opacity: 0,
+            }}
+            transition={{
+              opacity: {
+                duration: reducirMovimiento ? 0 : 0.8,
+                ease: "easeOut",
+              },
+
+              scale: {
+                duration: DURACION_ZOOM,
+                ease: "easeInOut",
+                repeat: Infinity,
+              },
+            }}
+          />
+        </AnimatePresence>
+      </div>
+
+      {/* ======================================================
+          SOMBRA SUPERIOR E INFERIOR
+          ====================================================== */}
 
       <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 bg-gradient-to-r from-black/70 via-black/20 to-black/30"
+        className="
+          pointer-events-none
+          absolute inset-0 z-[2]
+          bg-gradient-to-t
+          from-black/85
+          via-transparent
+          to-black/30
+        "
       />
 
-      {/* DEGRADADO INFERIOR */}
-
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/20"
-      />
-
-
-      {/* ==================================================
-          BOTÓN PARA VOLVER AL INICIO
-      ================================================== */}
+      {/* ======================================================
+          BOTÓN VOLVER A MEMORIAL POTOSÍ
+          ====================================================== */}
 
       <Link
-        to="/"
-        aria-label="Volver al inicio"
-        title="Volver al inicio"
-        className="absolute left-4 top-4 z-30 flex h-12 w-12 items-center justify-center rounded-full border border-white/40 bg-black/35 text-white backdrop-blur-md transition-all duration-300 hover:border-amber-300 hover:bg-amber-400 hover:text-black focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-amber-300 sm:left-7 sm:top-7 sm:h-14 sm:w-14"
+        to="/informacion"
+        className="
+          absolute left-4 top-5 z-20
+          inline-flex min-h-11
+          items-center gap-2
+          rounded-full border
+          border-white/30
+          bg-black/60
+          px-5 py-3
+          text-xs font-bold
+          uppercase tracking-wide
+          text-white backdrop-blur-md
+          transition-colors
+          hover:bg-black/85
+          sm:left-10 sm:top-8
+        "
       >
-        <IconoInicio />
+        ← VOLVER A MEMORIAL
       </Link>
 
+      {/* ======================================================
+          FLECHA IZQUIERDA
+          ====================================================== */}
 
-      {/* ==================================================
-          CONTADOR DE FOTOGRAFÍAS
-      ================================================== */}
+      <button
+        type="button"
+        aria-label="Fotografía anterior"
+        onClick={anterior}
+        className="
+          absolute left-2 top-1/2 z-20
+          flex h-11 w-11
+          -translate-y-1/2
+          items-center justify-center
+          rounded-full border
+          border-white/40
+          bg-black/60
+          text-white
+          backdrop-blur-md
+          transition-colors
+          hover:bg-orange-600
+          sm:left-6
+          sm:h-14 sm:w-14
+        "
+      >
+        <Flecha izquierda />
+      </button>
+
+      {/* ======================================================
+          FLECHA DERECHA
+          ====================================================== */}
+
+      <button
+        type="button"
+        aria-label="Fotografía siguiente"
+        onClick={siguiente}
+        className="
+          absolute right-2 top-1/2 z-20
+          flex h-11 w-11
+          -translate-y-1/2
+          items-center justify-center
+          rounded-full border
+          border-white/40
+          bg-black/60
+          text-white
+          backdrop-blur-md
+          transition-colors
+          hover:bg-orange-600
+          sm:right-6
+          sm:h-14 sm:w-14
+        "
+      >
+        <Flecha />
+      </button>
+
+      {/* ======================================================
+          INFORMACIÓN DE LA FOTOGRAFÍA
+          ====================================================== */}
 
       <div
-        className="absolute right-4 top-5 z-30 rounded-full border border-white/35 bg-black/25 px-4 py-2 text-sm font-bold tracking-widest text-white backdrop-blur-md sm:right-8 sm:top-8"
-        aria-live="polite"
-        aria-atomic="true"
+        className="
+          pointer-events-none
+          absolute bottom-0
+          left-0 right-0 z-10
+          px-5 pb-6 pt-16
+          sm:px-12 sm:pb-9
+          lg:px-24
+        "
       >
-        {String(activo + 1).padStart(2, '0')}
-
-        <span className="mx-2 text-amber-400">
-          /
-        </span>
-
-        {String(diapositivas.length).padStart(2, '0')}
-      </div>
-
-
-      {/* ==================================================
-          CARRUSEL PRINCIPAL
-          SE ELIMINA LA TARJETA DEL LADO IZQUIERDO.
-      ================================================== */}
-
-      <div className="absolute inset-0 flex flex-col gap-3 px-3 pb-24 pt-20 sm:px-6 sm:pb-24 sm:pt-24 md:flex-row md:gap-4 md:px-8 md:pb-24 md:pt-10 lg:px-12">
-
-        {tarjetasVisibles.map((indice) => {
-          const item = diapositivas[indice];
-
-          const seleccionada = indice === activo;
-
-          return (
-            <button
-              key={item.id}
-              type="button"
-              onClick={() => setActivo(indice)}
-              aria-pressed={seleccionada}
-              aria-label={`Mostrar fotografía: ${item.titulo}`}
-              className={`group relative isolate min-h-0 overflow-hidden rounded-xl border text-left transition-[flex,border-color,box-shadow] duration-500 ease-in-out focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-amber-300 ${
-                seleccionada
-                  ? 'border-amber-400 shadow-[0_15px_50px_rgba(0,0,0,0.3)]'
-                  : 'border-white/35 hover:border-amber-300'
-              }`}
-              style={{
-                flex: seleccionada
-                  ? '5 1 0%'
-                  : '1 1 0%',
+        <AnimatePresence mode="wait">
+          {mostrarTexto && (
+            <motion.div
+              key={`${coleccion.id}-texto-${indice}`}
+              initial={
+                reducirMovimiento
+                  ? false
+                  : {
+                      opacity: 0,
+                      y: 15,
+                    }
+              }
+              animate={{
+                opacity: 1,
+                y: 0,
               }}
+              exit={{
+                opacity: 0,
+                y: -10,
+              }}
+              transition={{
+                duration: reducirMovimiento ? 0 : 0.4,
+              }}
+              className="
+                pointer-events-auto
+                max-w-2xl
+                rounded-xl
+                bg-black/55
+                p-4
+                backdrop-blur-md
+                sm:p-5
+              "
             >
+              {/* CATEGORÍA */}
 
-              {/* FOTOGRAFÍA DE LA TARJETA */}
-
-              <img
-                src={item.imagen}
-                alt=""
-                aria-hidden="true"
-                className={`absolute inset-0 -z-20 h-full w-full object-cover transition-transform duration-700 ${
-                  seleccionada
-                    ? 'scale-100'
-                    : 'scale-110 group-hover:scale-100'
-                }`}
-              />
-
-
-              {/* OSCURECIMIENTO DE LA TARJETA */}
-
-              <div
-                aria-hidden="true"
-                className={`absolute inset-0 -z-10 transition-colors duration-500 ${
-                  seleccionada
-                    ? 'bg-gradient-to-t from-black/90 via-black/15 to-black/10'
-                    : 'bg-black/40 group-hover:bg-black/20'
-                }`}
-              />
-
-
-              {/* CONTENIDO */}
-
-              <div
-                className={`relative flex h-full flex-col justify-between p-4 text-white sm:p-6 ${
-                  seleccionada
-                    ? 'md:p-7 lg:p-10'
-                    : 'md:p-5'
-                }`}
+              <p
+                className="
+                  mb-2
+                  text-[10px]
+                  font-extrabold
+                  uppercase
+                  tracking-[0.18em]
+                  text-amber-300
+                  sm:text-xs
+                "
               >
+                {coleccion.nombre}
+              </p>
 
-                {/* NÚMERO */}
+              {/* TÍTULO */}
 
-                <div className="flex items-start justify-between gap-3">
+              <h1
+                className="
+                  font-['Bebas_Neue']
+                  text-[clamp(1.8rem,3.5vw,3.5rem)]
+                  uppercase leading-none
+                "
+              >
+                {foto.titulo}
+              </h1>
 
-                  <span
-                    className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full border text-sm font-extrabold ${
-                      seleccionada
-                        ? 'border-amber-400 bg-amber-400 text-black'
-                        : 'border-white/50 bg-black/30 text-white'
-                    }`}
-                  >
-                    {String(item.id).padStart(2, '0')}
-                  </span>
+              {/* DESCRIPCIÓN */}
 
-                  {seleccionada && (
-                    <span className="rounded-full border border-white/35 bg-black/25 px-3 py-2 text-[9px] font-extrabold uppercase tracking-[0.16em] text-white backdrop-blur-md sm:text-xs">
-                      {item.categoria}
-                    </span>
-                  )}
+              <p
+                className="
+                  mt-2 max-w-xl
+                  text-xs leading-relaxed
+                  text-white/90
+                  sm:text-sm
+                "
+              >
+                {foto.descripcion}
+              </p>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
-                </div>
+        {/* ==================================================
+            CONTROLES INFERIORES
+            ================================================== */}
 
-
-                {/* TÍTULO Y DESCRIPCIÓN */}
-
-                <div
-                  className={`mt-4 ${
-                    seleccionada
-                      ? 'max-w-3xl'
-                      : 'md:[writing-mode:vertical-rl] md:rotate-180'
-                  }`}
-                >
-
-                  {!seleccionada && (
-                    <p className="hidden text-xs font-extrabold uppercase tracking-[0.12em] text-white md:block">
-                      {item.categoria}
-                    </p>
-                  )}
-
-                  <h1
-                    className={`font-black uppercase leading-tight tracking-tight ${
-                      seleccionada
-                        ? 'text-2xl sm:text-4xl lg:text-5xl xl:text-6xl'
-                        : 'text-lg sm:text-xl md:text-xl lg:text-2xl'
-                    }`}
-                  >
-                    {item.titulo}
-                  </h1>
-
-                  {seleccionada && (
-                    <>
-                      <div
-                        aria-hidden="true"
-                        className="mt-5 h-1 w-16 rounded-full bg-gradient-to-r from-amber-300 to-orange-600 sm:w-20"
-                      />
-
-                      <p className="mt-5 max-w-2xl text-sm leading-7 text-white/90 sm:text-base sm:leading-8 lg:text-lg">
-                        {item.descripcion}
-                      </p>
-                    </>
-                  )}
-
-                </div>
-
-
-                {/* INDICADOR DE LA TARJETA ACTIVA */}
-
-                {seleccionada && (
-                  <div className="mt-4 flex items-center gap-3 text-[10px] font-bold uppercase tracking-[0.15em] text-white/75 sm:text-xs">
-
-                    <span className="h-2 w-2 rounded-full bg-amber-400" />
-
-                    {String(indice + 1).padStart(2, '0')}
-
-                    <span className="h-px w-8 bg-white/40" />
-
-                    {item.categoria}
-
-                  </div>
-                )}
-
-              </div>
-
-            </button>
-          );
-        })}
-
-      </div>
-
-
-      {/* ==================================================
-          BOTONES DE NAVEGACIÓN
-      ================================================== */}
-
-      <div className="absolute bottom-5 right-4 z-30 flex items-center gap-3 sm:bottom-7 sm:right-8">
-
-        <button
-          type="button"
-          onClick={anterior}
-          aria-label="Mostrar fotografía anterior"
-          className="flex h-12 w-12 items-center justify-center rounded-full border border-white/60 bg-black/35 text-white backdrop-blur-md transition-all duration-300 hover:border-amber-400 hover:bg-amber-400 hover:text-black focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-amber-300 sm:h-14 sm:w-14"
+        <div
+          className="
+            pointer-events-auto
+            mt-4 flex
+            items-center justify-between
+            gap-4
+          "
         >
-          <IconoFlecha direccion="izquierda" />
-        </button>
+          {/* MOSTRAR / OCULTAR INFORMACIÓN */}
 
-        <button
-          type="button"
-          onClick={siguiente}
-          aria-label="Mostrar fotografía siguiente"
-          className="flex h-12 w-12 items-center justify-center rounded-full border border-amber-400 bg-amber-400 text-black transition-all duration-300 hover:bg-amber-300 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-amber-300 sm:h-14 sm:w-14"
-        >
-          <IconoFlecha />
-        </button>
-
-      </div>
-
-
-      {/* ==================================================
-          INDICADORES INFERIORES
-      ================================================== */}
-
-      <div className="absolute bottom-7 left-1/2 z-30 flex -translate-x-1/2 items-center gap-2">
-
-        {diapositivas.map((item, indice) => (
           <button
-            key={item.id}
             type="button"
-            onClick={() => setActivo(indice)}
-            aria-label={`Ir a la fotografía ${indice + 1}`}
-            aria-pressed={activo === indice}
-            className={`h-2 rounded-full transition-all duration-300 ${
-              activo === indice
-                ? 'w-8 bg-amber-400'
-                : 'w-2 bg-white/50 hover:bg-white'
-            }`}
-          />
-        ))}
+            onClick={() =>
+              setMostrarTexto((actual) => !actual)
+            }
+            className="
+              rounded-full
+              border border-white/30
+              bg-black/60
+              px-4 py-2
+              text-xs font-semibold
+              text-white
+              backdrop-blur-md
+              transition-colors
+              hover:bg-black/85
+            "
+          >
+            {mostrarTexto
+              ? "OCULTAR INFORMACIÓN"
+              : "MOSTRAR INFORMACIÓN"}
+          </button>
 
+          {/* CONTADOR */}
+
+          <span
+            className="
+              rounded-full
+              bg-black/60
+              px-4 py-2
+              text-xs font-semibold
+              tracking-widest
+              text-white
+              backdrop-blur-md
+            "
+          >
+            {indice + 1} / {fotografias.length}
+          </span>
+        </div>
       </div>
-
     </main>
   );
 }
 
-
 // ============================================================
-// PÁGINA DE INFORMACIÓN
+// COMPONENTE PRINCIPAL
 // ============================================================
 
 export default function Informacion() {
-  return <CarruselExpansible />;
+  const [parametros] = useSearchParams();
+
+  const galeriaId = parametros.get("galeria");
+
+  const coleccionActiva = colecciones.find(
+    (coleccion) => coleccion.id === galeriaId
+  );
+
+  return coleccionActiva ? (
+    <GaleriaPantallaCompleta
+      key={coleccionActiva.id}
+      coleccion={coleccionActiva}
+    />
+  ) : (
+    <PortadaMemorial />
+  );
 }
+
