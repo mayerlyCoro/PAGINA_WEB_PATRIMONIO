@@ -206,7 +206,7 @@ export default function Hero() {
           </span>
 
           <span>
-            Dirección de Patrimonio Histórico
+            Dirección de Patrimonio Cultural 
           </span>
 
           <span className="text-base text-amber-400 sm:text-xl">
