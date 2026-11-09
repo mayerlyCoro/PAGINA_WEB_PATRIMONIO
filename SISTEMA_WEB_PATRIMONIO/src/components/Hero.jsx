@@ -10,7 +10,7 @@ const slides = [
   // 1. PORTADA PRINCIPAL
   {
     id: 1,
-    image: "/images/1.jpeg",
+    image: "/images/arcos.png",
     alt: "Vista panorámica del centro histórico de Potosí",
     type: "principal",
     badge: "Portal Oficial de Difusión y Gestión",
@@ -23,7 +23,7 @@ const slides = [
   // 2. CERRO RICO
   {
     id: 2,
-    image: "/images/cerro_hero.jpg",
+    image: "/images/cerro_hero.webp",
     alt: "Cerro Rico de Potosí",
     type: "secondary",
     badge: "Símbolo de la Villa Imperial",
@@ -36,7 +36,7 @@ const slides = [
   // 3. LAGUNAS HISTÓRICAS
   {
     id: 3,
-    image: "/images/laguna.jpg",
+    image: "/images/laguna.webp",
     alt: "Paisaje de laguna en Potosí",
     type: "secondary",
     badge: "Paisajes e Identidad de Potosí",
@@ -49,7 +49,7 @@ const slides = [
   // 4. CÁRCAMOS HISTÓRICOS
   {
     id: 4,
-    image: "/images/carcamo.jpeg",
+    image: "/images/carcamo.webp",
     alt: "Cárcamo histórico de Potosí",
     type: "secondary",
     badge: "Patrimonio Industrial e Histórico",
@@ -62,7 +62,7 @@ const slides = [
   // 5. CIUDAD PATRIMONIO
   {
     id: 5,
-    image: "/images/potosi_patrimonio.jpeg",
+    image: "/images/potosi_patrimonio.webp",
     alt: "Arquitectura patrimonial de la ciudad de Potosí",
     type: "secondary",
     badge: "Patrimonio Cultural de la Humanidad",

@@ -1,13 +1,14 @@
 
 import React, { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
+import Prahp from "./Prahp";
+import BalconesColoniales from "./BalconesColoniales";
+
 import {
   AnimatePresence,
   motion,
   useReducedMotion,
 } from "motion/react";
-
-import BalconesColoniales from "./BalconesColoniales";
 
 // ============================================================
 // CONFIGURACIÓN DEL ZOOM CINEMATOGRÁFICO
@@ -21,16 +22,12 @@ const DURACION_ZOOM = 18;
 // EXTENSIONES DE LAS FOTOGRAFÍAS
 // ============================================================
 
-// Archivos PNG de Potosí de Antaño.
-// Los demás utilizan extensión JPG.
-//
-// IMPORTANTE:
-// - No existe 28_c
-// - No existe 47_c
-// Por eso ambos se omiten del carrusel.
+// No existen las fotografías 28_c ni 47_c.
+// Los números indicados utilizan PNG.
+// Los demás utilizan JPG.
 
 const numerosPNG = new Set([
-  2,4,6,11,12, 14,
+  2, 4, 6, 11, 12, 14,
   19, 20, 21, 26,
   29, 30, 32, 33, 34, 35, 36,
   37, 38, 39, 40, 41, 42, 43,
@@ -38,9 +35,11 @@ const numerosPNG = new Set([
 ]);
 
 function obtenerRutaAntano(numero) {
-  const extension = numerosPNG.has(numero) ? "png" : "jpg";
+  const extension = numerosPNG.has(numero)
+    ? "png"
+    : "jpg";
 
-  return `/images/${numero}_c.${extension}`;
+  return `/images/${numero}_c.webp`;
 }
 
 // ============================================================
@@ -353,10 +352,6 @@ const fotografiasAntano = datosAntano.map((foto) => ({
 // COLECCIONES DE MEMORIAL POTOSÍ
 // ============================================================
 
-// NOTA:
-// Balcones Coloniales conserva su tarjeta en la portada,
-// pero su galería se encuentra en BalconesColoniales.jsx.
-
 const colecciones = [
   {
     id: "antano",
@@ -367,44 +362,57 @@ const colecciones = [
     portada: obtenerRutaAntano(4),
     fotografias: fotografiasAntano,
   },
+
+  // ==========================================================
+  // PRAHP
+  // FOTO DE PORTADA CORREGIDA
+  // ==========================================================
+
   {
     id: "prahp",
     nombre: "PRAHP",
     subtitulo: "REHABILITACIÓN PATRIMONIAL",
     descripcion:
       "Un espacio para conocer el valor de la conservación patrimonial.",
-    portada: "/images/potosi_patrimonio.jpeg",
+
+    // Imagen del Pabellón de los Oficiales Reales
+    portada: "/images/prahp/1-4_p.webp",
+
     fotografias: [
       {
-        src: "/images/potosi_patrimonio.jpeg",
+        src: "/images/potosi_patrimonio.webp",
         titulo: "CONSERVAR NUESTRA HISTORIA",
         descripcion:
           "La conservación protege los valores de nuestros espacios históricos.",
       },
       {
-        src: "/images/1.jpeg",
+        src: "/images/1.webp",
         titulo: "PATRIMONIO ARQUITECTÓNICO",
         descripcion:
           "El legado arquitectónico de la Villa Imperial.",
       },
       {
-        src: "/images/Gonzalo Viera Azpiroz - Potosí.jpeg",
+        src: "/images/Gonzalo Viera Azpiroz - Potosí.webp",
         titulo: "NUESTRO LEGADO",
         descripcion:
           "Conocer nuestro patrimonio permite valorar su importancia.",
       },
     ],
   },
+
+  // ==========================================================
+  // BALCONES COLONIALES
+  // ==========================================================
+
   {
     id: "balcones",
     nombre: "BALCONES COLONIALES",
     subtitulo: "ARQUITECTURA HISTÓRICA",
     descripcion:
       "Descubre los balcones históricos, sus ubicaciones y sus historias.",
-    portada: "/images/balcones/1_b.png",
+    portada: "/images/balcones/1_b.webp",
 
-    // Los datos de esta galería están en
-    // BalconesColoniales.jsx.
+    // La galería está en BalconesColoniales.jsx.
   },
 ];
 
@@ -451,13 +459,20 @@ function PortadaMemorial() {
         sm:px-10 lg:px-20
       "
     >
-      {/* FONDO CON ZOOM CINEMATOGRÁFICO */}
+      {/* ======================================================
+          FONDO CON ZOOM CINEMATOGRÁFICO
+
+          NUEVA IMAGEN: Cerro_Hermoso.webp
+          ====================================================== */}
 
       <motion.img
-        src="/images/Gonzalo Viera Azpiroz - Potosí.jpeg"
+        src="/images/Cerro_Hermoso.webp"
         alt=""
         aria-hidden="true"
-        className="absolute inset-0 -z-20 h-full w-full object-cover"
+        className="
+          absolute inset-0 -z-20
+          h-full w-full object-cover
+        "
         initial={false}
         animate={
           reducirMovimiento
@@ -511,7 +526,9 @@ function PortadaMemorial() {
           </p>
         </motion.div>
 
-        {/* TARJETAS DE LAS TRES COLECCIONES */}
+        {/* ==================================================
+            TARJETAS DE LAS TRES COLECCIONES
+            ================================================== */}
 
         <div className="mt-12 grid grid-cols-1 gap-5 md:grid-cols-3 lg:mt-16">
           {colecciones.map((coleccion, index) => (
@@ -525,18 +542,37 @@ function PortadaMemorial() {
               animate={{ opacity: 1, y: 0 }}
               transition={{
                 duration: reducirMovimiento ? 0 : 0.6,
-                delay: reducirMovimiento ? 0 : index * 0.12,
+                delay: reducirMovimiento
+                  ? 0
+                  : index * 0.12,
               }}
             >
               <Link
                 to={`/informacion?galeria=${coleccion.id}`}
-                className="group relative flex min-h-[240px] overflow-hidden rounded-2xl border border-white/30 bg-black/60 shadow-2xl transition-all duration-300 hover:-translate-y-2 hover:border-amber-400"
+                className="
+                  group relative flex
+                  min-h-[240px]
+                  overflow-hidden
+                  rounded-2xl
+                  border border-white/30
+                  bg-black/60
+                  shadow-2xl
+                  transition-all duration-300
+                  hover:-translate-y-2
+                  hover:border-amber-400
+                "
               >
                 <img
                   src={coleccion.portada}
                   alt=""
                   loading="lazy"
-                  className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
+                  className="
+                    absolute inset-0
+                    h-full w-full
+                    object-cover
+                    transition-transform duration-700
+                    group-hover:scale-110
+                  "
                 />
 
                 <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-black/10" />
@@ -565,22 +601,29 @@ function PortadaMemorial() {
 }
 
 // ============================================================
-// VISOR DE POTOSÍ DE ANTAÑO Y PRAHP
+// GALERÍA DE PANTALLA COMPLETA
 // ============================================================
 
-// Balcones Coloniales NO utiliza este visor.
-// Tiene su propio componente independiente.
+// Se utiliza para Potosí de Antaño.
+//
+// PRAHP utiliza Prahp.jsx.
+// Balcones Coloniales utiliza BalconesColoniales.jsx.
 
 function GaleriaPantallaCompleta({ coleccion }) {
   const reducirMovimiento = useReducedMotion();
 
   const [indice, setIndice] = useState(0);
-  const [mostrarTexto, setMostrarTexto] = useState(true);
+
+  const [mostrarTexto, setMostrarTexto] =
+    useState(true);
 
   const fotografias = coleccion.fotografias;
+
   const foto = fotografias[indice];
 
+  // ==========================================================
   // SIGUIENTE FOTOGRAFÍA
+  // ==========================================================
 
   const siguiente = () => {
     setIndice(
@@ -588,7 +631,9 @@ function GaleriaPantallaCompleta({ coleccion }) {
     );
   };
 
+  // ==========================================================
   // FOTOGRAFÍA ANTERIOR
+  // ==========================================================
 
   const anterior = () => {
     setIndice(
@@ -598,7 +643,9 @@ function GaleriaPantallaCompleta({ coleccion }) {
     );
   };
 
+  // ==========================================================
   // NAVEGACIÓN CON TECLADO
+  // ==========================================================
 
   useEffect(() => {
     const controlarTeclas = (event) => {
@@ -620,7 +667,8 @@ function GaleriaPantallaCompleta({ coleccion }) {
         event.preventDefault();
 
         setIndice(
-          (actual) => (actual + 1) % fotografias.length
+          (actual) =>
+            (actual + 1) % fotografias.length
         );
       }
 
@@ -635,7 +683,10 @@ function GaleriaPantallaCompleta({ coleccion }) {
       }
     };
 
-    window.addEventListener("keydown", controlarTeclas);
+    window.addEventListener(
+      "keydown",
+      controlarTeclas
+    );
 
     return () => {
       window.removeEventListener(
@@ -645,7 +696,9 @@ function GaleriaPantallaCompleta({ coleccion }) {
     };
   }, [fotografias.length]);
 
+  // ==========================================================
   // BLOQUEAR SCROLL
+  // ==========================================================
 
   useEffect(() => {
     const overflowAnterior =
@@ -654,16 +707,24 @@ function GaleriaPantallaCompleta({ coleccion }) {
     document.body.style.overflow = "hidden";
 
     return () => {
-      document.body.style.overflow = overflowAnterior;
+      document.body.style.overflow =
+        overflowAnterior;
     };
   }, []);
 
   return (
     <main
       aria-label={`Galería ${coleccion.nombre}`}
-      className="fixed inset-0 z-[100] h-[100dvh] w-screen overflow-hidden bg-[#090909] text-white"
+      className="
+        fixed inset-0 z-[100]
+        h-[100dvh] w-screen
+        overflow-hidden
+        bg-[#090909] text-white
+      "
     >
-      {/* FONDO DESENFOCADO */}
+      {/* ======================================================
+          FONDO DESENFOCADO
+          ====================================================== */}
 
       <div className="absolute inset-0 overflow-hidden">
         <AnimatePresence mode="sync">
@@ -672,12 +733,19 @@ function GaleriaPantallaCompleta({ coleccion }) {
             src={foto.src}
             alt=""
             aria-hidden="true"
-            className="absolute inset-0 h-full w-full scale-110 object-cover blur-3xl"
+            className="
+              absolute inset-0
+              h-full w-full
+              scale-110
+              object-cover blur-3xl
+            "
             initial={{ opacity: 0 }}
             animate={{ opacity: 0.5 }}
             exit={{ opacity: 0 }}
             transition={{
-              duration: reducirMovimiento ? 0 : 0.65,
+              duration: reducirMovimiento
+                ? 0
+                : 0.65,
             }}
           />
         </AnimatePresence>
@@ -685,7 +753,9 @@ function GaleriaPantallaCompleta({ coleccion }) {
         <div className="absolute inset-0 bg-black/50" />
       </div>
 
-      {/* FOTOGRAFÍA CON ZOOM CINEMATOGRÁFICO */}
+      {/* ======================================================
+          FOTOGRAFÍA CON ZOOM CINEMATOGRÁFICO
+          ====================================================== */}
 
       <div className="absolute inset-0 z-[1] flex items-center justify-center overflow-hidden px-3 py-16 sm:px-16 sm:py-8 lg:px-24">
         <AnimatePresence mode="sync">
@@ -694,7 +764,16 @@ function GaleriaPantallaCompleta({ coleccion }) {
             src={foto.src}
             alt={foto.titulo}
             draggable={false}
-            className="absolute max-h-[calc(100dvh-100px)] max-w-[calc(100vw-24px)] select-none object-contain drop-shadow-[0_12px_35px_rgba(0,0,0,0.6)] sm:max-h-[calc(100dvh-60px)] sm:max-w-[calc(100vw-130px)] lg:max-w-[calc(100vw-190px)]"
+            className="
+              absolute
+              max-h-[calc(100dvh-100px)]
+              max-w-[calc(100vw-24px)]
+              select-none object-contain
+              drop-shadow-[0_12px_35px_rgba(0,0,0,0.6)]
+              sm:max-h-[calc(100dvh-60px)]
+              sm:max-w-[calc(100vw-130px)]
+              lg:max-w-[calc(100vw-190px)]
+            "
             initial={
               reducirMovimiento
                 ? false
@@ -705,6 +784,7 @@ function GaleriaPantallaCompleta({ coleccion }) {
             }
             animate={{
               opacity: 1,
+
               scale: reducirMovimiento
                 ? 1
                 : [
@@ -716,13 +796,18 @@ function GaleriaPantallaCompleta({ coleccion }) {
             exit={{ opacity: 0 }}
             transition={{
               opacity: {
-                duration: reducirMovimiento ? 0 : 0.8,
+                duration: reducirMovimiento
+                  ? 0
+                  : 0.8,
                 ease: "easeOut",
               },
+
               scale: {
                 duration: DURACION_ZOOM,
                 ease: "easeInOut",
-                repeat: reducirMovimiento ? 0 : Infinity,
+                repeat: reducirMovimiento
+                  ? 0
+                  : Infinity,
               },
             }}
           />
@@ -733,40 +818,98 @@ function GaleriaPantallaCompleta({ coleccion }) {
 
       <div className="pointer-events-none absolute inset-0 z-[2] bg-gradient-to-t from-black/85 via-transparent to-black/30" />
 
-      {/* VOLVER A MEMORIAL */}
+      {/* ======================================================
+          VOLVER A MEMORIAL
+          ====================================================== */}
 
       <Link
         to="/informacion"
-        className="absolute left-4 top-5 z-20 inline-flex min-h-11 items-center gap-2 rounded-full border border-white/30 bg-black/60 px-5 py-3 text-xs font-bold uppercase tracking-wide text-white backdrop-blur-md transition-colors hover:bg-black/85 sm:left-10 sm:top-8"
+        className="
+          absolute left-4 top-5 z-20
+          inline-flex min-h-11
+          items-center gap-2
+          rounded-full
+          border border-white/30
+          bg-black/60
+          px-5 py-3
+          text-xs font-bold
+          uppercase tracking-wide
+          text-white
+          backdrop-blur-md
+          transition-colors
+          hover:bg-black/85
+          sm:left-10 sm:top-8
+        "
       >
         ← VOLVER A MEMORIAL
       </Link>
 
-      {/* FLECHA IZQUIERDA */}
+      {/* ======================================================
+          FLECHA IZQUIERDA
+          ====================================================== */}
 
       <button
         type="button"
         aria-label="Fotografía anterior"
         onClick={anterior}
-        className="absolute left-2 top-1/2 z-20 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-white/40 bg-black/60 text-white backdrop-blur-md transition-colors hover:bg-orange-600 sm:left-6 sm:h-14 sm:w-14"
+        className="
+          absolute left-2 top-1/2 z-20
+          flex h-11 w-11
+          -translate-y-1/2
+          items-center justify-center
+          rounded-full
+          border border-white/40
+          bg-black/60
+          text-white
+          backdrop-blur-md
+          transition-colors
+          hover:bg-orange-600
+          sm:left-6 sm:h-14 sm:w-14
+        "
       >
         <Flecha izquierda />
       </button>
 
-      {/* FLECHA DERECHA */}
+      {/* ======================================================
+          FLECHA DERECHA
+          ====================================================== */}
 
       <button
         type="button"
         aria-label="Fotografía siguiente"
         onClick={siguiente}
-        className="absolute right-2 top-1/2 z-20 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-white/40 bg-black/60 text-white backdrop-blur-md transition-colors hover:bg-orange-600 sm:right-6 sm:h-14 sm:w-14"
+        className="
+          absolute right-2 top-1/2 z-20
+          flex h-11 w-11
+          -translate-y-1/2
+          items-center justify-center
+          rounded-full
+          border border-white/40
+          bg-black/60
+          text-white
+          backdrop-blur-md
+          transition-colors
+          hover:bg-orange-600
+          sm:right-6 sm:h-14 sm:w-14
+        "
       >
         <Flecha />
       </button>
 
-      {/* INFORMACIÓN DE LA FOTOGRAFÍA */}
+      {/* ======================================================
+          INFORMACIÓN DE LA FOTOGRAFÍA
+          ====================================================== */}
 
-      <div className="pointer-events-none absolute bottom-0 left-0 right-0 z-10 px-5 pb-6 pt-16 sm:px-12 sm:pb-9 lg:px-24">
+      <div
+        className="
+          pointer-events-none
+          absolute bottom-0
+          left-0 right-0 z-10
+          px-5 pb-6 pt-16
+          sm:px-12 sm:pb-9
+          lg:px-24
+        "
+      >
         <AnimatePresence mode="wait">
           {mostrarTexto && (
             <motion.div
@@ -774,24 +917,64 @@ function GaleriaPantallaCompleta({ coleccion }) {
               initial={
                 reducirMovimiento
                   ? false
-                  : { opacity: 0, y: 15 }
+                  : {
+                      opacity: 0,
+                      y: 15,
+                    }
               }
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              transition={{
-                duration: reducirMovimiento ? 0 : 0.4,
+              animate={{
+                opacity: 1,
+                y: 0,
               }}
-              className="pointer-events-auto max-w-2xl rounded-xl bg-black/55 p-4 backdrop-blur-md sm:p-5"
+              exit={{
+                opacity: 0,
+                y: -10,
+              }}
+              transition={{
+                duration: reducirMovimiento
+                  ? 0
+                  : 0.4,
+              }}
+              className="
+                pointer-events-auto
+                max-w-2xl
+                rounded-xl
+                bg-black/55
+                p-4 backdrop-blur-md
+                sm:p-5
+              "
             >
-              <p className="mb-2 text-[10px] font-extrabold uppercase tracking-[0.18em] text-amber-300 sm:text-xs">
+              <p
+                className="
+                  mb-2 text-[10px]
+                  font-extrabold
+                  uppercase
+                  tracking-[0.18em]
+                  text-amber-300
+                  sm:text-xs
+                "
+              >
                 {coleccion.nombre}
               </p>
 
-              <h1 className="font-['Bebas_Neue'] text-[clamp(1.8rem,3.5vw,3.5rem)] uppercase leading-none">
+              <h1
+                className="
+                  font-['Bebas_Neue']
+                  text-[clamp(1.8rem,3.5vw,3.5rem)]
+                  uppercase leading-none
+                "
+              >
                 {foto.titulo}
               </h1>
 
-              <p className="mt-2 max-w-xl text-xs leading-relaxed text-white/90 sm:text-sm">
+              <p
+                className="
+                  mt-2 max-w-xl
+                  text-xs leading-relaxed
+                  text-white/90
+                  sm:text-sm
+                "
+              >
                 {foto.descripcion}
               </p>
             </motion.div>
@@ -800,20 +983,48 @@ function GaleriaPantallaCompleta({ coleccion }) {
 
         {/* CONTROLES INFERIORES */}
 
-        <div className="pointer-events-auto mt-4 flex items-center justify-between gap-4">
+        <div
+          className="
+            pointer-events-auto
+            mt-4 flex items-center
+            justify-between gap-4
+          "
+        >
           <button
             type="button"
             onClick={() =>
-              setMostrarTexto((actual) => !actual)
+              setMostrarTexto(
+                (actual) => !actual
+              )
             }
-            className="rounded-full border border-white/30 bg-black/60 px-4 py-2 text-xs font-semibold text-white backdrop-blur-md transition-colors hover:bg-black/85"
+            className="
+              rounded-full
+              border border-white/30
+              bg-black/60
+              px-4 py-2
+              text-xs font-semibold
+              text-white
+              backdrop-blur-md
+              transition-colors
+              hover:bg-black/85
+            "
           >
             {mostrarTexto
               ? "OCULTAR INFORMACIÓN"
               : "MOSTRAR INFORMACIÓN"}
           </button>
 
-          <span className="rounded-full bg-black/60 px-4 py-2 text-xs font-semibold tracking-widest text-white backdrop-blur-md">
+          <span
+            className="
+              rounded-full
+              bg-black/60
+              px-4 py-2
+              text-xs font-semibold
+              tracking-widest
+              text-white
+              backdrop-blur-md
+            "
+          >
             {indice + 1} / {fotografias.length}
           </span>
         </div>
@@ -833,7 +1044,6 @@ export default function Informacion() {
 
   // ==========================================================
   // BALCONES COLONIALES
-  // ABRE SU COMPONENTE INDEPENDIENTE
   // ==========================================================
 
   if (galeriaId === "balcones") {
@@ -841,7 +1051,15 @@ export default function Informacion() {
   }
 
   // ==========================================================
-  // POTOSÍ DE ANTAÑO Y PRAHP
+  // PRAHP - COMPONENTE INDEPENDIENTE
+  // ==========================================================
+
+  if (galeriaId === "prahp") {
+    return <Prahp />;
+  }
+
+  // ==========================================================
+  // POTOSÍ DE ANTAÑO
   // ==========================================================
 
   const coleccionActiva = colecciones.find(

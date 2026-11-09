@@ -7,7 +7,7 @@ export const planes = [
     categoria: "Gestión patrimonial",
     descripcion:
       "Instrumentos de planificación y gestión orientados a la preservación del patrimonio histórico y urbano de la ciudad de Potosí.",
-    imagen: "/images/1.jpeg",
+    imagen: "/images/1.webp",
     icono: "manejo",
     documentos: [
       {
@@ -25,7 +25,7 @@ export const planes = [
     categoria: "Conservación arquitectónica",
     descripcion:
       "Planificación de acciones para la rehabilitación, recuperación y conservación de las áreas históricas y su arquitectura patrimonial.",
-    imagen: "/images/1.2.jpeg",
+    imagen: "/images/1.2.webp",
     icono: "rehabilitacion",
     documentos: [
       {
@@ -43,7 +43,7 @@ export const planes = [
     categoria: "Protección y prevención",
     descripcion:
       "Documentos técnicos relacionados con las medidas de prevención, intervención e inspección para la protección del patrimonio histórico.",
-    imagen: "/images/carcamo.jpeg",
+    imagen: "/images/carcamo.webp",
     icono: "contingencia",
     documentos: [
       {

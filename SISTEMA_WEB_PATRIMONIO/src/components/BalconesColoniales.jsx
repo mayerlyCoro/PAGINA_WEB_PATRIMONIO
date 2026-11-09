@@ -31,9 +31,9 @@ const balcones = [
       "Los relatos sobre la antigua propietaria pertenecen a la tradición oral y no constituyen hechos históricos comprobados.",
 
     imagenes: [
-      { src: `${RUTA}1_b.png`, descripcion: "Fachada de la casona" },
-      { src: `${RUTA}1-1_b.png`, descripcion: "Vista frontal del balcón" },
-      { src: `${RUTA}1-2_b.png`, descripcion: "Detalles ornamentales" },
+      { src: `${RUTA}1_b.webp`, descripcion: "Fachada de la casona" },
+      { src: `${RUTA}1-1_b.webp`, descripcion: "Vista frontal del balcón" },
+      { src: `${RUTA}1-2_b.webp`, descripcion: "Detalles ornamentales" },
     ],
   },
 
@@ -54,8 +54,8 @@ const balcones = [
       "Las versiones sobre ajusticiamientos en este lugar forman parte de las tradiciones populares y requieren verificación documental.",
 
     imagenes: [
-      { src: `${RUTA}2_b.png`, descripcion: "Vista de la esquina histórica" },
-      { src: `${RUTA}2-1_b.png`, descripcion: "Fachada y balcón de madera" },
+      { src: `${RUTA}2_b.webp`, descripcion: "Vista de la esquina histórica" },
+      { src: `${RUTA}2-1_b.webp`, descripcion: "Fachada y balcón de madera" },
     ],
   },
 
@@ -73,10 +73,10 @@ const balcones = [
       "Este conjunto arquitectónico es reconocido por los elementos ornamentales tallados en madera que sostienen la estructura del balcón. Sus figuras decorativas, tradicionalmente asociadas con sirenas y personajes de carácter fantástico, expresan la riqueza artística de la carpintería patrimonial potosina. La combinación de madera tallada y herrería constituye uno de sus rasgos más destacados.",
 
     imagenes: [
-      { src: `${RUTA}3_b.png`, descripcion: "Vista general de la fachada" },
-      { src: `${RUTA}3-1_b.png`, descripcion: "Detalle de madera tallada" },
-      { src: `${RUTA}3-2_b.png`, descripcion: "Ornamentación inferior" },
-      { src: `${RUTA}3-3_b.png`, descripcion: "Acercamiento ornamental" },
+      { src: `${RUTA}3_b.webp`, descripcion: "Vista general de la fachada" },
+      { src: `${RUTA}3-1_b.webp`, descripcion: "Detalle de madera tallada" },
+      { src: `${RUTA}3-2_b.webp`, descripcion: "Ornamentación inferior" },
+      { src: `${RUTA}3-3_b.webp`, descripcion: "Acercamiento ornamental" },
     ],
   },
 
@@ -97,9 +97,9 @@ const balcones = [
       "La historia particular de este inmueble y su identificación fotográfica están pendientes de cotejo con el inventario patrimonial.",
 
     imagenes: [
-      { src: `${RUTA}4_b.png`, descripcion: "Vista principal" },
-      { src: `${RUTA}4-1_b.png`, descripcion: "Vista complementaria" },
-      { src: `${RUTA}4-2_b.png`, descripcion: "Detalle arquitectónico" },
+      { src: `${RUTA}4_b.webp`, descripcion: "Vista principal" },
+      { src: `${RUTA}4-1_b.webp`, descripcion: "Vista complementaria" },
+      { src: `${RUTA}4-2_b.webp`, descripcion: "Detalle arquitectónico" },
     ],
   },
 
@@ -120,9 +120,9 @@ const balcones = [
       "La correspondencia entre el inmueble y las fotografías debe confirmarse con su ficha patrimonial.",
 
     imagenes: [
-      { src: `${RUTA}5_b.png`, descripcion: "Vista principal de la casona" },
-      { src: `${RUTA}5-1_b.png`, descripcion: "Vista complementaria" },
-      { src: `${RUTA}5-2_b.png`, descripcion: "Detalles arquitectónicos" },
+      { src: `${RUTA}5_b.webp`, descripcion: "Vista principal de la casona" },
+      { src: `${RUTA}5-1_b.webp`, descripcion: "Vista complementaria" },
+      { src: `${RUTA}5-2_b.webp`, descripcion: "Detalles arquitectónicos" },
     ],
   },
 
@@ -143,7 +143,7 @@ const balcones = [
       "La historia particular del inmueble está pendiente de documentación.",
 
     imagenes: [
-      { src: `${RUTA}6_b.png`, descripcion: "Vista del inmueble" },
+      { src: `${RUTA}6_b.webp`, descripcion: "Vista del inmueble" },
     ],
   },
 
@@ -164,8 +164,8 @@ const balcones = [
       "La identificación de los balcones específicos debe contrastarse con la documentación arquitectónica del monumento.",
 
     imagenes: [
-      { src: `${RUTA}7_b.png`, descripcion: "Fachada histórica" },
-      { src: `${RUTA}7-1_b.png`, descripcion: "Vista complementaria" },
+      { src: `${RUTA}7_b.webp`, descripcion: "Fachada histórica" },
+      { src: `${RUTA}7-1_b.webp`, descripcion: "Vista complementaria" },
     ],
   },
 
@@ -186,7 +186,7 @@ const balcones = [
       "La historia específica del inmueble está pendiente de verificación documental.",
 
     imagenes: [
-      { src: `${RUTA}8_b.png`, descripcion: "Vista del conjunto arquitectónico" },
+      { src: `${RUTA}8_b.webp`, descripcion: "Vista del conjunto arquitectónico" },
     ],
   },
 
@@ -207,7 +207,7 @@ const balcones = [
       "La fotografía destaca principalmente la portada. La identificación y reseña histórica están pendientes de cotejo patrimonial.",
 
     imagenes: [
-      { src: `${RUTA}9_b.png`, descripcion: "Fachada de la casona histórica" },
+      { src: `${RUTA}9_b.webp`, descripcion: "Fachada de la casona histórica" },
     ],
   },
 ];

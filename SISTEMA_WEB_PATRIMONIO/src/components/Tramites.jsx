@@ -147,7 +147,7 @@ export default function Tramites() {
 {/* IMAGEN DE FONDO DE TRÁMITES CON ZOOM CINEMATOGRÁFICO */}
 
 <motion.img
-  src="/images/Calle_de_Potosí.jpg"
+  src="/images/Calle_de_Potosí.webp"
   alt=""
   aria-hidden="true"
   className="absolute inset-0 h-full w-full object-cover object-center"

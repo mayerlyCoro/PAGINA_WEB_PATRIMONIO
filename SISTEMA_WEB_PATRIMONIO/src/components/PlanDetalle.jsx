@@ -1,55 +1,304 @@
 
 import React from "react";
 import { Link, useParams } from "react-router-dom";
-
+import { motion, useReducedMotion } from "motion/react";
 import {
-  motion,
-  useReducedMotion,
-} from "motion/react";
+  ArrowLeft,
+  ArrowRight,
+  BookOpen,
+  Download,
+  ExternalLink,
+  FileText,
+} from "lucide-react";
 
 import { planes } from "../data/planes";
 import { IconoPlan } from "./PlanesProgramas";
 
 // ============================================================
-// COMPONENTE PRINCIPAL
-// DETALLE INDIVIDUAL DE CADA PLAN
+// DOCUMENTOS PDF DE CADA PLAN
+// ============================================================
+//
+// Los PDF se encuentran en:
+//
+// public/pdf/
+//
+// En React + Vite las rutas públicas comienzan con /pdf/,
+// no con /public/pdf/.
+//
+// disponible: true
+//   Muestra los botones VER PDF y DESCARGAR.
+//
+// disponible: false
+//   Muestra solamente el nombre y "En elaboración".
+// ============================================================
+
+const documentosPorTipo = {
+  manejo: [
+    {
+      id: "plan-manejo",
+      titulo: "Plan de Manejo de la Ciudad de Potosí",
+      descripcion:
+        "Documento de planificación y gestión orientado a la preservación del patrimonio histórico y urbano de la ciudad de Potosí.",
+      archivo: "/pdf/plan_de_manejo.pdf",
+      disponible: true,
+    },
+  ],
+
+  rehabilitacion: [
+    {
+      id: "plan-rehabilitacion",
+      titulo: "Plan de Rehabilitación de Áreas Históricas",
+      descripcion:
+        "Documento de planificación para la rehabilitación, recuperación y conservación de las áreas históricas y su arquitectura patrimonial.",
+      archivo: "/pdf/img004.pdf",
+      disponible: true,
+    },
+  ],
+
+  contingencia: [
+    // DOCUMENTO PRINCIPAL
+    {
+      id: "plan-contingencia",
+      titulo: "Plan de Contingencia",
+      descripcion:
+        "Documento de planificación de medidas de prevención, respuesta y protección del patrimonio histórico de Potosí.",
+      archivo: "/pdf/Plan_de_Contingencia.pdf",
+      disponible: true,
+    },
+
+    // DOCUMENTO TODAVÍA EN ELABORACIÓN
+    {
+      id: "guia-tecnica",
+      titulo: "Guía técnica",
+      descripcion:
+        "Documento complementario del Plan de Contingencia.",
+      archivo: null,
+      disponible: false,
+    },
+
+    // DOCUMENTO TODAVÍA EN ELABORACIÓN
+    {
+      id: "normativa-inspeccion",
+      titulo: "Normativa para la inspección",
+      descripcion:
+        "Documento complementario del Plan de Contingencia.",
+      archivo: null,
+      disponible: false,
+    },
+  ],
+};
+
+// ============================================================
+// IDENTIFICAR EL TIPO DE PLAN
+// ============================================================
+
+function identificarTipo(plan) {
+  const texto = [
+    plan?.id,
+    plan?.icono,
+    plan?.titulo,
+  ]
+    .filter(Boolean)
+    .join(" ")
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
+
+  if (texto.includes("contingencia")) {
+    return "contingencia";
+  }
+
+  if (texto.includes("rehabilitacion")) {
+    return "rehabilitacion";
+  }
+
+  return "manejo";
+}
+
+// ============================================================
+// TARJETA INDIVIDUAL DE DOCUMENTO
+// ============================================================
+
+function TarjetaDocumento({
+  documento,
+  index,
+  reducirMovimiento,
+}) {
+  const estaDisponible =
+    documento.disponible && Boolean(documento.archivo);
+
+  return (
+    <motion.article
+      initial={
+        reducirMovimiento
+          ? false
+          : { opacity: 0, y: 24 }
+      }
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{
+        duration: 0.55,
+        delay: index * 0.12,
+      }}
+      className="
+        group flex flex-col gap-6
+        rounded-2xl border border-[#E5D9CD]
+        bg-white p-6
+        shadow-[0_8px_28px_rgba(50,35,25,0.06)]
+        transition-all duration-300
+        hover:border-[#DAA16A]
+        hover:shadow-[0_16px_40px_rgba(75,35,20,0.10)]
+        md:flex-row md:items-center
+        md:justify-between md:p-8
+      "
+    >
+      {/* INFORMACIÓN DEL DOCUMENTO */}
+
+      <div className="flex min-w-0 flex-1 items-start gap-5">
+        <div
+          className="
+            flex h-16 w-16 shrink-0
+            items-center justify-center
+            rounded-xl bg-[#FFF3E8]
+            text-[#B94A14]
+          "
+        >
+          <FileText size={31} strokeWidth={1.7} />
+        </div>
+
+        <div className="min-w-0">
+          <span
+            className="
+              mb-2 block text-[11px] font-extrabold
+              uppercase tracking-[0.16em]
+              text-[#B94A14]
+            "
+          >
+            {estaDisponible
+              ? "Documento PDF"
+              : "Documento complementario"}
+          </span>
+
+          <h3
+            className="
+              text-xl font-extrabold
+              leading-snug text-[#20342E]
+              md:text-2xl
+            "
+          >
+            {documento.titulo}
+          </h3>
+
+          {estaDisponible ? (
+            <p
+              className="
+                mt-3 max-w-2xl text-sm
+                leading-relaxed text-stone-600
+                md:text-base
+              "
+            >
+              {documento.descripcion}
+            </p>
+          ) : (
+            <p
+              className="
+                mt-3 text-sm font-semibold
+                text-[#A94C16]
+                md:text-base
+              "
+            >
+              En elaboración
+            </p>
+          )}
+        </div>
+      </div>
+
+      {/* ACCIONES:
+          SOLO PARA DOCUMENTOS DISPONIBLES */}
+
+      {estaDisponible && (
+        <div
+          className="
+            flex shrink-0 flex-wrap gap-3
+            md:justify-end
+          "
+        >
+          <a
+            href={documento.archivo}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="
+              inline-flex min-h-12 items-center
+              justify-center gap-2 rounded-xl
+              bg-[#17372D] px-5 py-3
+              text-xs font-extrabold
+              uppercase tracking-wide
+              text-white transition
+              hover:bg-[#285845]
+            "
+          >
+            <ExternalLink size={17} />
+            Ver PDF
+          </a>
+
+          <a
+            href={documento.archivo}
+            download
+            className="
+              inline-flex min-h-12 items-center
+              justify-center gap-2 rounded-xl
+              border-2 border-[#B94A14]
+              px-5 py-3
+              text-xs font-extrabold
+              uppercase tracking-wide
+              text-[#B94A14]
+              transition
+              hover:bg-[#B94A14]
+              hover:text-white
+            "
+          >
+            <Download size={17} />
+            Descargar
+          </a>
+        </div>
+      )}
+    </motion.article>
+  );
+}
+
+// ============================================================
+// COMPONENTE PRINCIPAL: DETALLE DE PLAN
 // ============================================================
 
 export default function PlanDetalle() {
   const { planId } = useParams();
-
   const reducirMovimiento = useReducedMotion();
 
-  // BUSCAR EL PLAN SELECCIONADO
+  // Buscar el plan seleccionado en los datos originales.
 
   const plan = planes.find(
-    (item) => item.id === planId
+    (item) => String(item.id) === String(planId)
   );
 
-  // ==========================================================
-  // CUANDO EL PLAN NO EXISTE
-  // ==========================================================
+  // Si el ID no existe, mostrar un mensaje.
 
   if (!plan) {
     return (
       <main
         className="
-          flex
-          min-h-screen
-          flex-col
-          items-center
-          justify-center
-          bg-[#F7F4EF]
-          px-6
-          pt-24
-          text-center
+          flex min-h-[80vh] flex-col
+          items-center justify-center
+          bg-[#F7F4EF] px-6 text-center
         "
       >
+        <FileText
+          size={50}
+          className="mb-5 text-[#B94A14]"
+        />
+
         <h1
           className="
-            mb-4
-            text-3xl
-            font-bold
+            mb-4 text-3xl font-extrabold
             text-[#20342E]
           "
         >
@@ -57,520 +306,186 @@ export default function PlanDetalle() {
         </h1>
 
         <p className="mb-7 text-stone-600">
-          El plan solicitado no está disponible.
+          No encontramos el plan solicitado.
         </p>
-
-        {/* VOLVER A LA SECCIÓN DE PLANES */}
 
         <Link
           to="/#planes"
           className="
-            rounded-lg
-            bg-orange-600
-            px-6
-            py-3
-            font-bold
-            text-white
-            transition-colors
-            hover:bg-orange-700
+            rounded-xl bg-[#17372D]
+            px-6 py-3 font-bold text-white
           "
         >
-          ← Volver a Planes
+          Volver a Planes
         </Link>
       </main>
     );
   }
 
-  // ==========================================================
-  // DETALLE DEL PLAN
-  // ==========================================================
+  const tipo = identificarTipo(plan);
+
+  const documentos =
+    documentosPorTipo[tipo] || [];
 
   return (
     <main
       className="
-        min-h-screen
-        bg-[#F7F4EF]
+        min-h-screen bg-[#F7F4EF]
         text-[#20342E]
       "
     >
       {/* ======================================================
-          1. PORTADA CON IMAGEN
+          ENCABEZADO DEL PLAN
           ====================================================== */}
 
       <section
         className="
-          relative
-          flex
-          min-h-[55svh]
-          items-center
-          overflow-hidden
-          bg-zinc-950
-          px-5
-          pb-16
-          pt-40
-          text-white
+          bg-[#F7F4EF]
+          px-6 pb-10 pt-36
           sm:px-10
-          lg:px-24
+          lg:px-20 lg:pt-44
         "
       >
-        {/* IMAGEN DEL PLAN */}
-
-        <img
-          src={plan.imagen}
-          alt=""
-          aria-hidden="true"
-          className="
-            absolute
-            inset-0
-            h-full
-            w-full
-            object-cover
-            object-center
-          "
-        />
-
-        {/* OSCURECIMIENTO */}
-
-        <div
-          className="
-            absolute
-            inset-0
-            bg-gradient-to-r
-            from-[#081B17]/95
-            via-[#081B17]/70
-            to-black/30
-          "
-        />
-
-        {/* CONTENIDO DE LA PORTADA */}
-
         <motion.div
           initial={
             reducirMovimiento
               ? false
-              : {
-                  opacity: 0,
-                  y: 35,
-                }
+              : { opacity: 0, y: 25 }
           }
-          animate={{
-            opacity: 1,
-            y: 0,
-          }}
-          transition={{
-            duration: reducirMovimiento ? 0 : 0.8,
-          }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.65 }}
           className="
-            relative
-            z-10
-            mx-auto
-            w-full
-            max-w-[1300px]
+            mx-auto flex max-w-[1400px]
+            flex-col items-start gap-7
+            md:flex-row md:items-center
           "
         >
-          {/* BOTÓN VOLVER A PLANES */}
-
-          <Link
-            to="/#planes"
-            className="
-              mb-9
-              inline-flex
-              items-center
-              gap-2
-              text-sm
-              font-bold
-              uppercase
-              tracking-wide
-              text-amber-300
-              transition-colors
-              hover:text-white
-            "
-          >
-            <span aria-hidden="true">←</span>
-            VOLVER A PLANES
-          </Link>
-
-          {/* CATEGORÍA */}
-
-          <p
-            className="
-              mb-4
-              text-xs
-              font-extrabold
-              uppercase
-              tracking-[0.2em]
-              text-amber-300
-            "
-          >
-            {plan.categoria}
-          </p>
-
-          {/* TÍTULO */}
-
-          <h1
-            className="
-              max-w-4xl
-              font-['Bebas_Neue']
-              text-[clamp(3.4rem,7vw,7rem)]
-              uppercase
-              leading-[0.95]
-            "
-          >
-            {plan.titulo}
-          </h1>
-
-          {/* LÍNEA DORADA */}
+          {/* ÍCONO DEL PLAN */}
 
           <div
             className="
-              mt-6
-              h-[2px]
-              w-20
-              bg-amber-400
-            "
-          />
-        </motion.div>
-      </section>
-
-      {/* ======================================================
-          2. INFORMACIÓN DEL PLAN
-          ====================================================== */}
-
-      <section
-        className="
-          mx-auto
-          max-w-[1200px]
-          px-5
-          py-16
-          sm:px-8
-        "
-      >
-        {/* ENCABEZADO DE DOCUMENTACIÓN */}
-
-        <div
-          className="
-            mb-14
-            flex
-            flex-col
-            gap-5
-            sm:flex-row
-            sm:items-center
-          "
-        >
-          {/* ICONO DEL PLAN */}
-
-          <div
-            className="
-              flex
-              h-20
-              w-20
-              shrink-0
-              items-center
-              justify-center
-              text-red-600
+              flex h-20 w-20 shrink-0
+              items-center justify-center
+              text-[#E52C36]
             "
           >
             <IconoPlan
               tipo={plan.icono}
-              size={65}
+              size={68}
             />
           </div>
 
-          {/* DESCRIPCIÓN */}
+          {/* TEXTO */}
 
           <div>
             <p
               className="
-                mb-2
-                text-xs
-                font-bold
-                uppercase
-                tracking-widest
-                text-orange-700
+                mb-3 text-xs font-extrabold
+                uppercase tracking-[0.16em]
+                text-[#B94A14]
               "
             >
-              DIRECCIÓN DE PATRIMONIO HISTÓRICO
+              Dirección de Patrimonio Histórico
             </p>
 
-            <h2
+            <h1
               className="
-                mb-3
-                text-2xl
-                font-extrabold
-                sm:text-3xl
+                text-3xl font-extrabold
+                leading-tight text-[#20342E]
+                md:text-4xl
               "
             >
               Documentación del plan
-            </h2>
+            </h1>
 
             <p
               className="
-                max-w-3xl
-                text-base
-                leading-relaxed
-                text-stone-600
+                mt-4 max-w-4xl text-base
+                leading-relaxed text-stone-600
+                md:text-lg
               "
             >
               {plan.descripcion}
             </p>
           </div>
-        </div>
+        </motion.div>
+      </section>
 
-        {/* ==================================================
-            3. LISTADO DE DOCUMENTOS
-            ================================================== */}
+      {/* ======================================================
+          DOCUMENTACIÓN DISPONIBLE
+          ====================================================== */}
 
-        <div className="grid gap-5">
-          {plan.documentos.map((documento, index) => (
-            <motion.article
-              key={documento.nombre}
-              initial={
-                reducirMovimiento
-                  ? false
-                  : {
-                      opacity: 0,
-                      y: 25,
-                    }
-              }
-              whileInView={{
-                opacity: 1,
-                y: 0,
-              }}
-              viewport={{
-                once: true,
-              }}
-              transition={{
-                duration: reducirMovimiento ? 0 : 0.6,
-                delay: reducirMovimiento
-                  ? 0
-                  : index * 0.1,
-              }}
-              className="
-                flex
-                flex-col
-                gap-5
-                rounded-2xl
-                border
-                border-[#E5DBD0]
-                bg-white
-                p-6
-                shadow-sm
-                sm:p-8
-                lg:flex-row
-                lg:items-center
-                lg:justify-between
-              "
-            >
-              {/* DATOS DEL DOCUMENTO */}
+      <section
+        className="
+          mx-auto max-w-[1400px]
+          px-6 pb-16 pt-8
+          sm:px-10 lg:px-20
+        "
+      >
+        <div className="mb-8 flex items-center gap-3">
+          <BookOpen
+            size={23}
+            className="text-[#B94A14]"
+          />
 
-              <div className="flex items-start gap-4">
-                {/* ICONO PDF */}
-
-                <div
-                  className="
-                    flex
-                    h-14
-                    w-14
-                    shrink-0
-                    items-center
-                    justify-center
-                    rounded-xl
-                    bg-orange-50
-                    text-orange-700
-                  "
-                >
-                  <svg
-                    width="27"
-                    height="27"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="1.7"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    aria-hidden="true"
-                  >
-                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                    <path d="M14 2v6h6" />
-                    <path d="M8 13h8M8 17h8" />
-                  </svg>
-                </div>
-
-                {/* INFORMACIÓN */}
-
-                <div>
-                  <h3
-                    className="
-                      mb-2
-                      text-lg
-                      font-extrabold
-                      leading-snug
-                      sm:text-xl
-                    "
-                  >
-                    {documento.nombre}
-                  </h3>
-
-                  <p
-                    className="
-                      max-w-xl
-                      text-sm
-                      leading-relaxed
-                      text-stone-600
-                    "
-                  >
-                    {documento.descripcion}
-                  </p>
-
-                  {/* ESTADO DEL DOCUMENTO */}
-
-                  <p
-                    className={`
-                      mt-3
-                      text-xs
-                      font-bold
-                      uppercase
-                      tracking-wide
-                      ${
-                        documento.disponible
-                          ? "text-green-700"
-                          : "text-stone-500"
-                      }
-                    `}
-                  >
-                    {documento.disponible
-                      ? "Documento PDF disponible"
-                      : "Documento pendiente de incorporación"}
-                  </p>
-                </div>
-              </div>
-
-              {/* ==================================================
-                  4. BOTONES DE DOCUMENTOS
-                  ================================================== */}
-
-              <div
-                className="
-                  flex
-                  flex-col
-                  gap-3
-                  sm:flex-row
-                  lg:shrink-0
-                "
-              >
-                {documento.disponible ? (
-                  <>
-                    {/* VER EN LÍNEA */}
-
-                    <a
-                      href={documento.archivo}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="
-                        inline-flex
-                        min-h-12
-                        items-center
-                        justify-center
-                        rounded-lg
-                        border
-                        border-orange-600
-                        px-6
-                        py-3
-                        text-sm
-                        font-extrabold
-                        uppercase
-                        text-orange-700
-                        transition-colors
-                        hover:bg-orange-50
-                      "
-                    >
-                      Ver en línea
-                    </a>
-
-                    {/* DESCARGAR PDF */}
-
-                    <a
-                      href={documento.archivo}
-                      download
-                      className="
-                        inline-flex
-                        min-h-12
-                        items-center
-                        justify-center
-                        rounded-lg
-                        bg-gradient-to-r
-                        from-orange-600
-                        to-amber-500
-                        px-6
-                        py-3
-                        text-sm
-                        font-extrabold
-                        uppercase
-                        text-white
-                        transition-opacity
-                        hover:opacity-90
-                      "
-                    >
-                      Descargar PDF
-                    </a>
-                  </>
-                ) : (
-                  <span
-                    className="
-                      inline-flex
-                      min-h-12
-                      items-center
-                      justify-center
-                      rounded-lg
-                      border
-                      border-stone-200
-                      bg-stone-100
-                      px-6
-                      py-3
-                      text-sm
-                      font-semibold
-                      text-stone-500
-                    "
-                  >
-                    Documentación próximamente
-                  </span>
-                )}
-              </div>
-            </motion.article>
-          ))}
-        </div>
-
-        {/* ==================================================
-            5. BOTÓN INFERIOR DE REGRESO
-            ================================================== */}
-
-        <div className="mt-12 flex justify-center">
-          <Link
-            to="/#planes"
+          <h2
             className="
-              inline-flex
-              items-center
-              gap-3
-              rounded-xl
-              border
-              border-orange-600
-              bg-white
-              px-7
-              py-3
-              text-sm
-              font-extrabold
-              uppercase
-              tracking-wide
-              text-orange-700
-              transition-all
-              hover:bg-orange-50
-              hover:shadow-lg
+              text-lg font-extrabold
+              uppercase tracking-wide
+              text-[#20342E]
             "
           >
-            <span aria-hidden="true">←</span>
-            VOLVER A PLANES
-          </Link>
+            Documentos del plan
+          </h2>
         </div>
+
+        <div className="space-y-5">
+          {documentos.map((documento, index) => (
+            <TarjetaDocumento
+              key={documento.id}
+              documento={documento}
+              index={index}
+              reducirMovimiento={
+                reducirMovimiento
+              }
+            />
+          ))}
+        </div>
+      </section>
+
+      {/* ======================================================
+          REGRESAR A PLANES
+          ====================================================== */}
+
+      <section
+        className="
+          flex justify-center
+          px-6 pb-24
+        "
+      >
+        <Link
+          to="/#planes"
+          className="
+            inline-flex min-h-12
+            items-center justify-center gap-3
+            rounded-xl border-2
+            border-[#B94A14]
+            px-7 py-3
+            text-sm font-extrabold uppercase
+            tracking-wide text-[#B94A14]
+            transition-all duration-300
+            hover:bg-[#B94A14]
+            hover:text-white
+          "
+        >
+          <ArrowLeft size={18} />
+          Volver a Planes
+
+          <ArrowRight
+            size={16}
+            className="hidden"
+          />
+        </Link>
       </section>
     </main>
   );

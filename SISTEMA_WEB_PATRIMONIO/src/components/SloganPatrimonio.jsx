@@ -117,7 +117,7 @@ export default function SloganPatrimonio() {
             }}
           >
             <motion.img
-              src="/images/Cerro_Hermoso.jpg"
+              src="/images/Cerro_Hermoso.webp"
               alt=""
               aria-hidden="true"
               className="
@@ -260,7 +260,7 @@ export default function SloganPatrimonio() {
         {/* LOGO SIN FONDO BLANCO */}
 
         <motion.img
-          src="/images/images.png"
+          src="/images/images.webp"
           alt="Logo de la Dirección de Patrimonio Histórico"
           className="
             relative

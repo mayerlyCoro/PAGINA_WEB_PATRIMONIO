@@ -34,81 +34,8 @@ const navegacion = [
 ];
 
 // ============================================================
-// REDES SOCIALES
-// AGREGA AQUÍ LAS URL OFICIALES CUANDO LAS TENGAS
+// ICONOS DE CONTACTO
 // ============================================================
-
-const redes = [
-  {
-    nombre: "Facebook",
-    url: "",
-  },
-  {
-    nombre: "Instagram",
-    url: "",
-  },
-  {
-    nombre: "YouTube",
-    url: "",
-  },
-];
-
-// ============================================================
-// ICONOS
-// ============================================================
-
-function IconoRed({ nombre }) {
-  if (nombre === "Facebook") {
-    return (
-      <svg
-        viewBox="0 0 24 24"
-        width="20"
-        height="20"
-        fill="currentColor"
-        aria-hidden="true"
-      >
-        <path d="M22 12a10 10 0 1 0-11.56 9.88v-6.99H7.9V12h2.54V9.8c0-2.5 1.49-3.88 3.77-3.88 1.09 0 2.23.2 2.23.2v2.46h-1.26c-1.24 0-1.62.77-1.62 1.56V12h2.77l-.44 2.89h-2.33v6.99A10 10 0 0 0 22 12Z" />
-      </svg>
-    );
-  }
-
-  if (nombre === "Instagram") {
-    return (
-      <svg
-        viewBox="0 0 24 24"
-        width="20"
-        height="20"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.8"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        aria-hidden="true"
-      >
-        <rect x="2" y="2" width="20" height="20" rx="5" />
-        <circle cx="12" cy="12" r="4" />
-        <circle cx="18" cy="6" r="1" />
-      </svg>
-    );
-  }
-
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      width="20"
-      height="20"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.8"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      <rect x="2" y="5" width="20" height="14" rx="4" />
-      <path d="m10 9 5 3-5 3z" />
-    </svg>
-  );
-}
 
 function IconoContacto({ tipo }) {
   if (tipo === "ubicacion") {
@@ -173,7 +100,8 @@ function IconoContacto({ tipo }) {
 export default function Footer() {
   const { pathname } = useLocation();
 
-  // El degradado aparece únicamente en la portada.
+  // El degradado aparece únicamente en Inicio.
+
   const esInicio = pathname === "/";
 
   const claseTexto = esInicio
@@ -214,15 +142,16 @@ export default function Footer() {
         }
       `}
     >
-      {/* EFECTO SUAVE SOBRE EL DEGRADADO */}
+      {/* ======================================================
+          EFECTO SUAVE SOBRE EL DEGRADADO
+          ====================================================== */}
 
       {esInicio && (
         <>
           <div
             className="
               pointer-events-none
-              absolute
-              inset-0
+              absolute inset-0
               bg-gradient-to-b
               from-black/10
               via-transparent
@@ -233,11 +162,8 @@ export default function Footer() {
           <div
             className="
               pointer-events-none
-              absolute
-              -right-20
-              -top-40
-              h-80
-              w-80
+              absolute -right-20 -top-40
+              h-80 w-80
               rounded-full
               bg-yellow-200/15
               blur-3xl
@@ -252,29 +178,23 @@ export default function Footer() {
 
       <div
         className="
-          relative
-          z-10
-          mx-auto
-          max-w-[1550px]
-          px-5
-          pb-5
-          pt-9
+          relative z-10
+          mx-auto max-w-[1550px]
+          px-5 pb-5 pt-9
           sm:px-8
           lg:px-12
         "
       >
         {/* ==================================================
-            CUATRO COLUMNAS
+            TRES COLUMNAS
             ================================================== */}
 
         <div
           className="
-            grid
-            grid-cols-1
-            gap-8
+            grid grid-cols-1 gap-8
             sm:grid-cols-2
-            lg:grid-cols-[1.35fr_0.8fr_1fr_0.8fr]
-            lg:gap-10
+            lg:grid-cols-[1.4fr_0.8fr_1.15fr]
+            lg:gap-14
           "
         >
           {/* ==================================================
@@ -286,31 +206,28 @@ export default function Footer() {
 
             <div className="mb-4 flex flex-wrap items-center gap-4">
               <img
-                src="/images/images.png"
+                src="/images/images.webp"
                 alt="Dirección de Patrimonio Histórico"
                 className="
-                  h-14
-                  w-auto
+                  h-14 w-auto
                   object-contain
                 "
               />
 
               <img
-                src="/images/escudo.png"
+                src="/images/escudo.webp"
                 alt="Escudo municipal de Potosí"
                 className="
-                  h-12
-                  w-auto
+                  h-12 w-auto
                   object-contain
                 "
               />
 
               <img
-                src="/images/potosi.png"
+                src="/images/potosi.webp"
                 alt="Gobierno Autónomo Municipal de Potosí"
                 className="
-                  h-12
-                  w-auto
+                  h-12 w-auto
                   object-contain
                 "
               />
@@ -321,10 +238,8 @@ export default function Footer() {
             <h2
               className={`
                 mb-1
-                text-base
-                font-extrabold
-                uppercase
-                leading-snug
+                text-base font-extrabold
+                uppercase leading-snug
                 tracking-wide
                 ${claseTitulo}
               `}
@@ -334,9 +249,7 @@ export default function Footer() {
 
             <p
               className={`
-                mb-3
-                text-sm
-                font-semibold
+                mb-3 text-sm font-semibold
                 ${claseTexto}
               `}
             >
@@ -347,10 +260,7 @@ export default function Footer() {
 
             <div
               className={`
-                mb-3
-                h-[2px]
-                w-12
-                rounded-full
+                mb-3 h-[2px] w-12 rounded-full
                 ${
                   esInicio
                     ? "bg-yellow-200"
@@ -359,11 +269,12 @@ export default function Footer() {
               `}
             />
 
+            {/* DESCRIPCIÓN INSTITUCIONAL */}
+
             <p
               className={`
                 max-w-sm
-                text-sm
-                leading-relaxed
+                text-sm leading-relaxed
                 ${claseTexto}
               `}
             >
@@ -380,10 +291,8 @@ export default function Footer() {
             <h3
               className={`
                 mb-3
-                text-base
-                font-extrabold
-                uppercase
-                tracking-[0.12em]
+                text-base font-extrabold
+                uppercase tracking-[0.12em]
                 ${claseTitulo}
               `}
             >
@@ -392,9 +301,7 @@ export default function Footer() {
 
             <div
               className={`
-                mb-4
-                h-[2px]
-                w-9
+                mb-4 h-[2px] w-9
                 ${
                   esInicio
                     ? "bg-yellow-200"
@@ -410,12 +317,9 @@ export default function Footer() {
                     <Link
                       to={item.ruta}
                       className={`
-                        inline-flex
-                        items-center
-                        gap-2
+                        inline-flex items-center gap-2
                         text-sm
-                        transition-colors
-                        duration-300
+                        transition-colors duration-300
                         ${claseEnlace}
                       `}
                     >
@@ -445,10 +349,8 @@ export default function Footer() {
             <h3
               className={`
                 mb-3
-                text-base
-                font-extrabold
-                uppercase
-                tracking-[0.12em]
+                text-base font-extrabold
+                uppercase tracking-[0.12em]
                 ${claseTitulo}
               `}
             >
@@ -457,9 +359,7 @@ export default function Footer() {
 
             <div
               className={`
-                mb-4
-                h-[2px]
-                w-9
+                mb-4 h-[2px] w-9
                 ${
                   esInicio
                     ? "bg-yellow-200"
@@ -471,18 +371,16 @@ export default function Footer() {
             <div
               className={`
                 space-y-3
-                text-sm
-                leading-relaxed
+                text-sm leading-relaxed
                 ${claseTexto}
               `}
             >
-              {/* UBICACIÓN */}
+              {/* UBICACIÓN ACTUALIZADA */}
 
               <div className="flex items-start gap-3">
                 <span
                   className={`
-                    mt-0.5
-                    shrink-0
+                    mt-0.5 shrink-0
                     ${claseIcono}
                   `}
                 >
@@ -490,8 +388,7 @@ export default function Footer() {
                 </span>
 
                 <span>
-                  Centro Histórico, calle Quijarro N.º 123,
-                  Potosí, Bolivia
+                  Calle Frías, Potosí, Bolivia
                 </span>
               </div>
 
@@ -500,8 +397,7 @@ export default function Footer() {
               <div className="flex items-start gap-3">
                 <span
                   className={`
-                    mt-0.5
-                    shrink-0
+                    mt-0.5 shrink-0
                     ${claseIcono}
                   `}
                 >
@@ -518,8 +414,7 @@ export default function Footer() {
               <div className="flex items-start gap-3">
                 <span
                   className={`
-                    mt-0.5
-                    shrink-0
+                    mt-0.5 shrink-0
                     ${claseIcono}
                   `}
                 >
@@ -532,144 +427,6 @@ export default function Footer() {
               </div>
             </div>
           </div>
-
-          {/* ==================================================
-              COLUMNA 4 - REDES SOCIALES
-              ================================================== */}
-
-          <div>
-            <h3
-              className={`
-                mb-3
-                text-base
-                font-extrabold
-                uppercase
-                tracking-[0.12em]
-                ${claseTitulo}
-              `}
-            >
-              SÍGUENOS
-            </h3>
-
-            <div
-              className={`
-                mb-4
-                h-[2px]
-                w-9
-                ${
-                  esInicio
-                    ? "bg-yellow-200"
-                    : "bg-orange-500"
-                }
-              `}
-            />
-
-            <p
-              className={`
-                mb-4
-                text-sm
-                leading-relaxed
-                ${claseTexto}
-              `}
-            >
-              Conoce las actividades de restauración
-              y conservación patrimonial.
-            </p>
-
-            {/* ICONOS DE REDES */}
-
-            <div className="flex flex-wrap gap-2">
-              {redes.map((red) =>
-                red.url ? (
-                  <a
-                    key={red.nombre}
-                    href={red.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label={red.nombre}
-                    className="
-                      flex
-                      h-10
-                      w-10
-                      items-center
-                      justify-center
-                      rounded-lg
-                      border
-                      border-white/40
-                      bg-white
-                      text-[#A94C16]
-                      shadow-sm
-                      transition-all
-                      duration-300
-                      hover:-translate-y-1
-                      hover:bg-amber-100
-                    "
-                  >
-                    <IconoRed nombre={red.nombre} />
-                  </a>
-                ) : (
-                  <span
-                    key={red.nombre}
-                    title={`${red.nombre}: enlace pendiente`}
-                    aria-label={`${red.nombre}: enlace pendiente`}
-                    className="
-                      flex
-                      h-10
-                      w-10
-                      items-center
-                      justify-center
-                      rounded-lg
-                      border
-                      border-white/40
-                      bg-white/90
-                      text-stone-400
-                      shadow-sm
-                    "
-                  >
-                    <IconoRed nombre={red.nombre} />
-                  </span>
-                )
-              )}
-            </div>
-
-            {/* MENSAJE INSTITUCIONAL */}
-
-            <div
-              className={`
-                mt-5
-                border-l-2
-                pl-3
-                ${
-                  esInicio
-                    ? "border-yellow-200/80"
-                    : "border-orange-500"
-                }
-              `}
-            >
-              <p
-                className={`
-                  text-xs
-                  font-extrabold
-                  uppercase
-                  tracking-[0.12em]
-                  ${claseTitulo}
-                `}
-              >
-                PATRIMONIO HISTÓRICO
-              </p>
-
-              <p
-                className={`
-                  mt-1
-                  text-xs
-                  leading-relaxed
-                  ${claseTexto}
-                `}
-              >
-                Historia, arquitectura y cultura de Potosí.
-              </p>
-            </div>
-          </div>
         </div>
 
         {/* ==================================================
@@ -679,13 +436,9 @@ export default function Footer() {
         <div
           className={`
             mt-8
-            flex
-            flex-col
-            items-center
-            justify-between
-            gap-2
-            border-t
-            pt-4
+            flex flex-col
+            items-center justify-between
+            gap-2 border-t pt-4
             text-center
             sm:flex-row
             ${claseLinea}
@@ -703,10 +456,8 @@ export default function Footer() {
 
           <p
             className={`
-              text-xs
-              font-semibold
-              uppercase
-              tracking-wider
+              text-xs font-semibold
+              uppercase tracking-wider
               ${
                 esInicio
                   ? "text-yellow-100"

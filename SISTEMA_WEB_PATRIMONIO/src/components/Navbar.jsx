@@ -243,7 +243,7 @@ export default function Navbar() {
           className="shrink-0"
         >
           <img
-            src="/images/images.png"
+            src="/images/images.webp"
             alt="Dirección de Patrimonio Histórico"
             className={`
               w-auto object-contain
@@ -273,7 +273,7 @@ export default function Navbar() {
             </Link>
           ))}
 
-          {/* POTOSÍ DE ANTAÑO */}
+          {/* MEMORIAL POTOSÍ */}
 
           <Link
             to="/informacion"
@@ -303,7 +303,7 @@ export default function Navbar() {
           {/* LOGO MUNICIPAL */}
 
           <img
-            src="/images/potosi.png"
+            src="/images/potosi.webp"
             alt="Gobierno Autónomo Municipal de Potosí"
             className={`
               logo-giro-patrimonio
@@ -333,7 +333,7 @@ export default function Navbar() {
           {/* ESCUDO MUNICIPAL */}
 
           <img
-            src="/images/escudo.png"
+            src="/images/escudo.webp"
             alt="Escudo municipal de Potosí"
             className={`
               logo-giro-patrimonio

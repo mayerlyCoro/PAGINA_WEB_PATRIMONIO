@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Link } from "react-router-dom";
 import { motion, useReducedMotion } from "motion/react";
@@ -69,58 +68,84 @@ export default function PlanesProgramas() {
     >
       {/* PORTADA INSTITUCIONAL */}
 
-      <section className="relative flex min-h-[85svh] w-full items-center overflow-hidden bg-[#101F1C] px-6 pb-24 pt-40 text-white sm:px-12 lg:px-20 xl:px-28">
-        <motion.img
-          src="/images/potosi_patrimonio.jpeg"
-          alt=""
-          aria-hidden="true"
-          className="absolute inset-0 h-full w-full object-cover"
-          initial={false}
-          animate={
-            reducirMovimiento
-              ? { scale: 1 }
-              : { scale: [1, 1.1, 1] }
-          }
-          transition={{
-            duration: 20,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-        />
+      <section className="relative min-h-[85svh] w-full overflow-hidden bg-[#2A120E] text-white">
+        <div className="grid min-h-[85svh] grid-cols-1 lg:grid-cols-[0.95fr_1.05fr]">
+          {/* BLOQUE IZQUIERDO */}
 
-        <div className="absolute inset-0 bg-gradient-to-r from-[#0B2520]/95 via-[#0B2520]/75 to-[#0B2520]/45" />
+          <div className="relative flex items-center overflow-hidden px-6 pb-20 pt-40 sm:px-12 lg:px-16 xl:px-24">
+            {/* FONDO DEGRADADO */}
 
-        <motion.div
-          initial={
-            reducirMovimiento
-              ? false
-              : { opacity: 0, y: 40 }
-          }
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1 }}
-          className="relative z-10 w-full max-w-[1400px]"
-        >
-          <p className="mb-6 flex items-center gap-4 text-xs font-extrabold uppercase tracking-[0.25em] text-amber-300 sm:text-sm">
-            <span className="h-[2px] w-12 bg-amber-400" />
-            DIRECCIÓN DE PATRIMONIO HISTÓRICO
-          </p>
+            <div className="absolute inset-0 bg-[linear-gradient(135deg,#3A120F_0%,#7A2316_38%,#C45B18_72%,#E8A62A_100%)]" />
 
-          <h1 className="font-['Bebas_Neue'] text-[clamp(4.5rem,10vw,10rem)] uppercase leading-[0.86] tracking-[0.035em]">
-            <span className="block text-white">
-              PLANES
-            </span>
+            {/* SOMBRA OSCURA ENCIMA PARA DAR ELEGANCIA */}
 
-           
-          </h1>
+            <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(18,8,6,0.75)_0%,rgba(18,8,6,0.45)_45%,rgba(18,8,6,0.12)_100%)]" />
 
-          <div className="my-9 h-[3px] w-24 bg-gradient-to-r from-orange-500 to-amber-400" />
+            {/* DETALLES DECORATIVOS */}
 
-          <p className="max-w-2xl text-base font-semibold leading-relaxed text-zinc-100 sm:text-lg lg:text-xl">
-            Instrumentos de planificación, protección y
-            conservación del patrimonio histórico y
-            arquitectónico de la Villa Imperial de Potosí.
-          </p>
-        </motion.div>
+            <div className="absolute -left-16 top-16 h-44 w-44 rounded-full border border-white/10" />
+            <div className="absolute left-10 top-24 h-28 w-28 rounded-full border border-white/10" />
+            <div className="absolute bottom-16 left-8 h-56 w-56 rounded-full border border-white/10" />
+            <div className="absolute bottom-10 left-24 h-32 w-32 rounded-full border border-white/10" />
+
+            <motion.div
+              initial={
+                reducirMovimiento
+                  ? false
+                  : { opacity: 0, y: 40 }
+              }
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.9 }}
+              className="relative z-10 w-full max-w-[760px]"
+            >
+              <p className="mb-6 flex items-center gap-4 text-xs font-extrabold uppercase tracking-[0.25em] text-amber-200 sm:text-sm">
+                <span className="h-[2px] w-12 bg-amber-300" />
+                DIRECCIÓN DE PATRIMONIO HISTÓRICO
+              </p>
+
+              <h1 className="font-['Bebas_Neue'] text-[clamp(4.5rem,10vw,10rem)] uppercase leading-[0.86] tracking-[0.035em]">
+                <span className="block text-white">
+                  PLANES
+                </span>
+              </h1>
+
+              <div className="my-9 h-[4px] w-28 rounded-full bg-gradient-to-r from-[#F36B21] via-[#F59E0B] to-[#FACC15]" />
+
+              <p className="max-w-2xl text-base font-semibold leading-relaxed text-zinc-100 sm:text-lg lg:text-xl">
+                Instrumentos de planificación, protección y
+                conservación del patrimonio histórico y
+                arquitectónico de la Villa Imperial de Potosí.
+              </p>
+            </motion.div>
+          </div>
+
+          {/* BLOQUE DERECHO CON IMAGEN */}
+
+          <div className="relative min-h-[320px] overflow-hidden">
+            <motion.img
+              src="/images/potosi_calle.webp"
+              alt="Vista patrimonial de Potosí"
+              className="absolute inset-0 h-full w-full object-cover"
+              initial={false}
+              animate={
+                reducirMovimiento
+                  ? { scale: 1 }
+                  : { scale: [1, 1.08, 1] }
+              }
+              transition={{
+                duration: 18,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+            />
+
+            {/* CAPAS DE COLOR SOBRE LA IMAGEN */}
+
+            <div className="absolute inset-0 bg-[linear-gradient(270deg,rgba(245,158,11,0.16)_0%,rgba(194,65,12,0.22)_40%,rgba(60,14,9,0.65)_100%)]" />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(250,204,21,0.22),transparent_35%),radial-gradient(circle_at_bottom_left,rgba(239,68,68,0.18),transparent_32%)]" />
+          </div>
+        </div>
       </section>
 
       {/* PRESENTACIÓN */}

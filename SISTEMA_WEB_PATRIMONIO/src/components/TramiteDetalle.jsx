@@ -20,17 +20,17 @@ import { tramites } from "../data/tramites";
 // Las imágenes deben estar dentro de public/images.
 
 const imagenesTramites = [
-  "/images/Gonzalo Viera Azpiroz - Potosí.jpeg",
-  "/images/Potosí.jpeg",
-  "/images/descarga.jpeg",
+  "/images/Gonzalo Viera Azpiroz - Potosí.webp",
+  "/images/Potosí.webp",
+  "/images/descarga.webp",
 
-  "/images/Potosí.jpeg",
-  "/images/descarga.jpeg",
-  "/images/Gonzalo Viera Azpiroz - Potosí.jpeg",
+  "/images/Potosí.webp",
+  "/images/descarga.webp",
+  "/images/Gonzalo Viera Azpiroz - Potosí.webp",
 
-  "/images/descarga.jpeg",
-  "/images/Gonzalo Viera Azpiroz - Potosí.jpeg",
-  "/images/Potosí.jpeg",
+  "/images/descarga.webp",
+  "/images/Gonzalo Viera Azpiroz - Potosí.webp",
+  "/images/Potosí.webp",
 ];
 
 // ============================================================
@@ -342,7 +342,7 @@ export default function TramiteDetalle() {
       ? imagenesTramites[
           indiceTramite % imagenesTramites.length
         ]
-      : "/images/Potosí.jpeg";
+      : "/images/Potosíwebp";
 
   // ==========================================================
   // TRÁMITE NO ENCONTRADO

@@ -10,7 +10,7 @@ export const normativasData = [
     titulo: "LEY DE PRESERVACIÓN DE LAS ÁREAS HISTÓRICAS DE POTOSÍ",
     descripcion:
       "Protección y preservación de las áreas históricas de la Villa Imperial de Potosí.",
-    imagen: "/images/normativa-055-bg.jpg",
+    imagen: "/images/normativa-055-bg.webp",
     pdf: "/pdf/normativa-055.pdf",
   },
   {
@@ -20,7 +20,7 @@ export const normativasData = [
       "LEY MUNICIPAL DE PROCEDIMIENTOS ADMINISTRATIVOS EN EL ÁREA DE PATRIMONIO HISTÓRICO",
     descripcion:
       "Procedimientos administrativos relacionados con la gestión del patrimonio histórico de Potosí.",
-    imagen: "/images/normativa-122-bg.jpeg",
+    imagen: "/images/normativa-122-bg.webp",
     pdf: "/pdf/normativa-122.pdf",
   },
 ];

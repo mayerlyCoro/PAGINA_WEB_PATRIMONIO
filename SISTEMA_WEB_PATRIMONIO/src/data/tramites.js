@@ -86,7 +86,7 @@ export const tramites = [
     descripcion:
       'Documentación para la tramitación y aprobación de planos de lote y cambio de nombre.',
 
-    imagen: '/images/normativa-055-bg.jpeg',
+    imagen: '/images/normativa-055-bg.webp',
 
     referencia:
       'Artículo 11. Ley Municipal 122/2017, según el cartel fotografiado.',
@@ -129,7 +129,7 @@ export const tramites = [
     descripcion:
       'Requisitos generales y documentos adicionales para la aprobación de planos de fusión.',
 
-    imagen: '/images/normativa-122-bg.jpeg',
+    imagen: '/images/normativa-122-bg.webp',
 
     referencia:
       'Artículo 11, parágrafo II, según el cartel fotografiado.',
@@ -178,7 +178,7 @@ export const tramites = [
     descripcion:
       'Indicaciones para programar y realizar la inspección técnica durante la tramitación y aprobación de planos de lote, división, fusión y cambio de nombre.',
 
-    imagen: '/images/normativa-055-bg.jpeg',
+    imagen: '/images/normativa-055-bg.webp',
 
     referencia:
       'Cartel: Para la inspección técnica en la tramitación y aprobación de planos de lote y cambio de nombre.',
@@ -230,7 +230,7 @@ export const tramites = [
     descripcion:
       'Requisitos para la revisión de anteproyectos de construcción nueva, relevamiento y ampliación.',
 
-    imagen: '/images/normativa-122-bg.jpeg',
+    imagen: '/images/normativa-122-bg.webp',
 
     referencia:
       'Cartel: Requisitos para la revisión de anteproyectos.',
@@ -324,7 +324,7 @@ export const tramites = [
     descripcion:
       'Requisitos para la tramitación y aprobación de planos de construcción, relevamiento y ampliación.',
 
-    imagen: '/images/1.jpeg',
+    imagen: '/images/1.webp',
 
     referencia:
       'Artículo 14, según el cartel fotografiado.',
@@ -387,7 +387,7 @@ export const tramites = [
     descripcion:
       'Documentación solicitada para presentar una solicitud de inspección técnica por denuncia o afectación de un inmueble.',
 
-    imagen: '/images/normativa-055-bg.jpeg',
+    imagen: '/images/normativa-055-bg.webp',
 
     referencia:
       'Cartel: Solicitud de inspección técnica por denuncia o afectación de inmueble.',
@@ -437,7 +437,7 @@ export const tramites = [
     descripcion:
       'Requisitos para solicitar autorización de refacción de fachadas, reposición de muros perimetrales, construcciones menores interiores y pintado de fachadas.',
 
-    imagen: '/images/normativa-122-bg.jpeg',
+    imagen: '/images/normativa-122-bg.webp',
 
     referencia:
       'Cartel: Solicitud de autorización de intervenciones de obras menores.',
@@ -500,7 +500,7 @@ export const tramites = [
     descripcion:
       'Documentación para solicitar autorización por emergencia y/o ejecución de trabajos preventivos en un inmueble.',
 
-    imagen: '/images/1.jpeg',
+    imagen: '/images/1.webp',
 
     referencia:
       'Cartel: Solicitud de autorización por emergencia y/o trabajos preventivos.',
@@ -547,7 +547,7 @@ export const tramites = [
     descripcion:
       'Requisitos y procedimiento para la autorización, actualización o regularización de letreros publicitarios.',
 
-    imagen: '/images/normativa-055-bg.jpeg',
+    imagen: '/images/normativa-055-bg.webp',
 
     referencia:
       'Carteles de autorización de letreros publicitarios. Se menciona la Ordenanza Municipal 026/2000 para la verificación técnica.',
