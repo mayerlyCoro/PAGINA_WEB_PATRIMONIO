@@ -130,16 +130,32 @@ export default function Navbar() {
   };
 
   // ==========================================================
+  // TAMAÑO DE LETRAS SEGÚN LA SECCIÓN
+  // ==========================================================
+
+  // Letras más grandes solamente arriba de Inicio.
+  // Al bajar o visitar otra página vuelven al tamaño original.
+
+  const letrasGrandesInicio =
+    location.pathname === "/" && !reducido;
+
+  // ==========================================================
   // ESTILOS DE ENLACES
   // ==========================================================
 
   const enlace = `
     inline-flex items-center whitespace-nowrap
     border-b-2 border-transparent py-2
-    text-[13px] font-extrabold uppercase
-    tracking-[0.025em] transition-colors duration-300
-    2xl:text-[15px]
-    focus-visible:outline-2 focus-visible:outline-amber-400
+    font-extrabold uppercase
+    tracking-[0.025em]
+    transition-all duration-500
+    focus-visible:outline-2
+    focus-visible:outline-amber-400
+    ${
+      letrasGrandesInicio
+        ? "text-[19px] 2xl:text-[21px]"
+        : "text-[13px] 2xl:text-[15px]"
+    }
     ${
       reducido
         ? "text-[#302C26] hover:border-orange-600 hover:text-orange-700"
@@ -155,6 +171,27 @@ export default function Navbar() {
       reducido
         ? "text-[#302C26] hover:bg-orange-100"
         : "text-white hover:bg-white/10"
+    }
+  `;
+
+  // ==========================================================
+  // BOTÓN MEMORIAL POTOSÍ
+  // ==========================================================
+
+  const enlaceMemorial = `
+    whitespace-nowrap rounded-full border
+    px-4 py-2 font-extrabold
+    uppercase tracking-wide
+    transition-all duration-500
+    ${
+      letrasGrandesInicio
+        ? "text-[18px] 2xl:text-[20px]"
+        : "text-xs 2xl:text-sm"
+    }
+    ${
+      reducido
+        ? "border-amber-600/60 bg-amber-100/80 text-amber-950 hover:bg-amber-200"
+        : "border-amber-400/60 bg-amber-500/20 text-amber-300 hover:bg-amber-500/30"
     }
   `;
 
@@ -175,7 +212,9 @@ export default function Navbar() {
         }
       `}
     >
-      {/* ANIMACIONES DE LOGOS */}
+      {/* ======================================================
+          ANIMACIONES DE LOGOS
+          ====================================================== */}
 
       <style>{`
         @keyframes giroPatrimonio {
@@ -205,7 +244,9 @@ export default function Navbar() {
         }
       `}</style>
 
-      {/* FRANJA SUPERIOR */}
+      {/* ======================================================
+          FRANJA SUPERIOR
+          ====================================================== */}
 
       <div
         className={`
@@ -234,7 +275,9 @@ export default function Navbar() {
           }
         `}
       >
-        {/* LOGO PRINCIPAL */}
+        {/* ==================================================
+            LOGO PRINCIPAL
+            ================================================== */}
 
         <Link
           to="/"
@@ -278,17 +321,7 @@ export default function Navbar() {
           <Link
             to="/informacion"
             onClick={() => setMenuMovil(false)}
-            className={`
-              whitespace-nowrap rounded-full border
-              px-4 py-2 text-xs font-extrabold
-              uppercase tracking-wide
-              transition-colors 2xl:text-sm
-              ${
-                reducido
-                  ? "border-amber-600/60 bg-amber-100/80 text-amber-950 hover:bg-amber-200"
-                  : "border-amber-400/60 bg-amber-500/20 text-amber-300 hover:bg-amber-500/30"
-              }
-            `}
+            className={enlaceMemorial}
           >
             MEMORIAL POTOSÍ
           </Link>
@@ -299,7 +332,6 @@ export default function Navbar() {
             ================================================== */}
 
         <div className="flex shrink-0 items-center gap-2 sm:gap-3">
-
           {/* LOGO MUNICIPAL */}
 
           <img
@@ -347,7 +379,9 @@ export default function Navbar() {
             `}
           />
 
-          {/* BOTÓN MENÚ MÓVIL */}
+          {/* ==================================================
+              BOTÓN MENÚ MÓVIL
+              ================================================== */}
 
           <button
             type="button"
